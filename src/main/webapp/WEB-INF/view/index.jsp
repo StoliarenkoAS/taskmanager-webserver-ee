@@ -11,7 +11,7 @@
 </head>
 <body>
 <nav class="navbar navbar-dark navbar-expand-lg bg-dark sticky-top">
-    <a href="/" class="navbar-brand"><img src="image/rock-symbol-img.png" alt="logo" width="30"></a>
+    <a href="/" class="navbar-brand"><img src="../../image/rock-symbol-img.png" alt="logo" width="30"></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
             aria-expanded="false" aria-label="Toggle navigation">
@@ -20,13 +20,13 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a href="/users.jsp" class="nav-link">Users</a>
+                <a href="/users" class="nav-link">Users</a>
             </li>
             <li class="nav-item">
-                <a href="/projects.jsp" class="nav-link">Projects</a>
+                <a href="/projects" class="nav-link">Projects</a>
             </li>
             <li class="nav-item">
-                <a href="/tasks.jsp" class="nav-link">Tasks</a>
+                <a href="/tasks" class="nav-link">Tasks</a>
             </li>
         </ul>
     </div>
@@ -36,7 +36,7 @@
     </div>
 </nav>
 <nav class="navbar navbar-dark navbar-expand-lg bg-dark fixed-bottom">
-    <a href="#" class="navbar-brand"><img src="image/rock-symbol-img.png" alt="logo" width="30"></a>
+    <a href="#" class="navbar-brand"><img src="../../image/rock-symbol-img.png" alt="logo" width="30"></a>
 </nav>
 
 <div class="container-fluid">

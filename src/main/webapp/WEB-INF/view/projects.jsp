@@ -17,7 +17,7 @@
 </head>
 <body>
 <nav class="navbar navbar-dark navbar-expand-lg bg-dark sticky-top">
-    <a href="/" class="navbar-brand"><img src="image/rock-symbol-img.png" alt="logo" width="30"></a>
+    <a href="/" class="navbar-brand"><img src="../../image/rock-symbol-img.png" alt="logo" width="30"></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
             aria-expanded="false" aria-label="Toggle navigation">
@@ -26,13 +26,13 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a href="/users.jsp" class="nav-link">Users</a>
+                <a href="users" class="nav-link">Users</a>
             </li>
             <li class="nav-item">
-                <a href="/projects.jsp" class="nav-link">Projects</a>
+                <a href="/projects" class="nav-link">Projects</a>
             </li>
             <li class="nav-item">
-                <a href="/tasks.jsp" class="nav-link">Tasks</a>
+                <a href="/tasks" class="nav-link">Tasks</a>
             </li>
         </ul>
     </div>
@@ -40,10 +40,10 @@
     <button class="btn btn-outline-light">Logout</button>
 </nav>
 <nav class="navbar navbar-dark navbar-expand-lg bg-dark fixed-bottom">
-    <a href="#" class="navbar-brand"><img src="image/rock-symbol-img.png" alt="logo" width="30"></a>
+    <a href="#" class="navbar-brand"><img src="../../image/rock-symbol-img.png" alt="logo" width="30"></a>
 </nav>
 
-<div class="container-fluid">
+<div class="container-fluid" style="padding-bottom: 10%">
     <div class="container w-100">
         <%--  TABLE  --%>
         <h2 class="mt-3">Project list</h2>
@@ -68,8 +68,8 @@
                 <td style="vertical-align: middle">131655-3213454646-231166-131565-312</td>
                 <td style="vertical-align: middle">12.05.1990</td>
                 <td style="vertical-align: middle">29.08.1991</td>
-                <td class="text-center" style="vertical-align: middle"><i class="fas fa-pencil-alt align-self-center"></i></td>
-                <td class="text-center" style="vertical-align: middle"><i class="far fa-trash-alt"></i></td>
+                <td class="text-center" style="vertical-align: middle"><a href="project-edit"><i class="fas fa-pencil-alt align-self-center"></i></a></td>
+                <td class="text-center" style="vertical-align: middle"><a href="#"><i class="far fa-trash-alt"></i></a></td>
             </tr>
             <tr>
                 <th scope="row" style="vertical-align: middle">2</th>
@@ -77,8 +77,8 @@
                 <td style="vertical-align: middle">Johnatan</td>
                 <td>131655-3213454646-231166-131565-312</td><td style="vertical-align: middle">12.05.1990</td>
                 <td style="vertical-align: middle">29.08.1991</td>
-                <td class="text-center" style="vertical-align: middle"><i class="fas fa-pencil-alt align-self-center"></i></td>
-                <td class="text-center" style="vertical-align: middle"><i class="far fa-trash-alt"></i></td>
+                <td class="text-center" style="vertical-align: middle"><a href="project-edit"><i class="fas fa-pencil-alt align-self-center"></i></a></td>
+                <td class="text-center" style="vertical-align: middle"><a href="#"><i class="far fa-trash-alt"></i></a></td>
             </tr>
             <tr>
                 <th scope="row" style="vertical-align: middle">3</th>
@@ -86,8 +86,8 @@
                 <td style="vertical-align: middle">Marquis</td>
                 <td>131655-3213454646-231166-131565-312</td><td style="vertical-align: middle">12.05.1990</td>
                 <td style="vertical-align: middle">29.08.1991</td>
-                <td class="text-center" style="vertical-align: middle"><i class="fas fa-pencil-alt align-self-center"></i></td>
-                <td class="text-center" style="vertical-align: middle"><i class="far fa-trash-alt"></i></td>
+                <td class="text-center" style="vertical-align: middle"><a href="project-edit"><i class="fas fa-pencil-alt align-self-center"></i></a></td>
+                <td class="text-center" style="vertical-align: middle"><a href="#"><i class="far fa-trash-alt"></i></a></td>
             </tr>
             <tr>
                 <th scope="row" style="vertical-align: middle">4</th>
@@ -95,8 +95,8 @@
                 <td style="vertical-align: middle">SantaClaus</td>
                 <td>131655-3213454646-231166-131565-312</td><td style="vertical-align: middle">12.05.1990</td>
                 <td style="vertical-align: middle">29.08.1991</td>
-                <td class="text-center" style="vertical-align: middle"><i class="fas fa-pencil-alt align-self-center"></i></td>
-                <td class="text-center" style="vertical-align: middle"><i class="far fa-trash-alt"></i></td>
+                <td class="text-center" style="vertical-align: middle"><a href="project-edit"><i class="fas fa-pencil-alt align-self-center"></i></a></td>
+                <td class="text-center" style="vertical-align: middle"><a href="#"><i class="far fa-trash-alt"></i></a></td>
             </tr>
             </tbody>
         </table>
