@@ -6,7 +6,7 @@ import ru.stoliarenkoas.tm.webserver.Status;
 import ru.stoliarenkoas.tm.webserver.api.repository.ProjectRepository;
 import ru.stoliarenkoas.tm.webserver.comparator.ComparatorType;
 import ru.stoliarenkoas.tm.webserver.entity.Project;
-import ru.stoliarenkoas.tm.webserver.utils.DatabaseConnectionUtil;
+import ru.stoliarenkoas.tm.webserver.util.DatabaseConnectionUtil;
 
 import java.sql.*;
 import java.util.Date;
@@ -177,13 +177,15 @@ public class ProjectRepositoryMySQL implements ProjectRepository {
         checkIfExists.setString(2, project.getUserId());
         checkIfExists.setString(3, project.getName());
         final ResultSet resultSet = checkIfExists.executeQuery();
-        final boolean update = (resultSet.next() && resultSet.getInt(1) > 0);
+        final boolean update = resultSet.next() && resultSet.getInt("count") > 0;
 
         if (update) {
-            final PreparedStatement deleteStatement = connection.prepareStatement("DELETE FROM `project` WHERE `userId` = ? AND `name` = ?");
+            final PreparedStatement deleteStatement = connection.prepareStatement("DELETE FROM `project` WHERE (`userId` = ? AND `name` = ?) OR `id` = ?");
             deleteStatement.setString(1, project.getUserId());
             deleteStatement.setString(2, project.getName());
-            deleteStatement.execute();
+            deleteStatement.setString(3, project.getId());
+
+            deleteStatement.executeUpdate();
         }
 
         final PreparedStatement statement = connection.prepareStatement("INSERT INTO `project` " +

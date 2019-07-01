@@ -1,6 +1,7 @@
 package ru.stoliarenkoas.tm.webserver.servlet;
 
 import ru.stoliarenkoas.tm.webserver.Attributes;
+import ru.stoliarenkoas.tm.webserver.api.service.ProjectService;
 import ru.stoliarenkoas.tm.webserver.entity.Project;
 import ru.stoliarenkoas.tm.webserver.entity.Session;
 import ru.stoliarenkoas.tm.webserver.service.ProjectServiceImpl;
@@ -12,26 +13,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collection;
+import java.util.Collections;
 
-@WebServlet(urlPatterns = "/projects")
-public class ProjectListServlet extends HttpServlet {
+@WebServlet(urlPatterns = "/project-remove")
+public class ProjectRemoveServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        final String sessionId = (String) req.getSession().getAttribute(Attributes.SESSION_ID);
-        System.out.println(sessionId);
-        if (sessionId == null) resp.sendRedirect("/");
         try {
-            final Session session = new SessionServiceImpl().getById(sessionId);
-            System.out.println(session.getId());
-            if (session == null) resp.sendRedirect("/");
-            final Collection<Project> projectList = new ProjectServiceImpl().getAll(session);
-            req.setAttribute(Attributes.PROJECT_LIST, projectList);
-            req.getRequestDispatcher("/WEB-INF/view/projects.jsp").forward(req, resp);
+            final Session session = new SessionServiceImpl().getById((String) req.getSession().getAttribute(Attributes.SESSION_ID));
+            new ProjectServiceImpl().delete(session, req.getParameter(Attributes.PROJECT_ID));
         } catch (Exception e) {
             e.printStackTrace();
         }
+        resp.sendRedirect("projects");
     }
 
 }

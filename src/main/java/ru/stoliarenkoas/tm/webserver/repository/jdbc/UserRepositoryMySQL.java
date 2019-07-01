@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stoliarenkoas.tm.webserver.entity.User;
 import ru.stoliarenkoas.tm.webserver.api.repository.UserRepository;
-import ru.stoliarenkoas.tm.webserver.utils.DatabaseConnectionUtil;
+import ru.stoliarenkoas.tm.webserver.util.DatabaseConnectionUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

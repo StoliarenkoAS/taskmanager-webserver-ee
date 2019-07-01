@@ -29,7 +29,6 @@ public class Session {
                 "id='" + id + '\'' +
                 ", userId='" + userId + '\'' +
                 ", userLogin='" + userLogin + '\'' +
-                ", creationDate=" + creationDate +
                 ", sortMethod=" + sortMethod +
                 '}';
     }

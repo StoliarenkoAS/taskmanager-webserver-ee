@@ -1,4 +1,4 @@
-<!doctype html>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html lang="en">
 <head>
     <!-- Required meta tags -->
@@ -57,21 +57,21 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form>
+                <form action="user-login" method="post">
                     <div class="form-group">
                         <label for="loginInput">Login</label>
-                        <input class="form-control" type="text" required id="loginInput" aria-describedby="loginHelp" placeholder="login"/>
+                        <input name="login" class="form-control" type="text" required id="loginInput" aria-describedby="loginHelp" placeholder="login"/>
                         <small id="loginHelp" class="form-text text-muted">Enter your login</small>
                     </div>
                     <div class="form-group">
                         <label for="passwordInput">Password</label>
-                        <input class="form-control" type="password" required id="passwordInput" placeholder="password"/>
+                        <input name="password" class="form-control" type="password" required id="passwordInput" placeholder="password"/>
                         <small id="passwordHelp" class="form-text text-muted">Enter your password</small>
                     </div>
                     <hr class="separator">
                     <div class="container-fluid">
                         <div class="row justify-content-end">
-                            <button class="btn btn-success" type="submit" data-dismiss="modal" style="margin-right: 5px">Login</button>
+                            <button class="btn btn-success mr-1" type="submit">Login</button>
                             <button class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
                     </div>

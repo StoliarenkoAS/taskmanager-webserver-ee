@@ -1,4 +1,4 @@
-package ru.stoliarenkoas.tm.webserver.utils;
+package ru.stoliarenkoas.tm.webserver.util;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

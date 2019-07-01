@@ -1,4 +1,7 @@
-<!doctype html>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="ru.stoliarenkoas.tm.webserver.entity.Project" %>
+<%@ page import="ru.stoliarenkoas.tm.webserver.Attributes" %>
+<%@ page import="java.util.Collection" %>
 <html lang="en">
 <head>
     <!-- Required meta tags -->
@@ -61,43 +64,21 @@
             </tr>
             </thead>
             <tbody>
+
+            <% int i = 1;
+            for (Project project : (Collection<Project>)request.getAttribute(Attributes.PROJECT_LIST)) {%>
             <tr>
-                <th scope="row" style="vertical-align: middle">1</th>
-                <td style="vertical-align: middle">Johnatannnnnn</td>
-                <td style="vertical-align: middle">Johnatannnnnn</td>
-                <td style="vertical-align: middle">131655-3213454646-231166-131565-312</td>
-                <td style="vertical-align: middle">12.05.1990</td>
-                <td style="vertical-align: middle">29.08.1991</td>
-                <td class="text-center" style="vertical-align: middle"><a href="project-edit"><i class="fas fa-pencil-alt align-self-center"></i></a></td>
-                <td class="text-center" style="vertical-align: middle"><a href="#"><i class="far fa-trash-alt"></i></a></td>
+                <th scope="row" style="vertical-align: middle"><%=i++%></th>
+                <td style="vertical-align: middle"><%=project.getName()%></td>
+                <td style="vertical-align: middle"><%=project.getDescription()%></td>
+                <td><%=project.getId()%></td>
+                <td style="vertical-align: middle"><%=project.getStartDate()%></td>
+                <td style="vertical-align: middle"><%=project.getEndDate()%></td>
+                <td class="text-center" style="vertical-align: middle"><a href="project-edit?<%=Attributes.PROJECT_ID%>=<%=project.getId()%>"><i class="fas fa-pencil-alt align-self-center"></i></a></td>
+                <td class="text-center" style="vertical-align: middle"><a href="project-remove?<%=Attributes.PROJECT_ID%>=<%=project.getId()%>"><i class="far fa-trash-alt"></i></a></td>
             </tr>
-            <tr>
-                <th scope="row" style="vertical-align: middle">2</th>
-                <td style="vertical-align: middle">Johnatan</td>
-                <td style="vertical-align: middle">Johnatan</td>
-                <td>131655-3213454646-231166-131565-312</td><td style="vertical-align: middle">12.05.1990</td>
-                <td style="vertical-align: middle">29.08.1991</td>
-                <td class="text-center" style="vertical-align: middle"><a href="project-edit"><i class="fas fa-pencil-alt align-self-center"></i></a></td>
-                <td class="text-center" style="vertical-align: middle"><a href="#"><i class="far fa-trash-alt"></i></a></td>
-            </tr>
-            <tr>
-                <th scope="row" style="vertical-align: middle">3</th>
-                <td style="vertical-align: middle">Marquis</td>
-                <td style="vertical-align: middle">Marquis</td>
-                <td>131655-3213454646-231166-131565-312</td><td style="vertical-align: middle">12.05.1990</td>
-                <td style="vertical-align: middle">29.08.1991</td>
-                <td class="text-center" style="vertical-align: middle"><a href="project-edit"><i class="fas fa-pencil-alt align-self-center"></i></a></td>
-                <td class="text-center" style="vertical-align: middle"><a href="#"><i class="far fa-trash-alt"></i></a></td>
-            </tr>
-            <tr>
-                <th scope="row" style="vertical-align: middle">4</th>
-                <td style="vertical-align: middle">SantaClaus</td>
-                <td style="vertical-align: middle">SantaClaus</td>
-                <td>131655-3213454646-231166-131565-312</td><td style="vertical-align: middle">12.05.1990</td>
-                <td style="vertical-align: middle">29.08.1991</td>
-                <td class="text-center" style="vertical-align: middle"><a href="project-edit"><i class="fas fa-pencil-alt align-self-center"></i></a></td>
-                <td class="text-center" style="vertical-align: middle"><a href="#"><i class="far fa-trash-alt"></i></a></td>
-            </tr>
+            <% } %>
+
             </tbody>
         </table>
         <%--    PAGINATION    --%>
@@ -138,19 +119,19 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form>
+                <form action="project-create" method="post">
                     <div class="form-group">
                         <label for="nameInputCreateModal">Name</label>
-                        <input class="form-control form-control-sm" type="text" required id="nameInputCreateModal" aria-describedby="nameHelp" placeholder="name"/>
+                        <input name="<%=Attributes.NAME%>" class="form-control form-control-sm" type="text" required id="nameInputCreateModal" aria-describedby="nameHelp" placeholder="name"/>
                     </div>
                     <div class="form-group">
                         <label for="comment">Description:</label>
-                        <textarea class="form-control" rows="3" id="comment"></textarea>
+                        <textarea name="<%=Attributes.DESCRIPTION%>" class="form-control" rows="3" id="comment"></textarea>
                     </div>
                     <div class="form-row">
                         <div class="form-group col">
                             <label for="startDatepicker">Start date</label>
-                            <input id="startDatepicker"/>
+                            <input name="<%=Attributes.START_DATE%>" id="startDatepicker"/>
                             <script>
                                 $('#startDatepicker').datepicker({
                                     uiLibrary: 'bootstrap4'
@@ -159,7 +140,7 @@
                         </div>
                         <div class="form-group col">
                             <label for="endDatepicker">End date</label>
-                            <input id="endDatepicker"/>
+                            <input name="<%=Attributes.END_DATE%>" id="endDatepicker"/>
                             <script>
                                 $('#endDatepicker').datepicker({
                                     uiLibrary: 'bootstrap4'
@@ -170,7 +151,7 @@
                     <hr class="separator">
                     <div class="container-fluid">
                         <div class="row justify-content-end">
-                            <button class="btn btn-success mr-1" type="submit" data-dismiss="modal">Create</button>
+                            <button class="btn btn-success mr-1" type="submit">Create</button>
                             <button class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
                     </div>

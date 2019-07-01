@@ -4,13 +4,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stoliarenkoas.tm.webserver.api.repository.UserRepository;
 import ru.stoliarenkoas.tm.webserver.api.service.ProjectService;
-import ru.stoliarenkoas.tm.webserver.api.service.SessionService;
 import ru.stoliarenkoas.tm.webserver.api.service.UserService;
 import ru.stoliarenkoas.tm.webserver.entity.Session;
 import ru.stoliarenkoas.tm.webserver.entity.User;
 import ru.stoliarenkoas.tm.webserver.repository.jdbc.UserRepositoryMySQL;
-import ru.stoliarenkoas.tm.webserver.utils.CypherUtil;
-import ru.stoliarenkoas.tm.webserver.utils.SessionUtil;
+import ru.stoliarenkoas.tm.webserver.util.CypherUtil;
+import ru.stoliarenkoas.tm.webserver.util.SessionUtil;
 
 import java.util.Collection;
 import java.util.Collections;

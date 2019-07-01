@@ -6,7 +6,7 @@ import ru.stoliarenkoas.tm.webserver.Status;
 import ru.stoliarenkoas.tm.webserver.comparator.ComparatorType;
 import ru.stoliarenkoas.tm.webserver.entity.Task;
 import ru.stoliarenkoas.tm.webserver.api.repository.TaskRepository;
-import ru.stoliarenkoas.tm.webserver.utils.DatabaseConnectionUtil;
+import ru.stoliarenkoas.tm.webserver.util.DatabaseConnectionUtil;
 
 import java.sql.*;
 import java.util.Date;

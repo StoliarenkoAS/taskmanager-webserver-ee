@@ -7,7 +7,7 @@ import ru.stoliarenkoas.tm.webserver.api.service.SessionService;
 import ru.stoliarenkoas.tm.webserver.entity.Session;
 import ru.stoliarenkoas.tm.webserver.api.repository.Repository;
 import ru.stoliarenkoas.tm.webserver.api.service.Service;
-import ru.stoliarenkoas.tm.webserver.utils.SessionUtil;
+import ru.stoliarenkoas.tm.webserver.util.SessionUtil;
 
 import java.util.Collection;
 import java.util.Collections;

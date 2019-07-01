@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.stoliarenkoas.tm.webserver.comparator.ComparatorType;
 import ru.stoliarenkoas.tm.webserver.entity.Session;
 import ru.stoliarenkoas.tm.webserver.api.repository.SessionRepository;
-import ru.stoliarenkoas.tm.webserver.utils.DatabaseConnectionUtil;
+import ru.stoliarenkoas.tm.webserver.util.DatabaseConnectionUtil;
 
 import java.sql.*;
 import java.util.Calendar;
