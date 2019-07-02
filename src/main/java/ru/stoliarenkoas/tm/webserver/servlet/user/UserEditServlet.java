@@ -1,4 +1,4 @@
-package ru.stoliarenkoas.tm.webserver.servlet;
+package ru.stoliarenkoas.tm.webserver.servlet.user;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -7,12 +7,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = "/task-edit")
-public class TaskEditServlet extends HttpServlet {
+@WebServlet(urlPatterns = "/user-edit")
+public class UserEditServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/WEB-INF/view/task-edit.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/view/user-edit.jsp").forward(req, resp);
     }
 
 }

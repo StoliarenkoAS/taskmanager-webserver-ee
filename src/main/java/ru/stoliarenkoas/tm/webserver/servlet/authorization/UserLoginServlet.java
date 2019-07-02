@@ -1,4 +1,4 @@
-package ru.stoliarenkoas.tm.webserver.servlet;
+package ru.stoliarenkoas.tm.webserver.servlet.authorization;
 
 import ru.stoliarenkoas.tm.webserver.Attributes;
 import ru.stoliarenkoas.tm.webserver.entity.Session;

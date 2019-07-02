@@ -1,3 +1,7 @@
+<%@ page import="ru.stoliarenkoas.tm.webserver.entity.Task" %>
+<%@ page import="ru.stoliarenkoas.tm.webserver.Attributes" %>
+<%@ page import="java.util.Collection" %>
+<%@ page import="ru.stoliarenkoas.tm.webserver.entity.Project" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -61,49 +65,24 @@
                 <th scope="col" style="width: 40px">Delete</th>
             </tr>
             </thead>
+
             <tbody>
+            <% int i = 1;
+                for (Task task : (Collection<Task>)request.getAttribute(Attributes.TASK_LIST)) {%>
             <tr>
-                <th scope="row" style="vertical-align: middle">1</th>
-                <td style="vertical-align: center">Project name</td>
-                <td style="vertical-align: middle">Johnatannnnnn</td>
-                <td style="vertical-align: middle">Johnatannnnnn</td>
-                <td style="vertical-align: middle">131655-3213454646-231166-131565-312</td>
-                <td style="vertical-align: middle">12.05.1990</td>
-                <td style="vertical-align: middle">29.08.1991</td>
-                <td class="text-center" style="vertical-align: middle"><a href="task-edit"><i class="fas fa-pencil-alt align-self-center"></i></a></td>
-                <td class="text-center" style="vertical-align: middle"><a href="#"><i class="far fa-trash-alt"></i></a></td>
+                <th scope="row" style="vertical-align: middle"><%=i++%></th>
+                <td style="vertical-align: center"><%=task.getProjectId()%></td>
+                <td style="vertical-align: middle"><%=task.getName()%></td>
+                <td style="vertical-align: middle"><%=task.getDescription()%></td>
+                <td style="vertical-align: middle"><%=task.getId()%></td>
+                <td style="vertical-align: middle"><%=task.getStartDate()%></td>
+                <td style="vertical-align: middle"><%=task.getEndDate()%></td>
+                <td class="text-center" style="vertical-align: middle"><a href="task-edit?<%=Attributes.TASK_ID%>=<%=task.getId()%>"><i class="fas fa-pencil-alt align-self-center"></i></a></td>
+                <td class="text-center" style="vertical-align: middle"><a href="task-remove?<%=Attributes.TASK_ID%>=<%=task.getId()%>"><i class="far fa-trash-alt"></i></a></td>
             </tr>
-            <tr>
-                <th scope="row" style="vertical-align: middle">2</th>
-                <td style="vertical-align: center">Project name</td>
-                <td style="vertical-align: middle">Johnatan</td>
-                <td style="vertical-align: middle">Johnatan</td>
-                <td>131655-3213454646-231166-131565-312</td><td style="vertical-align: middle">12.05.1990</td>
-                <td style="vertical-align: middle">29.08.1991</td>
-                <td class="text-center" style="vertical-align: middle"><a href="task-edit"><i class="fas fa-pencil-alt align-self-center"></i></a></td>
-                <td class="text-center" style="vertical-align: middle"><a href="#"><i class="far fa-trash-alt"></i></a></td>
-            </tr>
-            <tr>
-                <th scope="row" style="vertical-align: middle">3</th>
-                <td style="vertical-align: center">Project name</td>
-                <td style="vertical-align: middle">Marquis</td>
-                <td style="vertical-align: middle">Marquis</td>
-                <td>131655-3213454646-231166-131565-312</td><td style="vertical-align: middle">12.05.1990</td>
-                <td style="vertical-align: middle">29.08.1991</td>
-                <td class="text-center" style="vertical-align: middle"><a href="task-edit"><i class="fas fa-pencil-alt align-self-center"></i></a></td>
-                <td class="text-center" style="vertical-align: middle"><a href="#"><i class="far fa-trash-alt"></i></a></td>
-            </tr>
-            <tr>
-                <th scope="row" style="vertical-align: middle">4</th>
-                <td style="vertical-align: center">Project name</td>
-                <td style="vertical-align: middle">SantaClaus</td>
-                <td style="vertical-align: middle">SantaClaus</td>
-                <td>131655-3213454646-231166-131565-312</td><td style="vertical-align: middle">12.05.1990</td>
-                <td style="vertical-align: middle">29.08.1991</td>
-                <td class="text-center" style="vertical-align: middle"><a href="task-edit"><i class="fas fa-pencil-alt align-self-center"></i></a></td>
-                <td class="text-center" style="vertical-align: middle"><a href="#"><i class="far fa-trash-alt"></i></a></td>
-            </tr>
+            <% } %>
             </tbody>
+
         </table>
         <%--    PAGINATION    --%>
         <nav aria-label="Page navigation">
@@ -143,32 +122,27 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form>
+                <form action="task-create" method="post">
                     <div class="form-group">
                         <label for="projectSelectCreateModal">Project</label>
-                        <select onfocus='this.size=3;' onblur='this.size=1;' onchange='this.size=1; this.blur();' class="form-control form-control-sm" id="projectSelectCreateModal">
-                            <option value="Project1-id">Project-01</option>
-                            <option value="Project2-id">Project-02</option>
-                            <option value="Project2-id">Project-02</option>
-                            <option value="Project2-id">Project-02</option>
-                            <option value="Project2-id">Project-02</option>
-                            <option value="Project2-id">Project-02</option>
-                            <option value="Project2-id">Project-02</option>
-                            <option value="Project2-id">Project-02</option>
+                        <select name="<%=Attributes.PROJECT_ID%>" onfocus='this.size=3;' onblur='this.size=1;' onchange='this.size=1; this.blur();' class="form-control form-control-sm" id="projectSelectCreateModal">
+                            <% for (Project project : (Collection<Project>)request.getAttribute(Attributes.PROJECT_LIST)) {%>
+                            <option value="<%=project.getId()%>"><%=project.getName()%></option>
+                            <% } %>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="nameInputCreateModal">Name</label>
-                        <input class="form-control form-control-sm" type="text" required id="nameInputCreateModal" aria-describedby="nameHelp" placeholder="name"/>
+                        <input name="<%=Attributes.NAME%>" class="form-control form-control-sm" type="text" required id="nameInputCreateModal" aria-describedby="nameHelp" placeholder="name"/>
                     </div>
                     <div class="form-group">
                         <label for="comment">Description:</label>
-                        <textarea class="form-control" rows="3" id="comment"></textarea>
+                        <input name="<%=Attributes.DESCRIPTION%>" class="form-control" rows="3" id="comment"></input>
                     </div>
                     <div class="form-row">
                         <div class="form-group col">
                             <label for="startDatepicker">Start date</label>
-                            <input id="startDatepicker"/>
+                            <input name="<%=Attributes.START_DATE%>" id="startDatepicker"/>
                             <script>
                                 $('#startDatepicker').datepicker({
                                     uiLibrary: 'bootstrap4'
@@ -177,7 +151,7 @@
                         </div>
                         <div class="form-group col">
                             <label for="endDatepicker">End date</label>
-                            <input id="endDatepicker"/>
+                            <input name="<%=Attributes.END_DATE%>" id="endDatepicker"/>
                             <script>
                                 $('#endDatepicker').datepicker({
                                     uiLibrary: 'bootstrap4'
@@ -188,7 +162,7 @@
                     <hr class="separator">
                     <div class="container-fluid">
                         <div class="row justify-content-end">
-                            <button class="btn btn-success mr-1" type="submit" data-dismiss="modal">Create</button>
+                            <button class="btn btn-success mr-1" type="submit">Create</button>
                             <button class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
                     </div>

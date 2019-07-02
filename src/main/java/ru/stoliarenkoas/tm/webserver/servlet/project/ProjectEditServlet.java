@@ -1,4 +1,4 @@
-package ru.stoliarenkoas.tm.webserver.servlet;
+package ru.stoliarenkoas.tm.webserver.servlet.project;
 
 import ru.stoliarenkoas.tm.webserver.Attributes;
 import ru.stoliarenkoas.tm.webserver.Status;
@@ -36,6 +36,8 @@ public class ProjectEditServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             final Session session = new SessionServiceImpl().getById((String)req.getSession().getAttribute(Attributes.SESSION_ID));
+            if (session == null) resp.sendRedirect("/");
+
             final ProjectService projectService = new ProjectServiceImpl();
             final Project project = projectService.get(session, req.getParameter(Attributes.PROJECT_ID));
             if (project == null) {

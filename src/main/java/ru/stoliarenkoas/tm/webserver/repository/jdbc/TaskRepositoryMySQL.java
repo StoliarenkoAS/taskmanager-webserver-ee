@@ -25,7 +25,7 @@ public class TaskRepositoryMySQL implements TaskRepository {
         final Task task = new Task();
         task.setId(resultSet.getString("id"));
         task.setProjectId(resultSet.getString("projectId"));
-        task.setUserId(resultSet.getString("userId"));
+        task.setUserId(resultSet.getString("user_id"));
         task.setName(resultSet.getString("name"));
         task.setDescription(resultSet.getString("description"));
         task.setCreationDate(resultSet.getDate("creationDate"));
@@ -38,7 +38,7 @@ public class TaskRepositoryMySQL implements TaskRepository {
     @Override @NotNull
     public Collection<Task> findAll(@NotNull final String userId) throws SQLException {
         final Collection<Task> tasks = new HashSet<>();
-        final PreparedStatement statement = connection.prepareStatement("SELECT * FROM `task` WHERE `userId` = ?");
+        final PreparedStatement statement = connection.prepareStatement("SELECT * FROM `task` WHERE `user_id` = ?");
         statement.setString(1, userId);
         final ResultSet resultSet = statement.executeQuery();
         while (resultSet.next()) {
@@ -50,7 +50,7 @@ public class TaskRepositoryMySQL implements TaskRepository {
     @Override @NotNull
     public Collection<Task> findAllAndSort(@NotNull final String userId, @NotNull final ComparatorType comparatorType) throws SQLException {
         final Collection<Task> tasks = new LinkedHashSet<>();
-        final PreparedStatement statement = connection.prepareStatement("SELECT * FROM `task` WHERE `userId` = ? ORDER BY ?");
+        final PreparedStatement statement = connection.prepareStatement("SELECT * FROM `task` WHERE `user_id` = ? ORDER BY ?");
         statement.setString(1, userId);
         switch (comparatorType) {
             case BY_STATUS: {
@@ -79,7 +79,7 @@ public class TaskRepositoryMySQL implements TaskRepository {
     @Override @NotNull
     public Collection<Task> findByName(@NotNull final String userId, @NotNull final String name) throws SQLException {
         final Collection<Task> tasks = new HashSet<>();
-        final PreparedStatement statement = connection.prepareStatement("SELECT * FROM `task` WHERE `userId` = ? AND `name` = ?");
+        final PreparedStatement statement = connection.prepareStatement("SELECT * FROM `task` WHERE `user_id` = ? AND `name` = ?");
         statement.setString(1, userId);
         statement.setString(2, name);
         final ResultSet resultSet = statement.executeQuery();
@@ -92,7 +92,7 @@ public class TaskRepositoryMySQL implements TaskRepository {
     @Override @NotNull
     public Collection<Task> findByNameAndSort(@NotNull final String userId, @NotNull final ComparatorType comparatorType, @NotNull final String name) throws SQLException {
         final Collection<Task> tasks = new LinkedHashSet<>();
-        final PreparedStatement statement = connection.prepareStatement("SELECT * FROM `task` WHERE `userId` = ? AND `name` = ? ORDER BY ?");
+        final PreparedStatement statement = connection.prepareStatement("SELECT * FROM `task` WHERE `user_id` = ? AND `name` = ? ORDER BY ?");
         statement.setString(1, userId);
         statement.setString(2, name);
         switch (comparatorType) {
@@ -122,7 +122,7 @@ public class TaskRepositoryMySQL implements TaskRepository {
     @Override @NotNull
     public Collection<Task> findByProjectId(@NotNull final String userId, @NotNull final String projectId) throws SQLException {
         final Collection<Task> tasks = new HashSet<>();
-        final PreparedStatement statement = connection.prepareStatement("SELECT * FROM `task` WHERE `userId` = ? AND `projectId` = ?");
+        final PreparedStatement statement = connection.prepareStatement("SELECT * FROM `task` WHERE `user_id` = ? AND `projectId` = ?");
         statement.setString(1, userId);
         statement.setString(2, projectId);
         final ResultSet resultSet = statement.executeQuery();
@@ -135,7 +135,7 @@ public class TaskRepositoryMySQL implements TaskRepository {
     @Override @NotNull
     public Collection<Task> search(@NotNull final String userId, @NotNull final String searchLine) throws SQLException {
         final Collection<Task> tasks = new HashSet<>();
-        final PreparedStatement statement = connection.prepareStatement("SELECT * FROM `task` WHERE (`userId` = ?) " +
+        final PreparedStatement statement = connection.prepareStatement("SELECT * FROM `task` WHERE (`user_id` = ?) " +
                 "AND (`name` LIKE CONCAT(\"%\", ?, \"%\") OR `description` LIKE LIKE CONCAT(\"%\", ?, \"%\"))");
         statement.setString(1, userId);
         statement.setString(2, searchLine);
@@ -149,7 +149,7 @@ public class TaskRepositoryMySQL implements TaskRepository {
 
     @Override @Nullable
     public Task findOne(@NotNull final String userId, @NotNull final String id) throws SQLException {
-        final PreparedStatement statement = connection.prepareStatement("SELECT * FROM `task` WHERE `userId` = ? AND `id` = ? LIMIT 1");
+        final PreparedStatement statement = connection.prepareStatement("SELECT * FROM `task` WHERE `user_id` = ? AND `id` = ? LIMIT 1");
         statement.setString(1, userId);
         statement.setString(2, id);
         final ResultSet resultSet = statement.executeQuery();
@@ -168,7 +168,7 @@ public class TaskRepositoryMySQL implements TaskRepository {
         if (resultSet.next() && resultSet.getInt("count") > 0) return false;
 
         final PreparedStatement statement = connection.prepareStatement("INSERT INTO `task` " +
-                "(`id`, `projectId`, `userId`, `name`, `description`, `creationDate`, `startDate`, `endDate`, `status`) " +
+                "(`id`, `projectId`, `user_id`, `name`, `description`, `creationDate`, `startDate`, `endDate`, `status`) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
         statement.setString(1, task.getId());
         statement.setString(2, task.getProjectId());
@@ -184,7 +184,7 @@ public class TaskRepositoryMySQL implements TaskRepository {
 
     @Override @NotNull
     public Boolean merge(@NotNull final String userId, @NotNull final Task task) throws SQLException {
-        final PreparedStatement checkIfExists = connection.prepareStatement("SELECT COUNT(*) AS `count` FROM `task` WHERE `id` = ?" +
+        final PreparedStatement checkIfExists = connection.prepareStatement("SELECT COUNT(*) AS `count` FROM `task` WHERE `id` = ? " +
                 "OR (`projectId` = ? AND `name` = ?)");
         checkIfExists.setString(1, task.getId());
         checkIfExists.setString(2, task.getProjectId());
@@ -193,14 +193,15 @@ public class TaskRepositoryMySQL implements TaskRepository {
         final boolean update = (resultSet.next() && resultSet.getInt(1) > 0);
 
         if (update) {
-            final PreparedStatement deleteStatement = connection.prepareStatement("DELETE FROM `project` WHERE `userId` = ? AND `name` = ?");
+            final PreparedStatement deleteStatement = connection.prepareStatement("DELETE FROM `task` WHERE (`user_id` = ? AND `name` = ?) OR `id` = ?");
             deleteStatement.setString(1, task.getProjectId());
             deleteStatement.setString(2, task.getName());
-            deleteStatement.execute();
+            deleteStatement.setString(3, task.getId());
+            deleteStatement.executeUpdate();
         }
 
         final PreparedStatement statement = connection.prepareStatement("INSERT INTO `task` " +
-            "(`id`, `projectId`, `userId`, `name`, `description`, `creationDate`, `startDate`, `endDate`, `status`) " +
+            "(`id`, `projectId`, `user_id`, `name`, `description`, `creationDate`, `startDate`, `endDate`, `status`) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
         statement.setString(1, task.getId());
         statement.setString(2, task.getProjectId());
@@ -216,7 +217,7 @@ public class TaskRepositoryMySQL implements TaskRepository {
 
     @Override @Nullable
     public String remove(@NotNull final String userId, @NotNull final String id) throws SQLException {
-        final PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM `task` WHERE `userId` = ? AND `id` = ?");
+        final PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM `task` WHERE `user_id` = ? AND `id` = ?");
         preparedStatement.setString(1, userId);
         preparedStatement.setString(2, id);
         if (preparedStatement.executeUpdate() > 0) return id;
@@ -231,8 +232,8 @@ public class TaskRepositoryMySQL implements TaskRepository {
     @Override @NotNull
     public Collection<String> removeByName(@NotNull final String userId, @NotNull final String name) throws SQLException {
         final Collection<String> ids = new HashSet<>();
-        final PreparedStatement getIdsStatement = connection.prepareStatement("SELECT `id` FROM `task` WHERE `userId` = ? AND `name` = ?");
-        final PreparedStatement removeStatement = connection.prepareStatement("DELETE FROM `task` WHERE `userId` = ? AND `name` = ?");
+        final PreparedStatement getIdsStatement = connection.prepareStatement("SELECT `id` FROM `task` WHERE `user_id` = ? AND `name` = ?");
+        final PreparedStatement removeStatement = connection.prepareStatement("DELETE FROM `task` WHERE `user_id` = ? AND `name` = ?");
         getIdsStatement.setString(1, userId);
         getIdsStatement.setString(2, name);
         removeStatement.setString(1, userId);
@@ -266,8 +267,8 @@ public class TaskRepositoryMySQL implements TaskRepository {
     @Override @NotNull
     public Collection<String> removeAll(@NotNull final String userId) throws SQLException {
         final Collection<String> ids = new HashSet<>();
-        final PreparedStatement getIdsStatement = connection.prepareStatement("SELECT `id` FROM `task` WHERE `userId` = ?");
-        final PreparedStatement removeStatement = connection.prepareStatement("DELETE FROM `task` WHERE `userId` = ?");
+        final PreparedStatement getIdsStatement = connection.prepareStatement("SELECT `id` FROM `task` WHERE `user_id` = ?");
+        final PreparedStatement removeStatement = connection.prepareStatement("DELETE FROM `task` WHERE `user_id` = ?");
         getIdsStatement.setString(1, userId);
         removeStatement.setString(1, userId);
         final ResultSet resultSet = getIdsStatement.executeQuery();

@@ -1,4 +1,4 @@
-package ru.stoliarenkoas.tm.webserver.servlet;
+package ru.stoliarenkoas.tm.webserver.servlet.authorization;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -7,12 +7,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = "/task-create")
-public class TaskCreateServlet extends HttpServlet {
+@WebServlet(urlPatterns = "/user-register")
+public class UserRegisterServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/WEB-INF/view/task-list.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/view/index.jsp").forward(req, resp);
     }
 
 }

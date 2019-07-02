@@ -1,4 +1,4 @@
-package ru.stoliarenkoas.tm.webserver.servlet;
+package ru.stoliarenkoas.tm.webserver.servlet.authorization;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,7 +12,8 @@ public class UserLogoutServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/WEB-INF/view/index.jsp").forward(req, resp);
+        req.getSession().invalidate();
+        resp.sendRedirect("/");
     }
 
 }

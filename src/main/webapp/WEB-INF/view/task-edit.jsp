@@ -1,3 +1,6 @@
+<%@ page import="ru.stoliarenkoas.tm.webserver.entity.Task" %>
+<%@ page import="ru.stoliarenkoas.tm.webserver.Attributes" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -44,27 +47,32 @@
     <a href="#" class="navbar-brand"><img src="https://i.imgur.com/cVPgHhm.png" alt="logo" width="30"></a>
 </nav>
 
+<%
+    final Task task = (Task) request.getAttribute(Attributes.TASK);
+    final SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+%>
+
 <div class="container mt-5" style="padding-bottom: 10%">
     <h3>Edit TASK:</h3>
-    <form>
+    <form action="task-edit" method="post">
         <div class="form-row">
             <div class="form-group col">
                 <label for="idInputEditModal">Id</label>
-                <input disabled class="form-control form-control-sm" type="text" id="idInputEditModal" aria-describedby="idHelp" placeholder="1111-2222222-33333-4444-555"/>
+                <input name="<%=Attributes.TASK_ID%>" readonly="readonly" class="form-control form-control-sm" type="text" id="idInputEditModal" aria-describedby="idHelp" value="<%=task.getId()%>"/>
             </div>
             <div class="form-group col">
                 <label for="projectIdInputEditModal">Project id</label>
-                <input disabled class="form-control form-control-sm" type="text" id="projectIdInputEditModal" aria-describedby="projectIdHelp" placeholder="1111-2222222-33333-4444-555"/>
+                <input name="<%=Attributes.PROJECT_ID%>" readonly="readonly" class="form-control form-control-sm" type="text" id="projectIdInputEditModal" aria-describedby="projectIdHelp" value="<%=task.getProjectId()%>"/>
             </div>
         </div>
         <div class="form-row">
             <div class="form-group col">
                 <label for="nameInputCreateModal">Name</label>
-                <input class="form-control form-control-sm" type="text" required id="nameInputCreateModal" aria-describedby="nameHelp" placeholder="name"/>
+                <input name="<%=Attributes.NAME%>" class="form-control form-control-sm" type="text" required id="nameInputCreateModal" aria-describedby="nameHelp" value="<%=task.getName()%>"/>
             </div>
             <div class="form-group col">
                 <label for="statusEditModal">Status</label>
-                <select class="form-control form-control-sm" id="statusEditModal">
+                <select name="<%=Attributes.STATUS%>" class="form-control form-control-sm" id="statusEditModal">
                     <option value="PLANNED">Planned</option>
                     <option value="IN_PROGRESS">In progress</option>
                     <option value="COMPLETE">Complete</option>
@@ -73,12 +81,12 @@
         </div>
         <div class="form-group">
             <label for="comment">Description:</label>
-            <textarea class="form-control" rows="3" id="comment"></textarea>
+            <input name="<%=Attributes.DESCRIPTION%>" class="form-control" rows="3" id="comment" value="<%=task.getDescription()%>"/>
         </div>
         <div class="form-row">
             <div class="form-group col">
                 <label for="startDatepicker">Start date</label>
-                <input id="startDatepicker"/>
+                <input name="<%=Attributes.START_DATE%>" id="startDatepicker" value="<%=format.format(task.getStartDate())%>"/>
                 <script>
                     $('#startDatepicker').datepicker({
                         uiLibrary: 'bootstrap4'
@@ -87,7 +95,7 @@
             </div>
             <div class="form-group col">
                 <label for="endDatepicker">End date</label>
-                <input id="endDatepicker"/>
+                <input name="<%=Attributes.END_DATE%>" id="endDatepicker" value="<%=format.format(task.getEndDate())%>"/>
                 <script>
                     $('#endDatepicker').datepicker({
                         uiLibrary: 'bootstrap4'
@@ -98,7 +106,7 @@
         <hr class="separator">
         <div class="container-fluid">
             <div class="row justify-content-end">
-                <button class="btn btn-success" type="submit" data-dismiss="modal">Save</button>
+                <button class="btn btn-success" type="submit">Save</button>
             </div>
         </div>
     </form>
