@@ -1,3 +1,6 @@
+<%@ page import="ru.stoliarenkoas.tm.webserver.entity.User" %>
+<%@ page import="ru.stoliarenkoas.tm.webserver.Attributes" %>
+<%@ page import="java.util.Collection" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -53,34 +56,16 @@
             </tr>
             </thead>
             <tbody>
+            <% int i = 1;
+                for (User user : (Collection<User>)request.getAttribute(Attributes.USER_LIST)) {%>
             <tr>
-                <th scope="row" style="vertical-align: middle">1</th>
-                <td style="vertical-align: middle">Johnatannnnnn</td>
-                <td style="vertical-align: middle">131655-3213454646-231166-131565-312</td>
-                <td class="text-center" style="vertical-align: middle"><a href="/user-edit"><i class="fas fa-pencil-alt align-self-center"></i></a></td>
-                <td class="text-center" style="vertical-align: middle"><a href="#"><i class="far fa-trash-alt"></i></a></td>
+                <th scope="row" style="vertical-align: middle"><%=i++%></th>
+                <td style="vertical-align: middle"><%=user.getLogin()%></td>
+                <td style="vertical-align: middle"><%=user.getId()%></td>
+                <td class="text-center" style="vertical-align: middle"><a href="user-edit?<%=Attributes.USER_ID%>=<%=user.getId()%>"><i class="fas fa-pencil-alt align-self-center"></i></a></td>
+                <td class="text-center" style="vertical-align: middle"><a href="user-remove?<%=Attributes.USER_ID%>=<%=user.getId()%>"><i class="far fa-trash-alt"></i></a></td>
             </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>Johnatan</td>
-                <td>131655-3213454646-231166-131565-312</td>
-                <td class="text-center" style="vertical-align: middle"><a href="/user-edit"><i class="fas fa-pencil-alt align-self-center"></i></a></td>
-                <td class="text-center" style="vertical-align: middle"><a href="#"><i class="far fa-trash-alt"></i></a></td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td>Marquis</td>
-                <td>131655-3213454646-231166-131565-312</td>
-                <td class="text-center" style="vertical-align: middle"><a href="/user-edit"><i class="fas fa-pencil-alt align-self-center"></i></a></td>
-                <td class="text-center" style="vertical-align: middle"><a href="#"><i class="far fa-trash-alt"></i></a></td>
-            </tr>
-            <tr>
-                <th scope="row">4</th>
-                <td>SantaClaus</td>
-                <td>131655-3213454646-231166-131565-312</td>
-                <td class="text-center" style="vertical-align: middle"><a href="/user-edit"><i class="fas fa-pencil-alt align-self-center"></i></a></td>
-                <td class="text-center" style="vertical-align: middle"><a href="#"><i class="far fa-trash-alt"></i></a></td>
-            </tr>
+            <% } %>
             </tbody>
         </table>
         <%--    PAGINATION    --%>

@@ -41,7 +41,7 @@
         </ul>
     </div>
 
-    <button class="btn btn-outline-light">Logout</button>
+    <button type="button" formaction="logout" class="btn btn-outline-light">Logout</button>
 </nav>
 <nav class="navbar navbar-dark navbar-expand-lg bg-dark fixed-bottom">
     <a href="#" class="navbar-brand"><img src="https://i.imgur.com/cVPgHhm.png" alt="logo" width="30"></a>

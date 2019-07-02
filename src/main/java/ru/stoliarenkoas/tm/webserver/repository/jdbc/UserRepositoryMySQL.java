@@ -96,7 +96,7 @@ public class UserRepositoryMySQL implements UserRepository {
 
     @Override @NotNull
     public Boolean persist(@NotNull final User user) throws SQLException {
-        final PreparedStatement statement = connection.prepareStatement("INSERT IGNORE INTO `user` (`id`, `login`, `pwdHash`, `role`) VALUES (?, ?, ?, ?)");
+        final PreparedStatement statement = connection.prepareStatement("INSERT INTO `user` (`id`, `login`, `pwdHash`, `role`) VALUES (?, ?, ?, ?)");
         statement.setString(1, user.getId());
         statement.setString(2, user.getLogin());
         statement.setString(3, user.getPasswordHash());
@@ -107,7 +107,11 @@ public class UserRepositoryMySQL implements UserRepository {
     @Override @NotNull
     public Boolean merge(@NotNull final String userId, @NotNull final User user) throws SQLException {
         if (!isAdmin(userId)) return false;
-        final PreparedStatement statement = connection.prepareStatement("INSERT REPLACE INTO `user` (`id`, `login`, `pwdHash`, `role`) VALUES (?, ?, ?, ?)");
+        final PreparedStatement deleteStatement = connection.prepareStatement("DELETE FROM `user` WHERE `id` = ?");
+        deleteStatement.setString(1, user.getId());
+        deleteStatement.executeUpdate();
+
+        final PreparedStatement statement = connection.prepareStatement("INSERT INTO `user` (`id`, `login`, `pwdHash`, `role`) VALUES (?, ?, ?, ?)");
         statement.setString(1, user.getId());
         statement.setString(2, user.getLogin());
         statement.setString(3, user.getPasswordHash());

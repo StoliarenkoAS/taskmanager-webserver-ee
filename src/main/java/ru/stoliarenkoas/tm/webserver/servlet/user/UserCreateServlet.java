@@ -1,5 +1,13 @@
 package ru.stoliarenkoas.tm.webserver.servlet.user;
 
+import ru.stoliarenkoas.tm.webserver.Attributes;
+import ru.stoliarenkoas.tm.webserver.api.service.UserService;
+import ru.stoliarenkoas.tm.webserver.entity.Session;
+import ru.stoliarenkoas.tm.webserver.entity.User;
+import ru.stoliarenkoas.tm.webserver.service.SessionServiceImpl;
+import ru.stoliarenkoas.tm.webserver.service.UserServiceImpl;
+import ru.stoliarenkoas.tm.webserver.util.CypherUtil;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,7 +20,31 @@ public class UserCreateServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/WEB-INF/view/user-list.jsp").forward(req, resp);
+        try {
+            final Session session = new SessionServiceImpl().getById((String) req.getSession().getAttribute(Attributes.SESSION_ID));
+            if (session == null) {
+                resp.sendRedirect("/");
+                return;
+            }
+
+            final UserService userService = new UserServiceImpl();
+            final User user = userService.get(session, session.getUserId());
+            if (user == null || User.Role.ADMIN != user.getRole()) {
+                resp.sendError(HttpServletResponse.SC_FORBIDDEN);
+                return;
+            }
+
+            final User newUser = new User();
+            newUser.setLogin(req.getParameter(Attributes.LOGIN));
+            newUser.setPasswordHash(CypherUtil.getMd5(req.getParameter(Attributes.PASSWORD)));
+            newUser.setRole(User.Role.valueOf(req.getParameter(Attributes.ROLE)));
+
+            userService.save(session, newUser);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        }
+        resp.sendRedirect("users");
     }
 
 }

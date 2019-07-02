@@ -21,7 +21,6 @@ public class UserLoginServlet extends HttpServlet {
         final String password = req.getParameter("password");
         try {
             final Session session = new UserServiceImpl().login(login, password);
-            System.out.println(session.getId());
             req.getSession().setAttribute(Attributes.SESSION_ID, session.getId());
         } catch (Exception e) {
             e.printStackTrace();

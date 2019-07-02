@@ -1,3 +1,5 @@
+<%@ page import="ru.stoliarenkoas.tm.webserver.entity.User" %>
+<%@ page import="ru.stoliarenkoas.tm.webserver.Attributes" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -39,24 +41,28 @@
     <a href="#" class="navbar-brand"><img src="https://i.imgur.com/cVPgHhm.png" alt="logo" width="30"></a>
 </nav>
 
+<%
+    final User user = (User) request.getAttribute(Attributes.USER);
+%>
+
 <div class="container mt-5" style="padding-bottom: 10%">
     <h3>Edit USER:</h3>
-    <form>
+    <form action="user-edit" method="post">
         <div class="form-group">
             <label for="idInputEditModal">Id</label>
-            <input disabled class="form-control form-control-sm" type="text" id="idInputEditModal" aria-describedby="idHelp" placeholder="1111-2222222-33333-4444-555"/>
+            <input name="<%=Attributes.USER_ID%>" readonly="readonly" class="form-control form-control-sm" type="text" id="idInputEditModal" aria-describedby="idHelp" value="<%=user.getId()%>"/>
         </div>
         <div class="form-group">
             <label for="loginInputEditModal">Login</label>
-            <input class="form-control form-control-sm" type="text" required id="loginInputEditModal" aria-describedby="loginHelp" placeholder="login"/>
+            <input name="<%=Attributes.LOGIN%>" class="form-control form-control-sm" type="text" required id="loginInputEditModal" aria-describedby="loginHelp" value="<%=user.getLogin()%>"/>
         </div>
         <div class="form-group">
             <label for="passwordInputEditModal">Password</label>
-            <input class="form-control form-control-sm" type="text" required id="passwordInputEditModal" placeholder="password"/>
+            <input name="<%=Attributes.PASSWORD%>" class="form-control form-control-sm" type="text" required id="passwordInputEditModal" placeholder="password"/>
         </div>
         <div class="form-group">
             <label for="roleEditModal">Role</label>
-            <select class="form-control form-control-sm" id="roleEditModal">
+            <select name="<%=Attributes.ROLE%>" class="form-control form-control-sm" id="roleEditModal">
                 <option value="ADMIN">Administrator</option>
                 <option value="USER">User</option>
             </select>
@@ -64,7 +70,7 @@
         <hr class="separator">
         <div class="container-fluid">
             <div class="row justify-content-end">
-                <button class="btn btn-success" type="submit" data-dismiss="modal">Save</button>
+                <button class="btn btn-success" type="submit">Save</button>
             </div>
         </div>
     </form>
