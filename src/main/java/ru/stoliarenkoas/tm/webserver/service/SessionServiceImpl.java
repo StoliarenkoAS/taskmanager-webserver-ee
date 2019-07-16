@@ -2,6 +2,7 @@ package ru.stoliarenkoas.tm.webserver.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.stereotype.Service;
 import ru.stoliarenkoas.tm.webserver.entity.Session;
 import ru.stoliarenkoas.tm.webserver.api.repository.SessionRepository;
 import ru.stoliarenkoas.tm.webserver.api.service.SessionService;
@@ -10,6 +11,7 @@ import ru.stoliarenkoas.tm.webserver.repository.jdbc.SessionRepositoryMySQL;
 import java.util.Collection;
 import java.util.Collections;
 
+@Service
 public class SessionServiceImpl implements SessionService {
     
     private final SessionRepository repository = new SessionRepositoryMySQL();

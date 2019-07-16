@@ -2,6 +2,7 @@ package ru.stoliarenkoas.tm.webserver.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.stereotype.Service;
 import ru.stoliarenkoas.tm.webserver.api.repository.PlannedEntityRepository;
 import ru.stoliarenkoas.tm.webserver.api.service.ProjectService;
 import ru.stoliarenkoas.tm.webserver.comparator.ComparatorType;
@@ -12,6 +13,7 @@ import ru.stoliarenkoas.tm.webserver.repository.jdbc.ProjectRepositoryMySQL;
 import java.util.Collection;
 import java.util.Collections;
 
+@Service
 public class ProjectServiceImpl extends AbstractService<Project> implements ProjectService {
 
     private TaskServiceImpl taskService = new TaskServiceImpl();

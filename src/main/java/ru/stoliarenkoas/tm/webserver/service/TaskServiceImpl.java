@@ -2,6 +2,7 @@ package ru.stoliarenkoas.tm.webserver.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.stereotype.Service;
 import ru.stoliarenkoas.tm.webserver.api.repository.PlannedEntityRepository;
 import ru.stoliarenkoas.tm.webserver.api.repository.TaskRepository;
 import ru.stoliarenkoas.tm.webserver.api.service.TaskService;
@@ -13,6 +14,7 @@ import ru.stoliarenkoas.tm.webserver.repository.jdbc.TaskRepositoryMySQL;
 import java.util.Collection;
 import java.util.Collections;
 
+@Service
 public class TaskServiceImpl extends AbstractService<Task> implements TaskService {
 
     public TaskServiceImpl() {

@@ -2,6 +2,7 @@ package ru.stoliarenkoas.tm.webserver.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.stereotype.Service;
 import ru.stoliarenkoas.tm.webserver.api.repository.UserRepository;
 import ru.stoliarenkoas.tm.webserver.api.service.ProjectService;
 import ru.stoliarenkoas.tm.webserver.api.service.UserService;
@@ -14,6 +15,7 @@ import ru.stoliarenkoas.tm.webserver.util.SessionUtil;
 import java.util.Collection;
 import java.util.Collections;
 
+@Service
 public class UserServiceImpl extends AbstractService<User> implements UserService {
 
     private final ProjectService projectService = new ProjectServiceImpl();
@@ -26,15 +28,13 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
     private Boolean isValid(@Nullable final Session session, @Nullable final User user) throws Exception {
         if (session == null || user == null) return false;
         if (user.getLogin() == null || user.getLogin().isEmpty()) return false;
-        if (!session.getUserId().equals(user.getId())) return false;
         return user.getPasswordHash() != null && !user.getPasswordHash().isEmpty();
     }
 
     @Override @NotNull
     public Boolean save(@Nullable final Session session, @Nullable final User user) throws Exception {
-        if (!isValid(session, user)) return false;
-        user.setPasswordHash(CypherUtil.getMd5(user.getPasswordHash())); //checked in validation method
-        repository.merge(user.getId(), user);
+        if (!isValid(session, user))  return false;
+        repository.merge(session.getUserId(), user);
         return true;
     }
 
