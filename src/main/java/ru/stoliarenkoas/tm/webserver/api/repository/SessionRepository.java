@@ -2,7 +2,7 @@ package ru.stoliarenkoas.tm.webserver.api.repository;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.stoliarenkoas.tm.webserver.entity.Session;
+import ru.stoliarenkoas.tm.webserver.model.entity.Session;
 
 import java.util.Collection;
 

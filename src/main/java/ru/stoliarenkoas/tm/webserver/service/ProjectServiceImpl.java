@@ -2,62 +2,147 @@ package ru.stoliarenkoas.tm.webserver.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.stoliarenkoas.tm.webserver.api.repository.PlannedEntityRepository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.stoliarenkoas.tm.webserver.api.service.ProjectService;
-import ru.stoliarenkoas.tm.webserver.comparator.ComparatorType;
-import ru.stoliarenkoas.tm.webserver.entity.Project;
-import ru.stoliarenkoas.tm.webserver.entity.Session;
-import ru.stoliarenkoas.tm.webserver.repository.jdbc.ProjectRepositoryMySQL;
+import ru.stoliarenkoas.tm.webserver.api.service.SessionService;
+import ru.stoliarenkoas.tm.webserver.api.service.TaskService;
+import ru.stoliarenkoas.tm.webserver.api.service.UserService;
+import ru.stoliarenkoas.tm.webserver.model.dto.ProjectDTO;
+import ru.stoliarenkoas.tm.webserver.model.dto.SessionDTO;
+import ru.stoliarenkoas.tm.webserver.model.entity.Project;
+import ru.stoliarenkoas.tm.webserver.model.entity.User;
+import ru.stoliarenkoas.tm.webserver.repository.ProjectRepositorySpring;
+import ru.stoliarenkoas.tm.webserver.util.SessionUtil;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 @Service
-public class ProjectServiceImpl extends AbstractService<Project> implements ProjectService {
+@Transactional
+@Qualifier("spring")
+public class ProjectServiceImpl implements ProjectService {
 
-    private TaskServiceImpl taskService = new TaskServiceImpl();
+    private ProjectRepositorySpring repository;
 
-    public ProjectServiceImpl() {
-        super(new ProjectRepositoryMySQL());
+    private SessionService sessionService;
+
+    private UserService userService;
+
+    private TaskService taskService;
+
+    @Autowired
+    public void setRepository(ProjectRepositorySpring repository) {
+        this.repository = repository;
     }
 
-    @Override
-    public Boolean deleteChildrenByParentId(@Nullable final Session session, @Nullable final String id) throws Exception {
-        return taskService.deleteByIds(session, Collections.singletonList(id));
+    @Autowired
+    public void setSessionService(SessionService sessionService) {
+        this.sessionService = sessionService;
     }
 
-    @Override
-    public Boolean deleteChildrenByParentIds(@Nullable final Session session, @Nullable final Collection<String> ids) throws Exception {
-        taskService.removeTasksByProjectIds(session, ids);
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    @Autowired
+    public void setTaskService(TaskService taskService) {
+        this.taskService = taskService;
+    }
+
+    @Nullable
+    private String getCurrentUserId(@Nullable final SessionDTO session) throws Exception {
+        if (session == null || !SessionUtil.isValid(session)) return null;
+        if (!sessionService.isOpen(session.getId())) return null;
+        return session.getUserId();
+    }
+
+    @Override @NotNull
+    public Collection<ProjectDTO> getAll(@Nullable SessionDTO session) throws Exception {
+        final String userId = getCurrentUserId(session);
+        if (userId == null) return Collections.emptyList();
+        return repository.findByUser_Id(userId).stream().map(Project::toDTO).collect(Collectors.toList());
+    }
+
+    @Override @NotNull
+    public Collection<ProjectDTO> getAllByName(@Nullable SessionDTO session, @Nullable String name) throws Exception {
+        final String userId = getCurrentUserId(session);
+        if (userId == null || name == null || userId.isEmpty() || name.isEmpty()) return Collections.emptyList();
+        return repository.findByUser_IdAndName(userId, name).stream().map(Project::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override @Nullable
+    public ProjectDTO get(@Nullable SessionDTO session, @Nullable String id) throws Exception {
+        final String userId = getCurrentUserId(session);
+        if (userId == null || id == null || userId.isEmpty() || id.isEmpty()) return null;
+        return repository.findAnyByUser_IdAndId(userId, id).toDTO();
+    }
+
+    @Override @NotNull
+    public Collection<ProjectDTO> search(@Nullable SessionDTO session, @Nullable String searchLine) throws Exception {
+        final String userId = getCurrentUserId(session);
+        if (userId == null || searchLine == null || userId.isEmpty() || searchLine.isEmpty()) return Collections.emptyList();
+        searchLine = "%" + searchLine + "%";
+        return repository.search(userId, searchLine).stream().map(Project::toDTO).collect(Collectors.toList());
+    }
+
+    @Override @NotNull
+    public Boolean save(@Nullable SessionDTO session, @Nullable ProjectDTO projectDTO) throws Exception {
+        final String userId = getCurrentUserId(session);
+        if (userId == null || projectDTO == null || userId.isEmpty()) return false;
+        if (!userId.equals(projectDTO.getUserId())) return false;
+        repository.save(new Project(projectDTO, new User(userService.get(session, userId))));
         return true;
     }
 
     @Override @NotNull
-    public Collection<Project> search(@Nullable final Session session, @Nullable final String searchLine) throws Exception {
+    public Boolean delete(@Nullable SessionDTO session, @Nullable String id) throws Exception {
         final String userId = getCurrentUserId(session);
-        if (userId == null || searchLine == null || searchLine.isEmpty()) return Collections.emptySet();
-        return ((PlannedEntityRepository<Project>)repository).search(userId, searchLine);
+        if (userId == null || id == null || userId.isEmpty() || id.isEmpty()) return false;
+        repository.deleteByUser_IdAndId(userId, id);
+        return true;
     }
 
     @Override @NotNull
-    public Collection<Project> getAllSorted(@Nullable final Session session, @Nullable final ComparatorType comparatorType) throws Exception {
-        final String userId = getCurrentUserId(session);
-        if (userId == null) return Collections.emptySet();
-        if (comparatorType == null) return getAll(session);
-        return ((PlannedEntityRepository<Project>)repository).findAllAndSort(userId, comparatorType);
+    public Boolean delete(@Nullable SessionDTO session, @Nullable ProjectDTO projectDTO) throws Exception {
+        if (projectDTO == null) return false;
+        return delete(session, projectDTO.getId());
     }
 
     @Override @NotNull
-    public Collection<Project> getAllByNameSorted(@Nullable final Session session, @Nullable final String name, @Nullable final ComparatorType comparatorType) throws Exception {
+    public Boolean deleteByIds(@Nullable SessionDTO session, @Nullable Collection<String> ids) throws Exception {
         final String userId = getCurrentUserId(session);
-        if (userId == null || name == null) return Collections.emptySet();
-        if (comparatorType == null) return getAllByName(session, name);
-        return ((PlannedEntityRepository<Project>)repository).findByNameAndSort(userId, comparatorType, name);
+        if (userId == null || ids == null || userId.isEmpty() || ids.isEmpty()) return false;
+        for (final String id : ids) {
+            repository.deleteByUser_IdAndId(userId, id);
+        }
+        return true;
     }
 
-    @Override
-    public @NotNull Boolean deleteProjectTasks(@Nullable final Session session, @Nullable final String projectId) throws Exception {
-        return deleteChildrenByParentId(session, projectId);
+    @Override @NotNull
+    public Boolean deleteByName(@Nullable SessionDTO session, @Nullable String name) throws Exception {
+        final String userId = getCurrentUserId(session);
+        if (userId == null || name == null || userId.isEmpty() || name.isEmpty()) return false;
+        return repository.deleteByUser_IdAndName(userId, name) > 0;
     }
+
+    @Override @NotNull
+    public Boolean deleteAll(@Nullable SessionDTO session) throws Exception {
+        final String userId = getCurrentUserId(session);
+        if (userId == null || userId.isEmpty()) return false;
+        return repository.deleteByUser_Id(userId) > 0;
+    }
+
+    @Override @NotNull
+    public Boolean deleteProjectTasks(@Nullable SessionDTO session, @Nullable String projectId) throws Exception {
+        final String userId = getCurrentUserId(session);
+        if (userId == null || projectId == null || userId.isEmpty() || projectId.isEmpty()) return false;
+        return !taskService.removeTasksByProjectIds(session, Collections.singletonList(projectId)).isEmpty();
+    }
+    
 }

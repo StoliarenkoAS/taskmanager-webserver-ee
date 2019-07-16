@@ -1,10 +1,11 @@
 <jsp:include page="template/header.jsp"/>
 
-<%@ page import="ru.stoliarenkoas.tm.webserver.entity.User" %>
+<%@ page import="ru.stoliarenkoas.tm.webserver.model.entity.User" %>
 <%@ page import="ru.stoliarenkoas.tm.webserver.Attributes" %>
+<%@ page import="ru.stoliarenkoas.tm.webserver.model.dto.UserDTO" %>
 
 <%
-    final User user = (User) request.getAttribute(Attributes.USER);
+    final UserDTO user = (UserDTO) request.getAttribute(Attributes.USER);
 %>
 
 <div class="container mt-5" style="padding-bottom: 10%">

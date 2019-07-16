@@ -8,18 +8,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
-import org.w3c.dom.Attr;
 import ru.stoliarenkoas.tm.webserver.Attributes;
 import ru.stoliarenkoas.tm.webserver.Status;
 import ru.stoliarenkoas.tm.webserver.api.service.ProjectService;
 import ru.stoliarenkoas.tm.webserver.api.service.SessionService;
 import ru.stoliarenkoas.tm.webserver.api.service.UserService;
-import ru.stoliarenkoas.tm.webserver.entity.Project;
-import ru.stoliarenkoas.tm.webserver.entity.Session;
-import ru.stoliarenkoas.tm.webserver.entity.User;
-import ru.stoliarenkoas.tm.webserver.service.SessionServiceImpl;
-import ru.stoliarenkoas.tm.webserver.service.UserServiceImpl;
-import ru.stoliarenkoas.tm.webserver.util.CypherUtil;
+import ru.stoliarenkoas.tm.webserver.model.dto.ProjectDTO;
+import ru.stoliarenkoas.tm.webserver.model.dto.SessionDTO;
+import ru.stoliarenkoas.tm.webserver.model.dto.UserDTO;
 
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
@@ -43,13 +39,13 @@ public class ProjectController {
     public String getProjectList(Model model, HttpSession httpSession) {
         System.out.println("project-list");
         try{
-            final Session session = sessionService.getById((String) httpSession.getAttribute(Attributes.SESSION_ID));
+            final SessionDTO session = sessionService.getById((String) httpSession.getAttribute(Attributes.SESSION_ID));
             if (session == null) return "index";
 
-            final User user = userService.get(session, session.getUserId());
+            final UserDTO user = userService.get(session, session.getUserId());
             if (user == null) return "index";
 
-            final Collection<Project> projectList = projectService.getAll(session);
+            final Collection<ProjectDTO> projectList = projectService.getAll(session);
             model.addAttribute(Attributes.PROJECT_LIST, projectList);
             return "projects";
         } catch (Exception e) {
@@ -62,14 +58,14 @@ public class ProjectController {
     public RedirectView createProject(@RequestParam Map<String, String> requestParams, HttpSession httpSession) {
         System.out.println("create-project");
         try {
-            final Session session = sessionService.getById((String) httpSession.getAttribute(Attributes.SESSION_ID));
+            final SessionDTO session = sessionService.getById((String) httpSession.getAttribute(Attributes.SESSION_ID));
             if (session == null) throw new Exception("not authorized");
 
-            final User user = userService.get(session, session.getUserId());
+            final UserDTO user = userService.get(session, session.getUserId());
             if (user == null) throw new Exception("forbidden action");
 
             SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
-            final Project newProject = new Project();
+            final ProjectDTO newProject = new ProjectDTO();
             newProject.setUserId(user.getId());
             newProject.setName(requestParams.get(Attributes.NAME));
             newProject.setDescription(requestParams.get(Attributes.DESCRIPTION));
@@ -89,13 +85,13 @@ public class ProjectController {
     public String getProjectEditPage(Model model, @RequestParam(Attributes.PROJECT_ID) String projectId, HttpSession httpSession) {
         System.out.println("project-edit[get]");
         try {
-            final Session session = sessionService.getById((String) httpSession.getAttribute(Attributes.SESSION_ID));
+            final SessionDTO session = sessionService.getById((String) httpSession.getAttribute(Attributes.SESSION_ID));
             if (session == null) throw new Exception("not authorized");
 
-            final User user = userService.get(session, session.getUserId());
+            final UserDTO user = userService.get(session, session.getUserId());
             if (user == null) throw new Exception("forbidden action");
 
-            final Project project = projectService.get(session, projectId);
+            final ProjectDTO project = projectService.get(session, projectId);
             if (project == null) return "index";
             model.addAttribute(Attributes.PROJECT, project);
             return "project-edit";
@@ -109,13 +105,13 @@ public class ProjectController {
     public RedirectView editProject(@RequestParam Map<String, String> requestParams, HttpSession httpSession) {
         System.out.println("project-edit[post]");
         try {
-            final Session session = sessionService.getById((String) httpSession.getAttribute(Attributes.SESSION_ID));
+            final SessionDTO session = sessionService.getById((String) httpSession.getAttribute(Attributes.SESSION_ID));
             if (session == null) throw new Exception("not authorized");
 
-            final User user = userService.get(session, session.getUserId());
+            final UserDTO user = userService.get(session, session.getUserId());
             if (user == null) throw new Exception("forbidden action");
 
-            final Project editableProject = projectService.get(session, requestParams.get(Attributes.PROJECT_ID));
+            final ProjectDTO editableProject = projectService.get(session, requestParams.get(Attributes.PROJECT_ID));
             if (editableProject == null) throw new Exception("invalid project");
 
             SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
@@ -136,10 +132,10 @@ public class ProjectController {
     @PostMapping("/remove")
     public RedirectView removeProject(@RequestParam(Attributes.PROJECT_ID) String projectId, HttpSession httpSession) {
         try {
-            final Session session = sessionService.getById((String) httpSession.getAttribute(Attributes.SESSION_ID));
+            final SessionDTO session = sessionService.getById((String) httpSession.getAttribute(Attributes.SESSION_ID));
             if (session == null) throw new Exception("not authorized");
 
-            final User user = userService.get(session, session.getUserId());
+            final UserDTO user = userService.get(session, session.getUserId());
             if (user == null) throw new Exception("forbidden action");
 
             projectService.delete(session, projectId);

@@ -1,7 +1,7 @@
 package ru.stoliarenkoas.tm.webserver.api.repository;
 
 import org.jetbrains.annotations.NotNull;
-import ru.stoliarenkoas.tm.webserver.entity.User;
+import ru.stoliarenkoas.tm.webserver.model.entity.User;
 
 import java.util.Optional;
 

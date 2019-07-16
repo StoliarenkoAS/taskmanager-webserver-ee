@@ -1,11 +1,12 @@
 <jsp:include page="template/header.jsp"/>
 
-<%@ page import="ru.stoliarenkoas.tm.webserver.entity.Project" %>
+<%@ page import="ru.stoliarenkoas.tm.webserver.model.entity.Project" %>
 <%@ page import="ru.stoliarenkoas.tm.webserver.Attributes" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="ru.stoliarenkoas.tm.webserver.model.dto.ProjectDTO" %>
 
 <%
-    final Project project = (Project) request.getAttribute(Attributes.PROJECT);
+    final ProjectDTO project = (ProjectDTO) request.getAttribute(Attributes.PROJECT);
     final SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
 %>
 

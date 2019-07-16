@@ -1,8 +1,9 @@
 <jsp:include page="template/header.jsp"/>
 
-<%@ page import="ru.stoliarenkoas.tm.webserver.entity.Project" %>
+<%@ page import="ru.stoliarenkoas.tm.webserver.model.entity.Project" %>
 <%@ page import="ru.stoliarenkoas.tm.webserver.Attributes" %>
 <%@ page import="java.util.Collection" %>
+<%@ page import="ru.stoliarenkoas.tm.webserver.model.dto.ProjectDTO" %>
 
 <div class="container-fluid" style="padding-bottom: 10%">
     <div class="container w-100">
@@ -24,7 +25,7 @@
             <tbody>
 
             <% int i = 1;
-            for (Project project : (Collection<Project>)request.getAttribute(Attributes.PROJECT_LIST)) {%>
+            for (ProjectDTO project : (Collection<ProjectDTO>)request.getAttribute(Attributes.PROJECT_LIST)) {%>
             <tr>
                 <th scope="row" style="vertical-align: middle"><%=i++%></th>
                 <td style="vertical-align: middle"><%=project.getName()%></td>

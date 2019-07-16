@@ -1,9 +1,11 @@
 <jsp:include page="template/header.jsp"/>
 
-<%@ page import="ru.stoliarenkoas.tm.webserver.entity.Task" %>
+<%@ page import="ru.stoliarenkoas.tm.webserver.model.entity.Task" %>
 <%@ page import="ru.stoliarenkoas.tm.webserver.Attributes" %>
 <%@ page import="java.util.Collection" %>
-<%@ page import="ru.stoliarenkoas.tm.webserver.entity.Project" %>
+<%@ page import="ru.stoliarenkoas.tm.webserver.model.entity.Project" %>
+<%@ page import="ru.stoliarenkoas.tm.webserver.model.dto.TaskDTO" %>
+<%@ page import="ru.stoliarenkoas.tm.webserver.model.dto.ProjectDTO" %>
 
 <div class="container-fluid" style="padding-bottom: 10%">
     <div class="container w-100">
@@ -26,7 +28,7 @@
 
             <tbody>
             <% int i = 1;
-                for (Task task : (Collection<Task>)request.getAttribute(Attributes.TASK_LIST)) {%>
+                for (TaskDTO task : (Collection<TaskDTO>)request.getAttribute(Attributes.TASK_LIST)) {%>
             <tr>
                 <th scope="row" style="vertical-align: middle"><%=i++%></th>
                 <td style="vertical-align: middle"><%=task.getProjectId()%></td>
@@ -94,7 +96,7 @@
                     <div class="form-group">
                         <label for="projectSelectCreateModal">Project</label>
                         <select name="<%=Attributes.PROJECT_ID%>" onfocus='this.size=3;' onblur='this.size=1;' onchange='this.size=1; this.blur();' class="form-control form-control-sm" id="projectSelectCreateModal">
-                            <% for (Project project : (Collection<Project>)request.getAttribute(Attributes.PROJECT_LIST)) {%>
+                            <% for (ProjectDTO project : (Collection<ProjectDTO>)request.getAttribute(Attributes.PROJECT_LIST)) {%>
                             <option value="<%=project.getId()%>"><%=project.getName()%></option>
                             <% } %>
                         </select>

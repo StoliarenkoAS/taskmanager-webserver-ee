@@ -8,17 +8,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
-import org.w3c.dom.Attr;
 import ru.stoliarenkoas.tm.webserver.Attributes;
 import ru.stoliarenkoas.tm.webserver.Status;
 import ru.stoliarenkoas.tm.webserver.api.service.ProjectService;
 import ru.stoliarenkoas.tm.webserver.api.service.SessionService;
 import ru.stoliarenkoas.tm.webserver.api.service.TaskService;
 import ru.stoliarenkoas.tm.webserver.api.service.UserService;
-import ru.stoliarenkoas.tm.webserver.entity.Project;
-import ru.stoliarenkoas.tm.webserver.entity.Task;
-import ru.stoliarenkoas.tm.webserver.entity.Session;
-import ru.stoliarenkoas.tm.webserver.entity.User;
+import ru.stoliarenkoas.tm.webserver.model.dto.ProjectDTO;
+import ru.stoliarenkoas.tm.webserver.model.dto.SessionDTO;
+import ru.stoliarenkoas.tm.webserver.model.dto.TaskDTO;
+import ru.stoliarenkoas.tm.webserver.model.dto.UserDTO;
 
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
@@ -45,14 +44,14 @@ public class TaskController {
     public String getTaskList(Model model, HttpSession httpSession) {
         System.out.println("task-list");
         try{
-            final Session session = sessionService.getById((String) httpSession.getAttribute(Attributes.SESSION_ID));
+            final SessionDTO session = sessionService.getById((String) httpSession.getAttribute(Attributes.SESSION_ID));
             if (session == null) return "index";
 
-            final User user = userService.get(session, session.getUserId());
+            final UserDTO user = userService.get(session, session.getUserId());
             if (user == null) return "index";
 
-            final Collection<Project> projectList = projectService.getAll(session);
-            final Collection<Task> taskList = taskService.getAll(session);
+            final Collection<ProjectDTO> projectList = projectService.getAll(session);
+            final Collection<TaskDTO> taskList = taskService.getAll(session);
             model.addAttribute(Attributes.TASK_LIST, taskList);
             model.addAttribute(Attributes.PROJECT_LIST, projectList);
             return "tasks";
@@ -66,14 +65,14 @@ public class TaskController {
     public RedirectView createTask(@RequestParam Map<String, String> requestParams, HttpSession httpSession) {
         System.out.println("create-task");
         try {
-            final Session session = sessionService.getById((String) httpSession.getAttribute(Attributes.SESSION_ID));
+            final SessionDTO session = sessionService.getById((String) httpSession.getAttribute(Attributes.SESSION_ID));
             if (session == null) throw new Exception("not authorized");
 
-            final User user = userService.get(session, session.getUserId());
+            final UserDTO user = userService.get(session, session.getUserId());
             if (user == null) throw new Exception("forbidden action");
 
             SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
-            final Task newTask = new Task();
+            final TaskDTO newTask = new TaskDTO();
             newTask.setUserId(user.getId());
             newTask.setProjectId(requestParams.get(Attributes.PROJECT_ID));
             newTask.setName(requestParams.get(Attributes.NAME));
@@ -94,13 +93,13 @@ public class TaskController {
     public String getTaskEditPage(Model model, @RequestParam(Attributes.TASK_ID) String taskId, HttpSession httpSession) {
         System.out.println("task-edit[get]");
         try {
-            final Session session = sessionService.getById((String) httpSession.getAttribute(Attributes.SESSION_ID));
+            final SessionDTO session = sessionService.getById((String) httpSession.getAttribute(Attributes.SESSION_ID));
             if (session == null) throw new Exception("not authorized");
 
-            final User user = userService.get(session, session.getUserId());
+            final UserDTO user = userService.get(session, session.getUserId());
             if (user == null) throw new Exception("forbidden action");
 
-            final Task task = taskService.get(session, taskId);
+            final TaskDTO task = taskService.get(session, taskId);
             if (task == null) return "index";
             model.addAttribute(Attributes.TASK, task);
             return "task-edit";
@@ -114,13 +113,13 @@ public class TaskController {
     public RedirectView editTask(@RequestParam Map<String, String> requestParams, HttpSession httpSession) {
         System.out.println("task-edit[post]");
         try {
-            final Session session = sessionService.getById((String) httpSession.getAttribute(Attributes.SESSION_ID));
+            final SessionDTO session = sessionService.getById((String) httpSession.getAttribute(Attributes.SESSION_ID));
             if (session == null) throw new Exception("not authorized");
 
-            final User user = userService.get(session, session.getUserId());
+            final UserDTO user = userService.get(session, session.getUserId());
             if (user == null) throw new Exception("forbidden action");
 
-            final Task editableTask = taskService.get(session, requestParams.get(Attributes.TASK_ID));
+            final TaskDTO editableTask = taskService.get(session, requestParams.get(Attributes.TASK_ID));
             if (editableTask == null) throw new Exception("invalid task");
 
             SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
@@ -141,10 +140,10 @@ public class TaskController {
     @PostMapping("/remove")
     public RedirectView removeTask(@RequestParam(Attributes.TASK_ID) String taskId, HttpSession httpSession) {
         try {
-            final Session session = sessionService.getById((String) httpSession.getAttribute(Attributes.SESSION_ID));
+            final SessionDTO session = sessionService.getById((String) httpSession.getAttribute(Attributes.SESSION_ID));
             if (session == null) throw new Exception("not authorized");
 
-            final User user = userService.get(session, session.getUserId());
+            final UserDTO user = userService.get(session, session.getUserId());
             if (user == null) throw new Exception("forbidden action");
 
             taskService.delete(session, taskId);

@@ -2,104 +2,163 @@ package ru.stoliarenkoas.tm.webserver.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.stoliarenkoas.tm.webserver.api.repository.UserRepository;
-import ru.stoliarenkoas.tm.webserver.api.service.ProjectService;
+import org.springframework.transaction.annotation.Transactional;
+import ru.stoliarenkoas.tm.webserver.api.service.SessionService;
 import ru.stoliarenkoas.tm.webserver.api.service.UserService;
-import ru.stoliarenkoas.tm.webserver.entity.Session;
-import ru.stoliarenkoas.tm.webserver.entity.User;
-import ru.stoliarenkoas.tm.webserver.repository.jdbc.UserRepositoryMySQL;
+import ru.stoliarenkoas.tm.webserver.model.dto.SessionDTO;
+import ru.stoliarenkoas.tm.webserver.model.dto.UserDTO;
+import ru.stoliarenkoas.tm.webserver.model.entity.User;
+import ru.stoliarenkoas.tm.webserver.repository.UserRepositorySpring;
 import ru.stoliarenkoas.tm.webserver.util.CypherUtil;
 import ru.stoliarenkoas.tm.webserver.util.SessionUtil;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl extends AbstractService<User> implements UserService {
+@Transactional
+@Qualifier("spring")
+public class UserServiceImpl implements UserService {
 
-    private final ProjectService projectService = new ProjectServiceImpl();
+    @Autowired
+    private UserRepositorySpring userRepository;
 
-    public UserServiceImpl() {
-        super(new UserRepositoryMySQL());
+    private SessionService sessionService;
+
+    private UserService userService;
+
+    @Autowired
+    public void setSessionService(SessionService sessionService) {
+        this.sessionService = sessionService;
     }
 
-    @NotNull
-    private Boolean isValid(@Nullable final Session session, @Nullable final User user) throws Exception {
-        if (session == null || user == null) return false;
-        if (user.getLogin() == null || user.getLogin().isEmpty()) return false;
-        return user.getPasswordHash() != null && !user.getPasswordHash().isEmpty();
-    }
-
-    @Override @NotNull
-    public Boolean save(@Nullable final Session session, @Nullable final User user) throws Exception {
-        if (!isValid(session, user))  return false;
-        repository.merge(session.getUserId(), user);
-        return true;
-    }
-
-    @NotNull
-    public Boolean persist(@Nullable final Session session, @Nullable final User user) throws Exception {
-        if (!isValid(session, user)) return false;
-        repository.persist(user); //checked in validation method
-        return true;
-    }
-
-    @Override @NotNull
-    public Boolean deleteChildrenByParentId(@Nullable final Session session, @Nullable final String id) throws Exception {
-        return projectService.deleteByIds(session, Collections.singleton(id));
-    }
-
-    @Override @NotNull
-    public Boolean deleteChildrenByParentIds(@Nullable final Session session, @Nullable final Collection<String> ids) throws Exception {
-        return projectService.deleteByIds(session, ids);
-    }
-
-    @Override @NotNull
-    public Boolean register(@Nullable final String login, @Nullable final String password) throws Exception {
-        if (login == null || login.isEmpty() || password == null || password.isEmpty()) return false;
-        final User user = new User();
-        user.setLogin(login);
-        user.setPasswordHash(CypherUtil.getMd5(password));
-        final Session session = SessionUtil.getSessionForUser(user);
-        return persist(session, user);
-    }
-
-    @Override @Nullable
-    public Session login(@Nullable final String login, @Nullable final String password) throws Exception {
-        System.out.printf("[AUTH] Login: %s, Password: %s %n", login, password);
-        if (login == null || login.isEmpty()) return null;
-        if (password == null || password.isEmpty()) return null;
-        final String passwordHash = CypherUtil.getMd5(password);
-        final User user = ((UserRepository)repository).validate(login, passwordHash).orElse(null);
-        if (user == null) return null;
-        final Session session = SessionUtil.getSessionForUser(user);
-        sessionService.open(session);
-        return session;
+    @Nullable
+    private String getCurrentUserId(@Nullable final SessionDTO session) throws Exception {
+        if (session == null || !SessionUtil.isValid(session)) return null;
+        if (!sessionService.isOpen(session.getId())) return null;
+        return session.getUserId();
     }
 
     @Override
-    public @NotNull Boolean logout(@Nullable final Session session) throws Exception {
-        if (session == null) return false;
+    public @Nullable SessionDTO login(@Nullable String login, @Nullable String password) throws Exception {
+        if (login == null || login.isEmpty()) return null;
+        if (password == null || password.isEmpty()) return null;
+
+        final String passwordHash = CypherUtil.getMd5(password);
+        final User user = userRepository.findByLoginAndPasswordHash(login, passwordHash);
+        if (user == null) return null;
+        final SessionDTO sessionDTO = SessionUtil.getSessionForUser(user.toDTO());
+        sessionService.open(sessionDTO);
+        System.out.println(sessionDTO);
+        return sessionDTO;
+    }
+
+    @Override
+    public @NotNull Boolean logout(@Nullable SessionDTO session) throws Exception {
+        if (session == null || !SessionUtil.isValid(session)) return false;
         return sessionService.closeById(session.getId());
     }
 
-    @Override @NotNull
-    public String showUserProfile(@Nullable final Session session) throws Exception {
-        final User currentUser = get(session, getCurrentUserId(session));
-        if (currentUser == null) return "[YOU ARE NOT LOGGED IN]";
-        return "USER PROFILE:" + "\n" +
-                "User: " + currentUser.getLogin() + "\n" +
-                "User status: " + currentUser.getRole().getDisplayName() + "\n";
-    }
+    @Override
+    public @NotNull Boolean register(@Nullable String login, @Nullable String password) throws Exception {
+        if (login == null || login.isEmpty() || password == null || password.isEmpty()) return false;
 
-    @Override @NotNull
-    public Boolean changePassword(@Nullable final Session session, @Nullable final String oldPassword, @Nullable final String newPassword) throws Exception {
-        final User currentUser = get(session, getCurrentUserId(session));
-        if (oldPassword == null || newPassword == null || newPassword.isEmpty()) return false;
-        if (currentUser == null || CypherUtil.getMd5(oldPassword).equals(currentUser.getPasswordHash())) return false;
-        currentUser.setPasswordHash(CypherUtil.getMd5(newPassword));
-        repository.merge(currentUser.getId(), currentUser);
+        final boolean exists = !userRepository.findByLogin(login).isEmpty();
+        if (exists) return false;
+        final UserDTO userDTO = new UserDTO();
+        userDTO.setLogin(login);
+        userDTO.setPasswordHash(CypherUtil.getMd5(password));
+        userRepository.save(new User(userDTO));
         return true;
     }
+
+    @Override
+    public @NotNull String showUserProfile(@Nullable SessionDTO sessionDTO) throws Exception {
+        final UserDTO currentUser = get(sessionDTO, getCurrentUserId(sessionDTO));
+        if (currentUser == null || sessionDTO == null || !SessionUtil.isValid(sessionDTO)) return "[YOU ARE NOT LOGGED IN]";
+        return "USER PROFILE:" + "\n" +
+                "UserDTO: " + currentUser.getLogin() + "\n" +
+                "UserDTO status: " + currentUser.getRole().getDisplayName() + "\n";
+    }
+
+    @Override
+    public @NotNull Boolean changePassword(@Nullable SessionDTO session, @Nullable String oldPassword, @Nullable String newPassword) throws Exception {
+        if (session == null || !SessionUtil.isValid(session)) return false;
+        final String userId = getCurrentUserId(session);
+        if (userId == null) return false;
+        final User user = userRepository.findAnyById(userId);
+        if (oldPassword == null || newPassword == null || newPassword.isEmpty()) return false;
+        if (user == null || !CypherUtil.getMd5(oldPassword).equals(user.getPasswordHash())) return false;
+        user.setPasswordHash(CypherUtil.getMd5(newPassword));
+        userRepository.save(user);
+        return true;
+    }
+
+    @Override
+    public @NotNull Collection<UserDTO> getAll(@Nullable SessionDTO session) throws Exception {
+        if (session == null || !SessionUtil.isValid(session)) return Collections.emptyList();
+        return ((Collection<User>)userRepository.findAll()).stream().map(User::toDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public @NotNull Collection<UserDTO> getAllByName(@Nullable SessionDTO session, @Nullable String name) throws Exception {
+        if (session == null || name == null || name.isEmpty() || !SessionUtil.isValid(session)) return Collections.emptyList();
+        return userRepository.findByLogin(name).stream().map(User::toDTO).collect(Collectors.toList());
+    }
+
+    @Nullable
+    @Override
+    public UserDTO get(@Nullable SessionDTO session, @Nullable String id) throws Exception {
+        if (session == null || id == null ||
+                id.isEmpty() || !SessionUtil.isValid(session)) return null;
+        return userRepository.findAnyById(id).toDTO();
+    }
+
+    @Override
+    public Boolean save(@Nullable SessionDTO session, @Nullable UserDTO userDTO) throws Exception {
+        if (session == null || !SessionUtil.isValid(session) || userDTO == null) return false;
+        return userRepository.save(new User(userDTO)) != null;
+    }
+
+    @Override
+    public Boolean delete(@Nullable SessionDTO session, @Nullable String id) throws Exception {
+        if (session == null || id == null ||
+                id.isEmpty() || !SessionUtil.isValid(session)) return null;
+        return userRepository.removeById(id) != null;
+    }
+
+    @Override
+    public Boolean delete(@Nullable SessionDTO session, @Nullable UserDTO object) throws Exception {
+        if (session == null || object == null || !SessionUtil.isValid(session)) return null;
+        return userRepository.removeById(object.getId()) != null;
+    }
+
+    @Override
+    public Boolean deleteByIds(@Nullable SessionDTO session, @Nullable Collection<String> ids) throws Exception {
+        if (session == null || ids == null ||
+                ids.isEmpty() || !SessionUtil.isValid(session)) return null;
+        for (final String id : ids) {
+            userRepository.removeById(id);
+        }
+        return true;
+    }
+
+    @Override
+    public Boolean deleteByName(@Nullable SessionDTO session, @Nullable String name) throws Exception {
+        if (session == null || name == null ||
+                name.isEmpty() || !SessionUtil.isValid(session)) return null;
+        return !userRepository.removeByLogin(name).isEmpty();
+    }
+
+    @Override
+    public Boolean deleteAll(@Nullable SessionDTO session) throws Exception {
+        if (session == null || !SessionUtil.isValid(session)) return null;
+        userRepository.deleteAll();
+        return true;
+    }
+
 }

@@ -2,26 +2,26 @@ package ru.stoliarenkoas.tm.webserver.api.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.stoliarenkoas.tm.webserver.entity.Session;
+import ru.stoliarenkoas.tm.webserver.model.dto.SessionDTO;
 
 import java.util.Collection;
 
 public interface SessionService {
 
     @NotNull
-    Collection<Session> getAll() throws Exception;
+    Collection<SessionDTO> getAll() throws Exception;
 
     @NotNull
-    Collection<Session> getByUserId(@Nullable String userId) throws Exception;
+    Collection<SessionDTO> getByUserId(@Nullable String userId) throws Exception;
 
     @Nullable
-    Session getById(@Nullable String id) throws Exception;
+    SessionDTO getById(@Nullable String id) throws Exception;
 
     @NotNull
     Boolean isOpen(@Nullable String id) throws Exception;
 
     @NotNull
-    Boolean open(@Nullable Session session) throws Exception;
+    Boolean open(@Nullable SessionDTO session) throws Exception;
 
     @NotNull
     Boolean closeById(@Nullable String id) throws Exception;

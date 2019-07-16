@@ -18,7 +18,7 @@ public class DatabaseConnectionUtil {
         if (connection == null) {
             synchronized (DatabaseConnectionUtil.class) {
                 if (connection == null) {
-                    try (InputStream input = DatabaseConnectionUtil.class.getClassLoader().getResourceAsStream("mysql-database.properties")){
+                    try (InputStream input = DatabaseConnectionUtil.class.getClassLoader().getResourceAsStream("application.properties")){
                         Properties prop = new Properties();
                         if (input == null) return null;
                         prop.load(input);

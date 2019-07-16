@@ -1,6 +1,7 @@
-<%@ page import="ru.stoliarenkoas.tm.webserver.entity.User" %>
+<%@ page import="ru.stoliarenkoas.tm.webserver.model.entity.User" %>
 <%@ page import="ru.stoliarenkoas.tm.webserver.Attributes" %>
 <%@ page import="java.util.Collection" %>
+<%@ page import="ru.stoliarenkoas.tm.webserver.model.dto.UserDTO" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -58,7 +59,7 @@
             </thead>
             <tbody>
             <% int i = 1;
-                for (User user : (Collection<User>)request.getAttribute(Attributes.USER_LIST)) {%>
+                for (UserDTO user : (Collection<UserDTO>)request.getAttribute(Attributes.USER_LIST)) {%>
             <tr>
                 <th scope="row" style="vertical-align: middle"><%=i++%></th>
                 <td style="vertical-align: middle"><%=user.getLogin()%></td>

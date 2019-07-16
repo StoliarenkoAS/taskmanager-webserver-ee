@@ -1,17 +1,18 @@
 <jsp:include page="template/header.jsp"/>
 
-<%@ page import="ru.stoliarenkoas.tm.webserver.entity.Task" %>
+<%@ page import="ru.stoliarenkoas.tm.webserver.model.entity.Task" %>
 <%@ page import="ru.stoliarenkoas.tm.webserver.Attributes" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="ru.stoliarenkoas.tm.webserver.model.dto.TaskDTO" %>
 
 <%
-    final Task task = (Task) request.getAttribute(Attributes.TASK);
+    final TaskDTO task = (TaskDTO) request.getAttribute(Attributes.TASK);
     final SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
 %>
 
 <div class="container mt-5" style="padding-bottom: 10%">
     <h3>Edit TASK:</h3>
-    <form action="/task/edit" method="post">
+    <form action="${pageContext.request.contextPath}/task/edit" method="post">
         <div class="form-row">
             <div class="form-group col">
                 <label for="idInputEditModal">Id</label>
