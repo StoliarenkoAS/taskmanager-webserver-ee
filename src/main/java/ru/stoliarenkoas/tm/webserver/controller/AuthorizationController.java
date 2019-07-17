@@ -28,6 +28,8 @@ public class AuthorizationController {
         try {
             final SessionDTO session = userService.login(login, password);
             httpSession.setAttribute(Attributes.SESSION_ID, session.getId());
+            httpSession.setAttribute(Attributes.USER_ID, session.getUserId());
+            httpSession.setAttribute(Attributes.LOGIN, session.getUserLogin());
         } catch (Exception e) {
             e.printStackTrace();
         }

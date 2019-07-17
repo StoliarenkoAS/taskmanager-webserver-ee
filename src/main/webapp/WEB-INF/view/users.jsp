@@ -2,6 +2,7 @@
 <%@ page import="ru.stoliarenkoas.tm.webserver.Attributes" %>
 <%@ page import="java.util.Collection" %>
 <%@ page import="ru.stoliarenkoas.tm.webserver.model.dto.UserDTO" %>
+<%@ page import="org.springframework.data.domain.Page" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -59,7 +60,7 @@
             </thead>
             <tbody>
             <% int i = 1;
-                for (UserDTO user : (Collection<UserDTO>)request.getAttribute(Attributes.USER_LIST)) {%>
+                for (UserDTO user : (Page<UserDTO>)request.getAttribute(Attributes.USER_LIST)) {%>
             <tr>
                 <th scope="row" style="vertical-align: middle"><%=i++%></th>
                 <td style="vertical-align: middle"><%=user.getLogin()%></td>
