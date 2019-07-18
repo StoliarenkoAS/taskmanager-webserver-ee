@@ -1,4 +1,4 @@
-<%--
+<%@ page import="ru.stoliarenkoas.tm.webserver.Attributes" %><%--
   Created by IntelliJ IDEA.
   User: Rabdis
   Date: 16.07.2019
@@ -43,10 +43,14 @@
             </li>
         </ul>
     </div>
-    <div class="btn-group" role="group">
+    <% boolean loggedIn = request.getSession().getAttribute(Attributes.USER_ID) != null; %>
+    <div class="btn-group <%=!loggedIn?"":"d-none"%>" role="group">
         <button class="btn btn-outline-light mx-1" data-toggle="modal" data-target="#loginModal">Login</button>
         <button class="btn btn-outline-light" data-toggle="modal" data-target="#registerModal">Register</button>
     </div>
+    <form class="m-0 p-0 <%=loggedIn?"":"d-none"%>" action="${pageContext.request.contextPath}/authorization/logout" method="post">
+        <button class="btn btn-outline-light" type="submit">Logout</button>
+    </form>
 </nav>
 <nav class="navbar navbar-dark navbar-expand-lg bg-dark fixed-bottom">
     <a href="#" class="navbar-brand"><img src="https://i.imgur.com/cVPgHhm.png" alt="logo" width="30"></a>
