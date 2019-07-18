@@ -1,4 +1,4 @@
-package ru.stoliarenkoas.tm.webserver.api.service.pageable;
+package ru.stoliarenkoas.tm.webserver.api.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,6 +15,11 @@ public interface UserServicePageable {
 
     @Nullable
     UserDTO findOne(@Nullable String loggedUserId, @Nullable String requestedUserId) throws AccessForbiddenException;
+
+    @Nullable
+    UserDTO login(@Nullable String login, @Nullable String password);
+
+    boolean exists(@Nullable String userId);
 
     void persist(@Nullable String loggedUserId, @Nullable UserDTO persistableUser) throws AccessForbiddenException;
 

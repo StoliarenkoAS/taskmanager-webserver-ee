@@ -5,19 +5,20 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.stoliarenkoas.tm.webserver.api.service.pageable.UserServicePageable;
+import org.springframework.web.context.annotation.ApplicationScope;
+import ru.stoliarenkoas.tm.webserver.api.service.UserServicePageable;
 import ru.stoliarenkoas.tm.webserver.exception.AccessForbiddenException;
 import ru.stoliarenkoas.tm.webserver.exception.IncorrectDataException;
 import ru.stoliarenkoas.tm.webserver.model.dto.UserDTO;
 import ru.stoliarenkoas.tm.webserver.model.entity.User;
-import ru.stoliarenkoas.tm.webserver.repository.pageable.UserRepositoryPageable;
+import ru.stoliarenkoas.tm.webserver.repository.UserRepositoryPageable;
 import ru.stoliarenkoas.tm.webserver.util.CypherUtil;
 
 @Service
+@ApplicationScope
 public class UserServicePageableImpl implements UserServicePageable {
 
     private UserRepositoryPageable repository;
@@ -57,8 +58,22 @@ public class UserServicePageableImpl implements UserServicePageable {
         return repository.findOne(requestedUserId).map(User::toDTO).orElse(null);
     }
 
+    @Nullable
     @Override
-    @Modifying
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public UserDTO login(@Nullable final String login, @Nullable final String password) {
+        if (login == null || password == null || login.isEmpty() || password.isEmpty()) return null;
+        return repository.login(login, CypherUtil.getMd5(password)).map(User::toDTO).orElse(null);
+    }
+
+    @Override
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public boolean exists(@Nullable String userId) {
+        if (userId == null || userId.isEmpty()) return false;
+        return repository.existsById(userId);
+    }
+
+    @Override
     @Transactional(rollbackFor = AccessForbiddenException.class)
     public void persist(
             @Nullable final String loggedUserId,
@@ -78,7 +93,6 @@ public class UserServicePageableImpl implements UserServicePageable {
     }
 
     @Override
-    @Modifying
     @Transactional(rollbackFor = IncorrectDataException.class)
     public void register(
             @Nullable final String login,
@@ -97,7 +111,6 @@ public class UserServicePageableImpl implements UserServicePageable {
     }
 
     @Override
-    @Modifying
     @Transactional(rollbackFor = AccessForbiddenException.class)
     public void remove(
             @Nullable final String loggedUserId,

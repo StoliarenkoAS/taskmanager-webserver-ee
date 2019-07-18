@@ -1,9 +1,8 @@
 <jsp:include page="template/header.jsp"/>
 
-<%@ page import="ru.stoliarenkoas.tm.webserver.model.entity.Task" %>
 <%@ page import="ru.stoliarenkoas.tm.webserver.Attributes" %>
-<%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="ru.stoliarenkoas.tm.webserver.model.dto.TaskDTO" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 
 <%
     final TaskDTO task = (TaskDTO) request.getAttribute(Attributes.TASK);

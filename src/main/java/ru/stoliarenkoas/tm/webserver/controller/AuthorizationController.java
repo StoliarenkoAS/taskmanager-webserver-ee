@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.stoliarenkoas.tm.webserver.Attributes;
-import ru.stoliarenkoas.tm.webserver.api.service.UserService;
-import ru.stoliarenkoas.tm.webserver.model.dto.SessionDTO;
+import ru.stoliarenkoas.tm.webserver.api.service.UserServicePageable;
+import ru.stoliarenkoas.tm.webserver.model.dto.UserDTO;
 
 import javax.servlet.http.HttpSession;
 
@@ -15,10 +15,9 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/authorization")
 public class AuthorizationController {
 
-    private UserService userService;
-
+    private UserServicePageable userService;
     @Autowired
-    public void setUserService(UserService userService) {
+    public void setUserService(UserServicePageable userService) {
         this.userService = userService;
     }
 
@@ -26,10 +25,10 @@ public class AuthorizationController {
     public String login(@RequestParam("login") String login, @RequestParam("password") String password, HttpSession httpSession) {
         System.out.println("user-login");
         try {
-            final SessionDTO session = userService.login(login, password);
-            httpSession.setAttribute(Attributes.SESSION_ID, session.getId());
-            httpSession.setAttribute(Attributes.USER_ID, session.getUserId());
-            httpSession.setAttribute(Attributes.LOGIN, session.getUserLogin());
+            final UserDTO userDTO = userService.login(login, password);
+            if (userDTO == null) return null;
+            httpSession.setAttribute(Attributes.USER_ID, userDTO.getId());
+            httpSession.setAttribute(Attributes.LOGIN, userDTO.getLogin());
         } catch (Exception e) {
             e.printStackTrace();
         }

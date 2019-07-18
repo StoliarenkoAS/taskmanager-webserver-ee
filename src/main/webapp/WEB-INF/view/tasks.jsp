@@ -1,11 +1,10 @@
 <jsp:include page="template/header.jsp"/>
 
-<%@ page import="ru.stoliarenkoas.tm.webserver.model.entity.Task" %>
+<%@ page import="org.springframework.data.domain.Page" %>
 <%@ page import="ru.stoliarenkoas.tm.webserver.Attributes" %>
-<%@ page import="java.util.Collection" %>
-<%@ page import="ru.stoliarenkoas.tm.webserver.model.entity.Project" %>
-<%@ page import="ru.stoliarenkoas.tm.webserver.model.dto.TaskDTO" %>
 <%@ page import="ru.stoliarenkoas.tm.webserver.model.dto.ProjectDTO" %>
+<%@ page import="ru.stoliarenkoas.tm.webserver.model.dto.TaskDTO" %>
+<%@ page import="java.util.Collection" %>
 
 <div class="container-fluid" style="padding-bottom: 10%">
     <div class="container w-100">
@@ -28,7 +27,8 @@
 
             <tbody>
             <% int i = 1;
-                for (TaskDTO task : (Collection<TaskDTO>)request.getAttribute(Attributes.TASK_LIST)) {%>
+                Page<TaskDTO> taskPages = (Page<TaskDTO>)request.getAttribute(Attributes.TASK_LIST);
+                for (TaskDTO task : taskPages) {%>
             <tr>
                 <th scope="row" style="vertical-align: middle"><%=i++%></th>
                 <td style="vertical-align: middle"><%=task.getProjectId()%></td>
@@ -59,17 +59,21 @@
             <div class="row">
                 <div class="col">
                     <ul class="pagination">
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Previous" style="color: #262627">
+                        <li class="page-item <%=(taskPages.getNumber() > 0 ? "" : "disabled")%>">
+                            <a class="page-link" href="${pageContext.request.contextPath}/task/list?<%=Attributes.PAGE + "=" + (taskPages.getNumber()-1)%>" aria-label="Previous" style="color: #262627">
                                 <span aria-hidden="true">&laquo;</span>
                                 <span class="sr-only">Previous</span>
                             </a>
                         </li>
-                        <li class="page-item"><a class="page-link" href="#" style="color: #262627">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#" style="color: #262627">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#" style="color: #262627">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next" style="color: #262627">
+                        <li class="page-item disabled <%=(taskPages.getNumber() > 2 ? "" : "d-none")%>"><a class="page-link" href="#" style="color: #4f4f51">...</a></li>
+                        <li class="page-item <%=(taskPages.getNumber() > 1 ? "" : "d-none")%>"><a class="page-link" href="${pageContext.request.contextPath}/task/list?<%=Attributes.PAGE + "=" + (taskPages.getNumber()-2)%>" style="color: #262627"><%=(Integer)request.getAttribute(Attributes.PAGE)-1%></a></li>
+                        <li class="page-item <%=(taskPages.getNumber() > 0 ? "" : "d-none")%>"><a class="page-link" href="${pageContext.request.contextPath}/task/list?<%=Attributes.PAGE + "=" + (taskPages.getNumber()-1)%>" style="color: #262627"><%=(Integer)request.getAttribute(Attributes.PAGE)%></a></li>
+                        <li class="page-item disabled"><a class="page-link" href="#" style="color: #262627; background-color: lightgray"><%=(Integer)request.getAttribute(Attributes.PAGE)+1%></a></li>
+                        <li class="page-item <%=taskPages.getTotalPages()-taskPages.getNumber() > 1 ? "" : "d-none"%>"><a class="page-link" href="${pageContext.request.contextPath}/task/list?<%=Attributes.PAGE + "=" + (taskPages.getNumber()+1)%>" style="color: #262627"><%=(Integer)request.getAttribute(Attributes.PAGE)+2%></a></li>
+                        <li class="page-item <%=taskPages.getTotalPages()-taskPages.getNumber() > 2 ? "" : "d-none"%>"><a class="page-link" href="${pageContext.request.contextPath}/task/list?<%=Attributes.PAGE + "=" + (taskPages.getNumber()+2)%>" style="color: #262627"><%=(Integer)request.getAttribute(Attributes.PAGE)+3%></a></li>
+                        <li class="page-item disabled <%=taskPages.getTotalPages()-taskPages.getNumber() > 3 ? "" : "d-none"%>"><a class="page-link" href="#" style="color: #4f4f51">...</a></li>
+                        <li class="page-item <%=taskPages.getTotalPages()-taskPages.getNumber() > 1 ? "" : "disabled"%>">
+                            <a class="page-link" href="${pageContext.request.contextPath}/task/list?<%=Attributes.PAGE + "=" + (taskPages.getNumber()+1)%>" aria-label="Next" style="color: #262627">
                                 <span aria-hidden="true">&raquo;</span>
                                 <span class="sr-only">Next</span>
                             </a>

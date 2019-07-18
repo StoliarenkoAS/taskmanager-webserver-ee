@@ -1,48 +1,8 @@
-<%@ page import="ru.stoliarenkoas.tm.webserver.model.entity.User" %>
-<%@ page import="ru.stoliarenkoas.tm.webserver.Attributes" %>
-<%@ page import="java.util.Collection" %>
-<%@ page import="ru.stoliarenkoas.tm.webserver.model.dto.UserDTO" %>
-<%@ page import="org.springframework.data.domain.Page" %>
-<!doctype html>
-<html lang="en">
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
+<jsp:include page="template/header.jsp"/>
 
-    <title>Taskmanager EE</title>
-</head>
-<body>
-<nav class="navbar navbar-dark navbar-expand-lg bg-dark sticky-top">
-    <a href="/" class="navbar-brand"><img src="https://i.imgur.com/cVPgHhm.png" alt="logo" width="30"></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-            aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggle-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a href="${pageContext.request.contextPath}/user/list" class="nav-link">Users</a>
-            </li>
-            <li class="nav-item">
-                <a href="${pageContext.request.contextPath}/project/list" class="nav-link">Projects</a>
-            </li>
-            <li class="nav-item">
-                <a href="/tasks" class="nav-link">Tasks</a>
-            </li>
-        </ul>
-    </div>
-    <form action="${pageContext.request.contextPath}/authorization/logout" method="post">
-        <button class="btn btn-outline-light" type="submit">Logout</button>
-    </form>
-</nav>
-<nav class="navbar navbar-dark navbar-expand-lg bg-dark fixed-bottom">
-    <a href="#" class="navbar-brand"><img src="https://i.imgur.com/cVPgHhm.png" alt="logo" width="30"></a>
-</nav>
+<%@ page import="org.springframework.data.domain.Page" %>
+<%@ page import="ru.stoliarenkoas.tm.webserver.Attributes" %>
+<%@ page import="ru.stoliarenkoas.tm.webserver.model.dto.UserDTO" %>
 
 <div class="container-fluid" style="padding-bottom: 10%">
     <div class="container w-100">
@@ -60,7 +20,8 @@
             </thead>
             <tbody>
             <% int i = 1;
-                for (UserDTO user : (Page<UserDTO>)request.getAttribute(Attributes.USER_LIST)) {%>
+                Page<UserDTO> userPages = (Page<UserDTO>) request.getAttribute(Attributes.USER_LIST);
+                for (UserDTO user : userPages) {%>
             <tr>
                 <th scope="row" style="vertical-align: middle"><%=i++%></th>
                 <td style="vertical-align: middle"><%=user.getLogin()%></td>
@@ -86,17 +47,21 @@
             <div class="row">
             <div class="col">
             <ul class="pagination">
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Previous" style="color: #262627">
+                <li class="page-item <%=(userPages.getNumber() > 0 ? "" : "disabled")%>">
+                    <a class="page-link" href="${pageContext.request.contextPath}/user/list?<%=Attributes.PAGE + "=" + (userPages.getNumber()-1)%>" aria-label="Previous" style="color: #262627">
                         <span aria-hidden="true">&laquo;</span>
                         <span class="sr-only">Previous</span>
                     </a>
                 </li>
-                <li class="page-item"><a class="page-link" href="#" style="color: #262627">1</a></li>
-                <li class="page-item"><a class="page-link" href="#" style="color: #262627">2</a></li>
-                <li class="page-item"><a class="page-link" href="#" style="color: #262627">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Next" style="color: #262627">
+                <li class="page-item disabled <%=(userPages.getNumber() > 2 ? "" : "d-none")%>"><a class="page-link" href="#" style="color: #4f4f51">...</a></li>
+                <li class="page-item <%=(userPages.getNumber() > 1 ? "" : "d-none")%>"><a class="page-link" href="${pageContext.request.contextPath}/user/list?<%=Attributes.PAGE + "=" + (userPages.getNumber()-2)%>" style="color: #262627"><%=(Integer)request.getAttribute(Attributes.PAGE)-1%></a></li>
+                <li class="page-item <%=(userPages.getNumber() > 0 ? "" : "d-none")%>"><a class="page-link" href="${pageContext.request.contextPath}/user/list?<%=Attributes.PAGE + "=" + (userPages.getNumber()-1)%>" style="color: #262627"><%=(Integer)request.getAttribute(Attributes.PAGE)%></a></li>
+                <li class="page-item disabled"><a class="page-link" href="#" style="color: #262627; background-color: lightgray"><%=(Integer)request.getAttribute(Attributes.PAGE)+1%></a></li>
+                <li class="page-item <%=userPages.getTotalPages()-userPages.getNumber() > 1 ? "" : "d-none"%>"><a class="page-link" href="${pageContext.request.contextPath}/user/list?<%=Attributes.PAGE + "=" + (userPages.getNumber()+1)%>" style="color: #262627"><%=(Integer)request.getAttribute(Attributes.PAGE)+2%></a></li>
+                <li class="page-item <%=userPages.getTotalPages()-userPages.getNumber() > 2 ? "" : "d-none"%>"><a class="page-link" href="${pageContext.request.contextPath}/user/list?<%=Attributes.PAGE + "=" + (userPages.getNumber()+2)%>" style="color: #262627"><%=(Integer)request.getAttribute(Attributes.PAGE)+3%></a></li>
+                <li class="page-item disabled <%=userPages.getTotalPages()-userPages.getNumber() > 3 ? "" : "d-none"%>"><a class="page-link" href="#" style="color: #4f4f51">...</a></li>
+                <li class="page-item <%=userPages.getTotalPages()-userPages.getNumber() > 1 ? "" : "disabled"%>">
+                    <a class="page-link" href="${pageContext.request.contextPath}/user/list?<%=Attributes.PAGE + "=" + (userPages.getNumber()+1)%>" aria-label="Next" style="color: #262627">
                         <span aria-hidden="true">&raquo;</span>
                         <span class="sr-only">Next</span>
                     </a>

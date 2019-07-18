@@ -1,6 +1,5 @@
 <jsp:include page="template/header.jsp"/>
 
-<%@ page import="ru.stoliarenkoas.tm.webserver.model.entity.User" %>
 <%@ page import="ru.stoliarenkoas.tm.webserver.Attributes" %>
 <%@ page import="ru.stoliarenkoas.tm.webserver.model.dto.UserDTO" %>
 

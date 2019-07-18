@@ -1,5 +1,6 @@
 package ru.stoliarenkoas.tm.webserver.controller;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,15 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 import ru.stoliarenkoas.tm.webserver.Attributes;
-import ru.stoliarenkoas.tm.webserver.api.service.SessionService;
-import ru.stoliarenkoas.tm.webserver.api.service.UserService;
-import ru.stoliarenkoas.tm.webserver.api.service.pageable.UserServicePageable;
-import ru.stoliarenkoas.tm.webserver.model.dto.SessionDTO;
+import ru.stoliarenkoas.tm.webserver.api.service.UserServicePageable;
 import ru.stoliarenkoas.tm.webserver.model.dto.UserDTO;
 import ru.stoliarenkoas.tm.webserver.util.CypherUtil;
 
 import javax.servlet.http.HttpSession;
-import java.util.Collection;
 import java.util.Map;
 
 @Controller
@@ -34,14 +31,19 @@ public class UserController {
     }
 
     @GetMapping("/list")
-    public String getUserList(Model model, HttpSession httpSession) {
+    public String getUserList(
+            @NotNull final Model model,
+            @RequestParam(name = Attributes.PAGE, required = false) Integer pageNumber,
+            @NotNull final HttpSession httpSession) {
         System.out.println("user-list");
         try{
             final String loggedUserId = (String) httpSession.getAttribute(Attributes.USER_ID);
             final UserDTO user = userService.findOne(loggedUserId, loggedUserId);
             if (user == null || UserDTO.Role.ADMIN != user.getRole()) return "index";
 
-            final PageRequest page = new PageRequest(0, 10);
+            if (pageNumber == null) pageNumber = 0;
+            model.addAttribute(Attributes.PAGE, pageNumber);
+            final PageRequest page = PageRequest.of(pageNumber, 1);
             final Page<UserDTO> userList = userService.findAll(loggedUserId, page);
             model.addAttribute(Attributes.USER_LIST, userList);
             return "users";
@@ -73,11 +75,14 @@ public class UserController {
     }
 
     @GetMapping("/edit")
-    public String getUserEditPage(Model model, @RequestParam(Attributes.USER_ID) String userId, HttpSession httpSession) {
+    public String getUserEditPage(
+            @NotNull final Model model,
+            @RequestParam(Attributes.USER_ID) String userId,
+            @NotNull final HttpSession httpSession) {
         System.out.println("user-edit");
         try {
             final String loggedUserId = (String) httpSession.getAttribute(Attributes.USER_ID);
-            final UserDTO user = userService.findOne(loggedUserId, loggedUserId);
+            final UserDTO user = userService.findOne(loggedUserId, userId);
             if (user == null) return "index";
             model.addAttribute(Attributes.USER, user);
             return "user-edit";

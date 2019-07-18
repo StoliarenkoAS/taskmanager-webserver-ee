@@ -1,4 +1,4 @@
-package ru.stoliarenkoas.tm.webserver.repository.pageable;
+package ru.stoliarenkoas.tm.webserver.repository;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,5 +20,9 @@ public interface UserRepositoryPageable extends JpaRepository<User, String> {
     @Query(value = "SELECT u FROM User u WHERE u.login = :login")
     @QueryHints({@QueryHint(name = "org.hibernate.cacheable", value = "true")})
     List<User> findByLogin(@NotNull @Param("login") String login);
+
+    @Query(value = "SELECT u FROM User u WHERE u.login = :login AND u.passwordHash = :passwordHash")
+    @QueryHints({@QueryHint(name = "org.hibernate.cacheable", value = "true")})
+    Optional<User> login(@NotNull @Param("login") String login, @NotNull @Param("passwordHash") String passwordHash);
 
 }
