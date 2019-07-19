@@ -61,8 +61,11 @@ public class UserServicePageableImpl implements UserServicePageable {
     @Nullable
     @Override
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public UserDTO login(@Nullable final String login, @Nullable final String password) {
-        if (login == null || password == null || login.isEmpty() || password.isEmpty()) return null;
+    public UserDTO login(@Nullable final String login, @Nullable final String password)
+            throws IncorrectDataException {
+        if (login == null || password == null || login.isEmpty() || password.isEmpty()) {
+            throw new IncorrectDataException("invalid input data");
+        };
         return repository.login(login, CypherUtil.getMd5(password)).map(User::toDTO).orElse(null);
     }
 

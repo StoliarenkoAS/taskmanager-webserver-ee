@@ -17,7 +17,7 @@ public interface UserServicePageable {
     UserDTO findOne(@Nullable String loggedUserId, @Nullable String requestedUserId) throws AccessForbiddenException;
 
     @Nullable
-    UserDTO login(@Nullable String login, @Nullable String password);
+    UserDTO login(@Nullable String login, @Nullable String password) throws IncorrectDataException;
 
     boolean exists(@Nullable String userId);
 

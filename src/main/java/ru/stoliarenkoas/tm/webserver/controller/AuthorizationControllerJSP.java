@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/authorization")
-public class AuthorizationController {
+public class AuthorizationControllerJSP {
 
     private UserServicePageable userService;
     @Autowired

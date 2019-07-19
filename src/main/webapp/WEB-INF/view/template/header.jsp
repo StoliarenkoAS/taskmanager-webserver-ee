@@ -1,11 +1,5 @@
-<%@ page import="ru.stoliarenkoas.tm.webserver.Attributes" %><%--
-  Created by IntelliJ IDEA.
-  User: Rabdis
-  Date: 16.07.2019
-  Time: 12:38
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="ru.stoliarenkoas.tm.webserver.Attributes" %>
 <html lang="en">
 <head>
     <!-- Required meta tags -->
