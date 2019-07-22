@@ -27,7 +27,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/task")
-public class TaskController {
+public class TaskControllerJSP {
 
     @Autowired
     private TaskServicePageable taskService;

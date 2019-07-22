@@ -21,7 +21,11 @@ public interface UserServicePageable {
 
     boolean exists(@Nullable String userId);
 
-    void persist(@Nullable String loggedUserId, @Nullable UserDTO persistableUser) throws AccessForbiddenException;
+    void persist(@Nullable String loggedUserId, @Nullable UserDTO persistableUser)
+            throws AccessForbiddenException, IncorrectDataException;
+
+    void merge(@Nullable String loggedUserId, @Nullable UserDTO mergableUser)
+            throws AccessForbiddenException, IncorrectDataException;
 
     void register(@Nullable String login, @Nullable String password) throws IncorrectDataException;
 

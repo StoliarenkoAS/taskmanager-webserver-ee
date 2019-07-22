@@ -17,6 +17,8 @@ import ru.stoliarenkoas.tm.webserver.model.entity.User;
 import ru.stoliarenkoas.tm.webserver.repository.UserRepositoryPageable;
 import ru.stoliarenkoas.tm.webserver.util.CypherUtil;
 
+import java.util.Optional;
+
 @Service
 @ApplicationScope
 public class UserServicePageableImpl implements UserServicePageable {
@@ -81,8 +83,9 @@ public class UserServicePageableImpl implements UserServicePageable {
     public void persist(
             @Nullable final String loggedUserId,
             @Nullable final UserDTO persistableUser)
-            throws AccessForbiddenException {
-        if (loggedUserId == null || persistableUser == null) return;
+            throws AccessForbiddenException, IncorrectDataException {
+        if (loggedUserId == null) throw new AccessForbiddenException("not logged in");
+        if (persistableUser == null) throw new IncorrectDataException("null user");
         if (persistableUser.getRole() != UserDTO.Role.USER) {
             final User loggedUser = repository.findOne(loggedUserId).orElse(null);
             if (loggedUser == null || loggedUser.getRole() != UserDTO.Role.ADMIN) {
@@ -93,6 +96,29 @@ public class UserServicePageableImpl implements UserServicePageable {
             throw new AccessForbiddenException("user already exists");
         }
         repository.save(new User(persistableUser));
+    }
+
+    @Override
+    public void merge(
+            @Nullable final String loggedUserId,
+            @Nullable final UserDTO mergableUser)
+            throws AccessForbiddenException, IncorrectDataException {
+        if (loggedUserId == null) throw new AccessForbiddenException("not logged in");
+        if (mergableUser == null) throw new IncorrectDataException("null user");
+        if (mergableUser.getRole() != UserDTO.Role.USER) {
+            final User loggedUser = repository.findOne(loggedUserId).orElse(null);
+            if (loggedUser == null || loggedUser.getRole() != UserDTO.Role.ADMIN) {
+                throw new AccessForbiddenException();
+            }
+        }
+        final Optional<User> userOptional = repository.findOne(mergableUser.getId());
+        final User user = userOptional.orElseThrow(()->new IncorrectDataException("no such user"));
+        user.setLogin(mergableUser.getLogin());
+        if (mergableUser.getPasswordHash() != null) {
+            user.setPasswordHash(CypherUtil.getMd5(mergableUser.getPasswordHash()));
+        }
+        user.setRole(mergableUser.getRole());
+        repository.save(user);
     }
 
     @Override

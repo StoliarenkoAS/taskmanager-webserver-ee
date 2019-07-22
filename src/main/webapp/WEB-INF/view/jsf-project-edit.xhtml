@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:view>
+    <h:head>
+    </h:head>
+    <ui:composition template="/WEB-INF/view/template.xhtml">
+        <ui:define name="content">
+            <div class="container w-50 mt-5 justify-content-center" style="padding-bottom: 10%; margin: 0 auto; text-align: left">
+                <p:growl id="growl" showDetail="true" />
+
+                <h3 class="mb-3 ml-2">Edit PROJECT:</h3>
+                <h:form style="justify-content: center; text-align: left;" styleClass="ui-fluid">
+                    <p:panelGrid columns="2" styleClass="ui-noborder" style="width: 100%; margin: auto">
+                        <p:outputLabel for="idInputEditModal">Id</p:outputLabel>
+                        <p:inputText readonly="readonly" disabled="true" id="idInputEditModal" value="#{projectController.editableProject.id}"/>
+
+                        <p:outputLabel for="nameInputEditModal">Name</p:outputLabel>
+                        <p:inputText id="nameInputEditModal" value="#{projectController.editableProject.name}"/>
+
+                        <p:outputLabel for="statusInputEditModal">Status</p:outputLabel>
+                        <p:selectOneMenu id="statusInputEditModal" value="#{projectController.editableProject.status}">
+                            <f:selectItem itemLabel="Planned" itemValue="PLANNED"/>
+                            <f:selectItem itemLabel="In progress" itemValue="IN_PROGRESS"/>
+                            <f:selectItem itemLabel="Completed" itemValue="COMPLETE"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel for="descriptionEditModal">Description</p:outputLabel>
+                        <p:inputTextarea id="descriptionEditModal" value="#{projectController.editableProject.description}" rows="3"/>
+
+                        <p:outputLabel for="startDateEditModal">Start date</p:outputLabel>
+                        <p:datePicker id="startDateEditModal" pattern="dd.MM.yyyy" value="#{projectController.editableProject.startDate}"/>
+
+                        <p:outputLabel for="endDateEditModal">End date</p:outputLabel>
+                        <p:datePicker id="endDateEditModal" pattern="dd.MM.yyyy" value="#{projectController.editableProject.endDate}"/>
+
+                    </p:panelGrid>
+                        <hr class="separator"/>
+                        <div class="container-fluid">
+                            <div class="row justify-content-end">
+                                <h:commandButton
+                                        value="Save"
+                                        action="#{projectController.projectSave}"
+                                        class="btn btn-success mr-2"
+                                />
+                            </div>
+                        </div>
+                </h:form>
+            </div>
+        </ui:define>
+    </ui:composition>
+</f:view>
+
+</html>

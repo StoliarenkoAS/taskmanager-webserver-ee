@@ -24,19 +24,21 @@
 
 <h:body>
     <nav class="navbar navbar-dark navbar-expand-lg bg-dark sticky-top">
-        <a href="/" class="navbar-brand"><img src="https://i.imgur.com/cVPgHhm.png" alt="logo" width="30"/></a>
+        <a href="${pageContext.request.contextPath}/" class="navbar-brand"><img src="https://i.imgur.com/cVPgHhm.png" alt="logo" width="30"/></a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <h:form>
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a href="${pageContext.request.contextPath}/user/list" class="nav-link">Users</a>
+                    <h:commandLink value="Users" action="user-list" class="nav-link"/>
                 </li>
                 <li class="nav-item">
-                    <a href="${pageContext.request.contextPath}/project/list" class="nav-link">Projects</a>
+                    <h:commandLink value="Projects" action="project-list" class="nav-link"/>
                 </li>
                 <li class="nav-item">
-                    <a href="${pageContext.request.contextPath}/task/list" class="nav-link">Tasks</a>
+                    <h:commandLink value="Tasks" action="task-list" class="nav-link"/>
                 </li>
             </ul>
+            </h:form>
         </div>
         <div class="btn-group #{authorizationController.userName == null ? '' : 'd-none'}" role="group">
             <button class="btn btn-outline-light mx-1" data-toggle="modal" data-target="#loginModal">Login</button>
@@ -109,16 +111,16 @@
             <h:form>
                 <div class="form-group">
                     <label for="loginInputRegisterModal">Login</label>
-                    <h:inputText class="form-control" type="text" required="true" id="loginInputRegisterModal" aria-describedby="loginHelp" placeholder="login"/>
+                    <h:inputText class="form-control" type="text" required="true" id="loginInputRegisterModal" aria-describedby="loginHelp" placeholder="login" value="#{authorizationController.loginInput}"/>
                     <small id="loginHelpRegisterModal" class="form-text text-muted">Enter your login</small>
                 </div>
                 <div class="form-group">
                     <label for="passwordInputRegisterModal">Password</label>
-                    <h:inputSecret class="form-control form-control-sm" type="password" required="true" id="passwordInputRegisterModal" placeholder="password"/>
+                    <h:inputSecret class="form-control form-control-sm" type="password" required="true" id="passwordInputRegisterModal" placeholder="password" value="#{authorizationController.passwordInput}"/>
                     <small id="passwordHelpRegisterModal" class="form-text text-muted">Enter your password</small>
                 </div>
                 <div class="form-group">
-                    <h:inputSecret class="form-control form-control-sm" type="password" required="true" id="passwordConfirmRegisterModal" placeholder="password"/>
+                    <h:inputSecret class="form-control form-control-sm" type="password" required="true" id="passwordConfirmRegisterModal" placeholder="password" value="#{authorizationController.passwordConfirmation}"/>
                     <small id="passwordConfirmHelpRegisterModal" class="form-text text-muted">Confirm password</small>
                 </div>
                 <hr class="separator"/>

@@ -7,5 +7,29 @@
         <pattern value="/" />
         <view-id value="/WEB-INF/view/jsf-index.xhtml" />
     </url-mapping>
+    <url-mapping>
+        <pattern value="/user/list" />
+        <view-id value="/WEB-INF/view/jsf-user-list.xhtml" />
+    </url-mapping>
+    <url-mapping>
+        <pattern value="/user/edit" />
+        <view-id value="/WEB-INF/view/jsf-user-edit.xhtml" />
+    </url-mapping>
+    <url-mapping>
+        <pattern value="/project/list" />
+        <view-id value="/WEB-INF/view/jsf-project-list.xhtml" />
+    </url-mapping>
+    <url-mapping>
+        <pattern value="/project/edit" />
+        <view-id value="/WEB-INF/view/jsf-project-edit.xhtml" />
+    </url-mapping>
+    <url-mapping>
+        <pattern value="/task/list" />
+        <view-id value="/WEB-INF/view/jsf-task-list.xhtml" />
+    </url-mapping>
+    <url-mapping>
+        <pattern value="/task/edit" />
+        <view-id value="/WEB-INF/view/jsf-task-edit.xhtml" />
+    </url-mapping>
 
 </pretty-config>

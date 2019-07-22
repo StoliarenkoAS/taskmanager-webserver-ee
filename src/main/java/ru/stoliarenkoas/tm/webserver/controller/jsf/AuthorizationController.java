@@ -35,6 +35,10 @@ public class AuthorizationController {
         this.userService = userService;
     }
 
+    public UserDTO getLoggedUser() {
+        return loggedUser;
+    }
+
     public String getUserName() {
         return loggedUser == null ? null : loggedUser.getName();
     }
@@ -78,11 +82,12 @@ public class AuthorizationController {
         clearFields();
     }
 
-    public void logout() {
+    public String logout() {
         System.out.println("jsf-logout");
         loggedUser = null;
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(null, new FacesMessage("Success", "logged out"));
+        return "index";
     }
 
     public void register() {
@@ -102,12 +107,6 @@ public class AuthorizationController {
         loginInput = null;
         passwordInput = null;
         passwordConfirmation = null;
-    }
-
-    public void test() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, new FacesMessage("Successful",  "Your message: " + loginInput) );
-        context.addMessage(null, new FacesMessage("Second Message", "Additional Message Detail"));
     }
 
 }

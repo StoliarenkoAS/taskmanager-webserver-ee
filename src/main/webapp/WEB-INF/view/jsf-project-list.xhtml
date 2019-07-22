@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:view>
+    <h:head>
+    </h:head>
+    <ui:composition template="/WEB-INF/view/template.xhtml">
+        <ui:define name="content">
+            <div class="container-fluid">
+                <div class="container">
+                    <div class="row justify-content-center text-align-center">
+                        <div class="col-12" style="margin: 24px">
+                            <h:form id="form">
+                                <p:growl id="growl" showDetail="true" />
+
+                                <p:dataTable
+                                        tableStyle="width: auto;"
+                                        value="#{projectController.projectList}"
+                                        var="project"
+                                        paginator="true"
+                                        paginatorPosition="bottom"
+                                        paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                        rows="10"
+                                        rowsPerPageTemplate="1,5,10,20"
+                                        rowIndexVar="row"
+                                        selectionMode="none"
+                                        id="projectTable"
+                                        lazy="true">
+
+                                    <f:facet name="header">
+                                        Project list
+                                    </f:facet>
+                                    <p:column headerText="#" >
+                                        <h:outputText value="#{row + 1}" />
+                                    </p:column>
+                                    <p:column headerText="Name" sortBy="#{project.name}" >
+                                        <h:outputText value="#{project.name}" />
+                                    </p:column>
+                                    <p:column headerText="Description" sortBy="#{project.description}" style="width: 100%" >
+                                        <h:outputText value="#{project.description}" />
+                                    </p:column>
+                                    <p:column headerText="StartDate" sortBy="#{project.startDate}" >
+                                        <h:outputText value="#{project.startDate}" >
+                                            <f:convertDateTime pattern="dd.MM.yyyy"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="EndDate" sortBy="#{project.endDate}" >
+                                        <h:outputText value="#{project.endDate}" >
+                                            <f:convertDateTime pattern="dd.MM.yyyy"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="Status" sortBy="#{project.status}" >
+                                        <h:outputText value="#{project.status}" />
+                                    </p:column>
+                                    <p:column headerText="Edit" style="text-align: center" >
+                                        <p:commandLink
+                                                action="#{projectController.projectEdit(project)}"
+                                        >
+                                            <i class="fas fa-pencil-alt"/>
+                                        </p:commandLink>
+                                    </p:column>
+                                    <p:column headerText="Remove" style="text-align: center" >
+                                        <p:commandLink
+                                                action="#{projectController.projectRemove(project)}"
+                                                update="@form"
+                                                >
+                                            <i class="far fa-trash-alt"/>
+                                        </p:commandLink>
+                                    </p:column>
+                                </p:dataTable>
+
+                                <hr class="separator"/>
+
+                                <div class="container-fluid">
+                                    <div class="row justify-content-end">
+                                        <h:commandButton
+                                                value="Create"
+                                                action="#{projectController.projectCreate}"
+                                                class="btn btn-success"
+                                        />
+                                    </div>
+                                </div>
+
+                            </h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ui:define>
+    </ui:composition>
+</f:view>
+
+</html>

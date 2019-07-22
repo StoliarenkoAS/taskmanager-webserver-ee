@@ -24,7 +24,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/project")
-public class ProjectController {
+public class ProjectControllerJSP {
 
     private ProjectServicePageable projectService;
     @Autowired

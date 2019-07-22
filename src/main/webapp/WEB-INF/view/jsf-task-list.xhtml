@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:view>
+    <h:head>
+    </h:head>
+    <ui:composition template="/WEB-INF/view/template.xhtml">
+        <ui:define name="content">
+            <div class="container-fluid">
+                <div class="container">
+                    <div class="row justify-content-center text-align-center">
+                        <div class="col-12" style="margin: 24px">
+                            <h:form id="form">
+                                <p:growl id="growl" showDetail="true" />
+
+                                <p:dataTable
+                                        tableStyle="width: auto;"
+                                        value="#{taskController.taskList}"
+                                        var="task"
+                                        paginator="true"
+                                        paginatorPosition="bottom"
+                                        paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                        rows="10"
+                                        rowsPerPageTemplate="1,5,10,20"
+                                        rowIndexVar="row"
+                                        selectionMode="none"
+                                        id="taskTable"
+                                        lazy="true">
+
+                                    <f:facet name="header">
+                                        Task list
+                                    </f:facet>
+                                    <p:column headerText="#" >
+                                        <h:outputText value="#{row + 1}" />
+                                    </p:column>
+                                    <p:column headerText="Name" sortBy="#{task.name}" >
+                                        <h:outputText value="#{task.name}" />
+                                    </p:column>
+                                    <p:column headerText="Description" sortBy="#{task.description}" style="width: 100%" >
+                                        <h:outputText value="#{task.description}" />
+                                    </p:column>
+                                    <p:column headerText="StartDate" sortBy="#{task.startDate}" >
+                                        <h:outputText value="#{task.startDate}" >
+                                            <f:convertDateTime pattern="dd.MM.yyyy"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="EndDate" sortBy="#{task.endDate}" >
+                                        <h:outputText value="#{task.endDate}" >
+                                            <f:convertDateTime pattern="dd.MM.yyyy"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="Status" sortBy="#{task.status}" >
+                                        <h:outputText value="#{task.status}" />
+                                    </p:column>
+                                    <p:column headerText="Edit" style="text-align: center" >
+                                        <p:commandLink
+                                                action="#{taskController.taskEdit(task)}"
+                                        >
+                                            <i class="fas fa-pencil-alt"/>
+                                        </p:commandLink>
+                                    </p:column>
+                                    <p:column headerText="Remove" style="text-align: center" >
+                                        <p:commandLink
+                                                action="#{taskController.taskRemove(task)}"
+                                                update="@form"
+                                                >
+                                            <i class="far fa-trash-alt"/>
+                                        </p:commandLink>
+                                    </p:column>
+                                </p:dataTable>
+
+                                <hr class="separator"/>
+
+                                <div class="container-fluid">
+                                    <div class="row justify-content-end">
+                                        <h:commandButton
+                                                value="Create"
+                                                action="#{taskController.taskCreate}"
+                                                class="btn btn-success"
+                                        />
+                                    </div>
+                                </div>
+
+                            </h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ui:define>
+    </ui:composition>
+</f:view>
+
+</html>

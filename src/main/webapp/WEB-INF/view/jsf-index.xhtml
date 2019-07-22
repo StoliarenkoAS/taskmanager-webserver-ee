@@ -16,19 +16,8 @@
                     <div class="container">
                         <div class="row text-center justify-content-center">
                             <div class="col-10" style="margin: 24px">
+                                <p:growl id="growl" showDetail="true" />
                                 <h1>Taskmanager SPRING</h1>
-                                <h:form>
-                                    <p:growl id="growl" showDetail="true" />
-
-                                    <p:panel header="Growl">
-                                        <h:panelGrid columns="2" cellpadding="5">
-                                            <p:outputLabel for="msg" value="Message:" />
-                                            <p:inputText id="msg" value="#{authorizationController.loginInput}" required="true" />
-                                        </h:panelGrid>
-
-                                        <p:commandButton value="Save" action="#{authorizationController.test}" update="@form" />
-                                    </p:panel>
-                                </h:form>
                             </div>
                         </div>
                     </div>
