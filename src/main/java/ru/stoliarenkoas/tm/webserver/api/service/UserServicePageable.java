@@ -8,7 +8,12 @@ import ru.stoliarenkoas.tm.webserver.exception.AccessForbiddenException;
 import ru.stoliarenkoas.tm.webserver.exception.IncorrectDataException;
 import ru.stoliarenkoas.tm.webserver.model.dto.UserDTO;
 
+import java.util.List;
+
 public interface UserServicePageable {
+
+    @NotNull
+    List<UserDTO> findAll(@Nullable String loggedUserId) throws AccessForbiddenException;
 
     @NotNull
     Page<UserDTO> findAll(@Nullable String loggedUserId, @Nullable PageRequest page) throws AccessForbiddenException;

@@ -20,7 +20,9 @@ import ru.stoliarenkoas.tm.webserver.model.entity.Task;
 import ru.stoliarenkoas.tm.webserver.repository.ProjectRepositoryPageable;
 import ru.stoliarenkoas.tm.webserver.repository.TaskRepositoryPageable;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @ApplicationScope
@@ -48,6 +50,14 @@ public class TaskServicePageableImpl implements TaskServicePageable {
     @Autowired
     public void setProjectRepository(ProjectRepositoryPageable projectRepository) {
         this.projectRepository = projectRepository;
+    }
+
+    @NotNull
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public List<TaskDTO> findAll(@Nullable final String loggedUserId) throws AccessForbiddenException {
+        checkAuthorization(loggedUserId);
+        final List<Task> tasks = repository.findAllByProject_User_Id(loggedUserId);
+        return tasks.stream().map(Task::toDTO).collect(Collectors.toList());
     }
 
     @NotNull

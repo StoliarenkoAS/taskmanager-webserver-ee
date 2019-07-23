@@ -12,10 +12,14 @@ import org.springframework.stereotype.Repository;
 import ru.stoliarenkoas.tm.webserver.model.entity.Task;
 
 import javax.persistence.QueryHint;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface TaskRepositoryPageable extends JpaRepository<Task, String> {
+
+    @QueryHints({@QueryHint(name = "org.hibernate.cacheable", value = "true")})
+    List<Task> findAllByProject_User_Id(@NotNull String userId);
 
     @QueryHints({@QueryHint(name = "org.hibernate.cacheable", value = "true")})
     Page<Task> findAllByProject_User_Id(@NotNull String userId, @NotNull Pageable pageable);

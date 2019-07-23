@@ -17,7 +17,9 @@ import ru.stoliarenkoas.tm.webserver.model.entity.User;
 import ru.stoliarenkoas.tm.webserver.repository.UserRepositoryPageable;
 import ru.stoliarenkoas.tm.webserver.util.CypherUtil;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @ApplicationScope
@@ -27,6 +29,19 @@ public class UserServicePageableImpl implements UserServicePageable {
     @Autowired
     public void setRepository(UserRepositoryPageable repository) {
         this.repository = repository;
+    }
+
+    @Override
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public @NotNull List<UserDTO> findAll(
+            @Nullable final String loggedUserId) throws AccessForbiddenException {
+        if (loggedUserId == null) throw new AccessForbiddenException("no logged user provided");
+        final User loggedUser = repository.findOne(loggedUserId).orElse(null);
+        if (loggedUser == null || loggedUser.getRole() != UserDTO.Role.ADMIN) {
+            throw new AccessForbiddenException();
+        }
+        final List<User> users = repository.findAll();
+        return users.stream().map(User::toDTO).collect(Collectors.toList());
     }
 
     @Override
@@ -60,7 +75,7 @@ public class UserServicePageableImpl implements UserServicePageable {
         return repository.findOne(requestedUserId).map(User::toDTO).orElse(null);
     }
 
-    @Nullable
+    @NotNull
     @Override
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public UserDTO login(@Nullable final String login, @Nullable final String password)
@@ -68,7 +83,9 @@ public class UserServicePageableImpl implements UserServicePageable {
         if (login == null || password == null || login.isEmpty() || password.isEmpty()) {
             throw new IncorrectDataException("invalid input data");
         };
-        return repository.login(login, CypherUtil.getMd5(password)).map(User::toDTO).orElse(null);
+        final Optional<User> user = repository.login(login, CypherUtil.getMd5(password));
+        if (!user.isPresent()) throw new IncorrectDataException("invalid login or password");
+        return user.map(User::toDTO).get();
     }
 
     @Override
