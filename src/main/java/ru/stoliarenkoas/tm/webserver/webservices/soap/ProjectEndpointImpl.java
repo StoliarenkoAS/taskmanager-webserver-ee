@@ -14,8 +14,8 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 import java.util.List;
 
-@WebService
-public class ProjectEndpoint {
+@WebService(endpointInterface = "ru.stoliarenkoas.tm.webserver.api.websevice.soap.ProjectEndpoint")
+public class ProjectEndpointImpl implements ru.stoliarenkoas.tm.webserver.api.websevice.soap.ProjectEndpoint {
 
     private ProjectServicePageableImpl projectService;
     @Autowired
@@ -29,6 +29,7 @@ public class ProjectEndpoint {
         this.tokenProvider = tokenProvider;
     }
 
+    @Override
     @WebMethod
     public List<ProjectDTO> getAllProjects(@WebParam @Nullable final String token)
                                            throws AccessForbiddenException {
@@ -37,6 +38,7 @@ public class ProjectEndpoint {
         return projectService.findAllByUserId(userId);
     }
 
+    @Override
     @WebMethod
     public ProjectDTO getOneProject(@WebParam @Nullable final String token,
                                     @WebParam @Nullable final String requestedProjectId)
@@ -46,6 +48,7 @@ public class ProjectEndpoint {
         return projectService.findOne(userId, requestedProjectId);
     }
 
+    @Override
     @WebMethod
     public void persistProject(@WebParam @Nullable final String token,
                                @WebParam @Nullable final ProjectDTO newProject)
@@ -55,6 +58,7 @@ public class ProjectEndpoint {
         projectService.persist(userId, newProject);
     }
 
+    @Override
     @WebMethod
     public void mergeProject(@WebParam @Nullable final String token,
                              @WebParam @Nullable final ProjectDTO updatedProject)
@@ -65,6 +69,7 @@ public class ProjectEndpoint {
     }
 
 
+    @Override
     @WebMethod
     public void deleteOneProject(@WebParam @Nullable final String token,
                                  @WebParam @Nullable final String requestedProjectId)

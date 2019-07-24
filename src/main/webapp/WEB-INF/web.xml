@@ -8,6 +8,10 @@
         <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
         <param-value>true</param-value>
     </context-param>
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/applicationContext.xml</param-value>
+    </context-param>
 <!--    <context-param>-->
 <!--        <param-name>primefaces.THEME</param-name>-->
 <!--        <param-value>none</param-value>-->
@@ -40,7 +44,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>CXFServlet</servlet-name>
-        <url-pattern>/ws/*</url-pattern>
+        <url-pattern>/webservice/*</url-pattern>
     </servlet-mapping>
 
     <!-- Spring listeners -->

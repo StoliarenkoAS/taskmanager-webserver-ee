@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.query.Param;
@@ -29,5 +30,8 @@ public interface ProjectRepositoryPageable extends JpaRepository<Project, String
 
     @QueryHints({@QueryHint(name = "org.hibernate.cacheable", value = "true")})
     boolean existsByUser_IdAndId(@NotNull String userId, @NotNull String id);
+
+    @Modifying
+    void deleteAllByUser_Id(@NotNull String userId);
 
 }

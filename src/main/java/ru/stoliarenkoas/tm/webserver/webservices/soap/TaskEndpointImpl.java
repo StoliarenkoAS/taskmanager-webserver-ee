@@ -14,8 +14,8 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 import java.util.List;
 
-@WebService
-public class TaskEndpoint {
+@WebService(endpointInterface = "ru.stoliarenkoas.tm.webserver.api.websevice.soap.TaskEndpoint")
+public class TaskEndpointImpl implements ru.stoliarenkoas.tm.webserver.api.websevice.soap.TaskEndpoint {
 
     private TaskServicePageableImpl taskService;
     @Autowired
@@ -29,6 +29,7 @@ public class TaskEndpoint {
         this.tokenProvider = tokenProvider;
     }
 
+    @Override
     @WebMethod
     public List<TaskDTO> getAllTasks(@WebParam @Nullable final String token)
                                      throws AccessForbiddenException {
@@ -37,8 +38,9 @@ public class TaskEndpoint {
         return taskService.findAll(userId);
     }
     
+    @Override
     @WebMethod
-    public TaskDTO getOneTask(@WebParam @Nullable final String token, 
+    public TaskDTO getOneTask(@WebParam @Nullable final String token,
                               @WebParam @Nullable final String requestedTaskId)
                               throws AccessForbiddenException, IncorrectDataException {
         if (token == null) throw new AccessForbiddenException("not logged in");
@@ -46,6 +48,7 @@ public class TaskEndpoint {
         return taskService.findOne(userId, requestedTaskId);
     }
 
+    @Override
     @WebMethod
     public void persistTask(@WebParam @Nullable final String token,
                             @WebParam @Nullable final TaskDTO newTask)
@@ -55,6 +58,7 @@ public class TaskEndpoint {
         taskService.persist(userId, newTask);
     }
 
+    @Override
     @WebMethod
     public void mergeTask(@WebParam @Nullable final String token,
                           @WebParam @Nullable final TaskDTO updatedTask)
@@ -65,6 +69,7 @@ public class TaskEndpoint {
     }
 
 
+    @Override
     @WebMethod
     public void deleteOneTask(@WebParam @Nullable final String token,
                               @WebParam @Nullable final String requestedTaskId)

@@ -129,6 +129,12 @@ public class ProjectServicePageableImpl implements ProjectServicePageable {
         repository.delete(project.get());
     }
 
+    public void removeAllByUserId(@Nullable final String loggedUserId)
+                                  throws AccessForbiddenException {
+        checkAuthorization(loggedUserId);
+        repository.deleteAllByUser_Id(loggedUserId);
+    }
+
     private void checkAuthorization(@Nullable final String loggedUserId) throws AccessForbiddenException {
         if (loggedUserId == null || loggedUserId.isEmpty()) {
             throw new AccessForbiddenException("not authorized");
