@@ -23,10 +23,10 @@
     <maven.compiler.source>8</maven.compiler.source>
     <maven.compiler.target>8</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <spring.version>5.1.8.RELEASE</spring.version>
+    <spring.version>5.1.6.RELEASE</spring.version>
     <hibernate.version>5.4.3.Final</hibernate.version>
 <!--    <jackson.version>RELEASE</jackson.version>-->
-    <cxf.version>2.7.18</cxf.version>
+    <cxf.version>3.1.6</cxf.version>
   </properties>
 
   <dependencies>
@@ -179,11 +179,11 @@
       <version>0.6.0</version>
     </dependency>
 
-    <dependency>
-      <groupId>org.apache.cxf</groupId>
-      <artifactId>cxf-api</artifactId>
-      <version>${cxf.version}</version>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.apache.cxf</groupId>-->
+<!--      <artifactId>cxf-api</artifactId>-->
+<!--      <version>${cxf.version}</version>-->
+<!--    </dependency>-->
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-rt-frontend-jaxws</artifactId>
@@ -197,6 +197,11 @@
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+      <version>${cxf.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.cxf</groupId>
+      <artifactId>cxf-rt-transports-http-jetty</artifactId>
       <version>${cxf.version}</version>
     </dependency>
 

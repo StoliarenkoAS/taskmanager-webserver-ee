@@ -14,6 +14,9 @@ import java.util.List;
 public interface UserEndpoint {
 
     @WebMethod
+    String test();
+
+    @WebMethod
     void userRegister(@WebParam @Nullable String login,
                       @WebParam @Nullable String password)
                       throws IncorrectDataException;

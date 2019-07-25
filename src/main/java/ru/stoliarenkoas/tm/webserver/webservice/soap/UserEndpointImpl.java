@@ -2,6 +2,7 @@ package ru.stoliarenkoas.tm.webserver.webservice.soap;
 
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.stoliarenkoas.tm.webserver.exception.AccessForbiddenException;
 import ru.stoliarenkoas.tm.webserver.exception.IncorrectDataException;
 import ru.stoliarenkoas.tm.webserver.model.dto.UserDTO;
@@ -13,6 +14,7 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 import java.util.List;
 
+@Component
 @WebService(endpointInterface = "ru.stoliarenkoas.tm.webserver.api.websevice.soap.UserEndpoint")
 public class UserEndpointImpl implements ru.stoliarenkoas.tm.webserver.api.websevice.soap.UserEndpoint {
 
@@ -26,6 +28,12 @@ public class UserEndpointImpl implements ru.stoliarenkoas.tm.webserver.api.webse
     @Autowired
     public void setTokenProvider(JwtTokenProvider tokenProvider) {
         this.tokenProvider = tokenProvider;
+    }
+
+    @Override
+    @WebMethod
+    public String test() {
+        return "{success: success}";
     }
 
     @Override
