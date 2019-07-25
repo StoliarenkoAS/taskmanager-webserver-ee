@@ -1,6 +1,5 @@
 package ru.stoliarenkoas.tm.webserver.service;
 
-import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,7 +9,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.AnnotationConfigWebContextLoader;
 import org.springframework.test.context.web.WebAppConfiguration;
-import ru.stoliarenkoas.tm.webserver.api.service.ProjectServicePageable;
 import ru.stoliarenkoas.tm.webserver.api.service.ProjectServicePageable;
 import ru.stoliarenkoas.tm.webserver.exception.AccessForbiddenException;
 import ru.stoliarenkoas.tm.webserver.exception.IncorrectDataException;

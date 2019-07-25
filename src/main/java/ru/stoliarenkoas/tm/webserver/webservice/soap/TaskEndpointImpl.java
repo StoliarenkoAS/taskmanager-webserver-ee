@@ -34,7 +34,7 @@ public class TaskEndpointImpl implements ru.stoliarenkoas.tm.webserver.api.webse
                                      throws AccessForbiddenException {
         if (token == null) throw new AccessForbiddenException("not logged in");
         final String userId = tokenProvider.getUserId(token);
-        return taskService.findAll(userId);
+        return taskService.findAllByUserId(userId);
     }
     
     @Override

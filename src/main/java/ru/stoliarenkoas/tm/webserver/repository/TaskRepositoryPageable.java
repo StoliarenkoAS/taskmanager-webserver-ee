@@ -31,6 +31,9 @@ public interface TaskRepositoryPageable extends JpaRepository<Task, String> {
     @QueryHints({@QueryHint(name = "org.hibernate.cacheable", value = "true")})
     Optional<Task> findOne(@NotNull @Param("userId") String userId, @NotNull @Param("id") String id);
 
+    @QueryHints({@QueryHint(name = "org.hibernate.cacheable", value = "true")})
+    Boolean existsByProject_User_IdAndId(@NotNull String userId, @NotNull String id);
+
     @Modifying
     @QueryHints({@QueryHint(name = "org.hibernate.cacheable", value = "true")})
     void deleteAllByProject_Id(@NotNull String projectId);

@@ -8,7 +8,12 @@ import ru.stoliarenkoas.tm.webserver.exception.AccessForbiddenException;
 import ru.stoliarenkoas.tm.webserver.exception.IncorrectDataException;
 import ru.stoliarenkoas.tm.webserver.model.dto.TaskDTO;
 
+import java.util.List;
+
 public interface TaskServicePageable {
+
+    @NotNull
+    List<TaskDTO> findAllByUserId(@Nullable String loggedUserId) throws AccessForbiddenException;
 
     @NotNull
     Page<TaskDTO> findAllByUserId(@Nullable String loggedUserId, @Nullable PageRequest page)
@@ -22,6 +27,9 @@ public interface TaskServicePageable {
     @Nullable
     TaskDTO findOne(@Nullable String loggedUserId, @Nullable String requestedTaskId)
             throws AccessForbiddenException, IncorrectDataException;
+
+    @NotNull
+    Boolean exists(@Nullable String loggedUserId, @Nullable String requestedTaskId);
 
     void persist(@Nullable String loggedUserId, @Nullable TaskDTO persistableTask)
             throws AccessForbiddenException, IncorrectDataException;

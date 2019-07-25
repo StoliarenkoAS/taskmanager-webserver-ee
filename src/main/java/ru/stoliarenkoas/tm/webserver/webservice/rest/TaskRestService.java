@@ -31,7 +31,7 @@ public class TaskRestService {
             throws AccessForbiddenException {
         if (token == null) throw new AccessForbiddenException("not logged in");
         final String userId = tokenProvider.getUserId(token);
-        return taskService.findAll(userId);
+        return taskService.findAllByUserId(userId);
     }
 
     @GET

@@ -53,8 +53,9 @@ public class TaskServicePageableImpl implements TaskServicePageable {
     }
 
     @NotNull
+    @Override
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public List<TaskDTO> findAll(@Nullable final String loggedUserId) throws AccessForbiddenException {
+    public List<TaskDTO> findAllByUserId(@Nullable final String loggedUserId) throws AccessForbiddenException {
         checkAuthorization(loggedUserId);
         final List<Task> tasks = repository.findAllByProject_User_Id(loggedUserId);
         return tasks.stream().map(Task::toDTO).collect(Collectors.toList());
@@ -100,6 +101,14 @@ public class TaskServicePageableImpl implements TaskServicePageable {
             throw new IncorrectDataException("no task selected");
         }
         return repository.findOne(loggedUserId, requestedTaskId).map(Task::toDTO).orElse(null);
+    }
+
+    @NotNull
+    @Override
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public Boolean exists(@Nullable String loggedUserId, @Nullable String requestedTaskId) {
+        if (loggedUserId == null || requestedTaskId == null) return false;
+        return repository.existsByProject_User_IdAndId(loggedUserId, requestedTaskId);
     }
 
     @Override
