@@ -3,6 +3,7 @@ package ru.stoliarenkoas.tm.webserver.service;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -103,6 +104,9 @@ public class UserServicePageableImpl implements UserServicePageable {
             throws AccessForbiddenException, IncorrectDataException {
         if (loggedUserId == null) throw new AccessForbiddenException("not logged in");
         if (persistableUser == null) throw new IncorrectDataException("null user");
+        if (persistableUser.getLogin() == null || persistableUser.getLogin().isEmpty()) {
+            throw new IncorrectDataException("empty login");
+        }
         if (persistableUser.getRole() != UserDTO.Role.USER) {
             final User loggedUser = repository.findOne(loggedUserId).orElse(null);
             if (loggedUser == null || loggedUser.getRole() != UserDTO.Role.ADMIN) {
@@ -112,7 +116,11 @@ public class UserServicePageableImpl implements UserServicePageable {
         if (repository.findOne(persistableUser.getId()).isPresent()) {
             throw new AccessForbiddenException("user already exists");
         }
-        repository.save(new User(persistableUser));
+        try {
+            repository.save(new User(persistableUser));
+        } catch (DataIntegrityViolationException e) {
+            throw new IncorrectDataException(e.getMessage());
+        }
     }
 
     @Override
@@ -122,7 +130,7 @@ public class UserServicePageableImpl implements UserServicePageable {
             throws AccessForbiddenException, IncorrectDataException {
         if (loggedUserId == null) throw new AccessForbiddenException("not logged in");
         if (mergableUser == null) throw new IncorrectDataException("null user");
-        if (mergableUser.getRole() != UserDTO.Role.USER) {
+        if (!loggedUserId.equals(mergableUser.getId())) {
             final User loggedUser = repository.findOne(loggedUserId).orElse(null);
             if (loggedUser == null || loggedUser.getRole() != UserDTO.Role.ADMIN) {
                 throw new AccessForbiddenException();

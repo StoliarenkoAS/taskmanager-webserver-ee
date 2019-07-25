@@ -1,8 +1,7 @@
-package ru.stoliarenkoas.tm.webserver.webservices.soap;
+package ru.stoliarenkoas.tm.webserver.webservice.soap;
 
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import ru.stoliarenkoas.tm.webserver.exception.AccessForbiddenException;
 import ru.stoliarenkoas.tm.webserver.exception.IncorrectDataException;
 import ru.stoliarenkoas.tm.webserver.model.dto.UserDTO;

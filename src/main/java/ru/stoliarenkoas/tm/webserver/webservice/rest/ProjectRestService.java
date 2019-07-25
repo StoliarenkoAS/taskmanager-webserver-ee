@@ -1,4 +1,4 @@
-package ru.stoliarenkoas.tm.webserver.webservices.rest;
+package ru.stoliarenkoas.tm.webserver.webservice.rest;
 
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;

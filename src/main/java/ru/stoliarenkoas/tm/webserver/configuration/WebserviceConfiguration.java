@@ -1,17 +1,5 @@
 package ru.stoliarenkoas.tm.webserver.configuration;
 
-import org.apache.cxf.Bus;
-import org.apache.cxf.bus.spring.SpringBus;
-import org.apache.cxf.jaxws.EndpointImpl;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import ru.stoliarenkoas.tm.webserver.webservices.soap.ProjectEndpointImpl;
-import ru.stoliarenkoas.tm.webserver.webservices.soap.TaskEndpointImpl;
-import ru.stoliarenkoas.tm.webserver.webservices.soap.UserEndpointImpl;
-
-import javax.xml.ws.Endpoint;
-
 //@EnableWebMvc
 //@Configuration
 public class WebserviceConfiguration {

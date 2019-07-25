@@ -22,25 +22,25 @@
 
     <jaxrs:server id="userService" address="/rs/user"
                   beanNames="userRestService"/>
-    <bean id="userRestService" class="ru.stoliarenkoas.tm.webserver.webservices.rest.UserRestService" scope="prototype"/>
+    <bean id="userRestService" class="ru.stoliarenkoas.tm.webserver.webservice.rest.UserRestService" scope="prototype"/>
     <jaxrs:server id="projectService" address="/rs/project"
                   beanNames="projectRestService"/>
-    <bean id="projectRestService" class="ru.stoliarenkoas.tm.webserver.webservices.rest.ProjectRestService" scope="prototype"/>
+    <bean id="projectRestService" class="ru.stoliarenkoas.tm.webserver.webservice.rest.ProjectRestService" scope="prototype"/>
     <jaxrs:server id="taskService" address="/rs/task"
                   beanNames="taskRestService"/>
-    <bean id="taskRestService" class="ru.stoliarenkoas.tm.webserver.webservices.rest.TaskRestService" scope="prototype"/>
+    <bean id="taskRestService" class="ru.stoliarenkoas.tm.webserver.webservice.rest.TaskRestService" scope="prototype"/>
 
     <jaxws:endpoint
             id="userEndpoint"
-            implementor="ru.stoliarenkoas.tm.webserver.webservices.soap.UserEndpointImpl"
+            implementor="ru.stoliarenkoas.tm.webserver.webservice.soap.UserEndpointImpl"
             address="/UserService"/>
     <jaxws:endpoint
             id="projectEndpoint"
-            implementor="ru.stoliarenkoas.tm.webserver.webservices.soap.ProjectEndpointImpl"
+            implementor="ru.stoliarenkoas.tm.webserver.webservice.soap.ProjectEndpointImpl"
             address="/ProjectService"/>
     <jaxws:endpoint
             id="taskEndpoint"
-            implementor="ru.stoliarenkoas.tm.webserver.webservices.soap.TaskEndpointImpl"
+            implementor="ru.stoliarenkoas.tm.webserver.webservice.soap.TaskEndpointImpl"
             address="/TaskService"/>
 
 </beans>
