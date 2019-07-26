@@ -16,8 +16,8 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@XmlRootElement
 @NoArgsConstructor
+@XmlRootElement(name = "project")
 public class ProjectDTO implements PlannedEntity, Serializable {
 
     private static final long serialVersionUID = 12345678902L;

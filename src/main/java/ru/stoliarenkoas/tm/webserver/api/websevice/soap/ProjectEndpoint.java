@@ -10,7 +10,7 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 import java.util.List;
 
-@WebService
+@WebService(name = "ProjectSoapService")
 public interface ProjectEndpoint {
 
     @WebMethod

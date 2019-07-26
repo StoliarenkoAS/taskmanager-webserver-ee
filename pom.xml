@@ -179,11 +179,6 @@
       <version>0.6.0</version>
     </dependency>
 
-<!--    <dependency>-->
-<!--      <groupId>org.apache.cxf</groupId>-->
-<!--      <artifactId>cxf-api</artifactId>-->
-<!--      <version>${cxf.version}</version>-->
-<!--    </dependency>-->
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-rt-frontend-jaxws</artifactId>
@@ -204,6 +199,37 @@
       <artifactId>cxf-rt-transports-http-jetty</artifactId>
       <version>${cxf.version}</version>
     </dependency>
+
+    <!-- JAX-WS conflict -->
+    <dependency>
+      <groupId>org.codehaus.woodstox</groupId>
+      <artifactId>stax2-api</artifactId>
+      <version>4.0.0</version>
+    </dependency>
+
+
+    <dependency>
+      <groupId>io.github.openfeign</groupId>
+      <artifactId>feign-okhttp</artifactId>
+      <version>9.3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>io.github.openfeign</groupId>
+      <artifactId>feign-gson</artifactId>
+      <version>9.3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>io.github.openfeign</groupId>
+      <artifactId>feign-slf4j</artifactId>
+      <version>9.3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>io.github.openfeign</groupId>
+      <artifactId>feign-jaxrs</artifactId>
+      <version>9.3.1</version>
+    </dependency>
+
+
 
   </dependencies>
 

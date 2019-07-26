@@ -29,7 +29,6 @@ public class TaskEndpointImpl implements ru.stoliarenkoas.tm.webserver.api.webse
     }
 
     @Override
-    @WebMethod
     public List<TaskDTO> getAllTasks(@WebParam @Nullable final String token)
                                      throws AccessForbiddenException {
         if (token == null) throw new AccessForbiddenException("not logged in");
@@ -38,7 +37,6 @@ public class TaskEndpointImpl implements ru.stoliarenkoas.tm.webserver.api.webse
     }
     
     @Override
-    @WebMethod
     public TaskDTO getOneTask(@WebParam @Nullable final String token,
                               @WebParam @Nullable final String requestedTaskId)
                               throws AccessForbiddenException, IncorrectDataException {
@@ -48,7 +46,6 @@ public class TaskEndpointImpl implements ru.stoliarenkoas.tm.webserver.api.webse
     }
 
     @Override
-    @WebMethod
     public void persistTask(@WebParam @Nullable final String token,
                             @WebParam @Nullable final TaskDTO newTask)
                             throws AccessForbiddenException, IncorrectDataException {
@@ -58,7 +55,6 @@ public class TaskEndpointImpl implements ru.stoliarenkoas.tm.webserver.api.webse
     }
 
     @Override
-    @WebMethod
     public void mergeTask(@WebParam @Nullable final String token,
                           @WebParam @Nullable final TaskDTO updatedTask)
                           throws AccessForbiddenException, IncorrectDataException {
@@ -69,7 +65,6 @@ public class TaskEndpointImpl implements ru.stoliarenkoas.tm.webserver.api.webse
 
 
     @Override
-    @WebMethod
     public void deleteOneTask(@WebParam @Nullable final String token,
                               @WebParam @Nullable final String requestedTaskId)
                               throws AccessForbiddenException, IncorrectDataException {

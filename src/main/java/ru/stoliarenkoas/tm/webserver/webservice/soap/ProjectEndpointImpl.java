@@ -29,7 +29,6 @@ public class ProjectEndpointImpl implements ru.stoliarenkoas.tm.webserver.api.we
     }
 
     @Override
-    @WebMethod
     public List<ProjectDTO> getAllProjects(@WebParam @Nullable final String token)
                                            throws AccessForbiddenException {
         if (token == null) throw new AccessForbiddenException("not logged in");
@@ -38,7 +37,6 @@ public class ProjectEndpointImpl implements ru.stoliarenkoas.tm.webserver.api.we
     }
 
     @Override
-    @WebMethod
     public ProjectDTO getOneProject(@WebParam @Nullable final String token,
                                     @WebParam @Nullable final String requestedProjectId)
                                     throws AccessForbiddenException, IncorrectDataException {
@@ -48,7 +46,6 @@ public class ProjectEndpointImpl implements ru.stoliarenkoas.tm.webserver.api.we
     }
 
     @Override
-    @WebMethod
     public void persistProject(@WebParam @Nullable final String token,
                                @WebParam @Nullable final ProjectDTO newProject)
                                throws AccessForbiddenException, IncorrectDataException {
@@ -58,7 +55,6 @@ public class ProjectEndpointImpl implements ru.stoliarenkoas.tm.webserver.api.we
     }
 
     @Override
-    @WebMethod
     public void mergeProject(@WebParam @Nullable final String token,
                              @WebParam @Nullable final ProjectDTO updatedProject)
                              throws AccessForbiddenException, IncorrectDataException {
@@ -69,7 +65,6 @@ public class ProjectEndpointImpl implements ru.stoliarenkoas.tm.webserver.api.we
 
 
     @Override
-    @WebMethod
     public void deleteOneProject(@WebParam @Nullable final String token,
                                  @WebParam @Nullable final String requestedProjectId)
                                  throws AccessForbiddenException, IncorrectDataException {

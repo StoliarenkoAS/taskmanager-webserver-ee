@@ -16,8 +16,8 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@XmlRootElement
 @NoArgsConstructor
+@XmlRootElement(name = "task")
 public class TaskDTO implements PlannedEntity, Serializable {
 
     private static final long serialVersionUID = 12345678903L;

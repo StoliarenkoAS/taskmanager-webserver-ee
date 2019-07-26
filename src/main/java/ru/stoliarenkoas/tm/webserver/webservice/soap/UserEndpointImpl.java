@@ -31,13 +31,11 @@ public class UserEndpointImpl implements ru.stoliarenkoas.tm.webserver.api.webse
     }
 
     @Override
-    @WebMethod
     public String test() {
         return "{success: success}";
     }
 
     @Override
-    @WebMethod
     public void userRegister(@WebParam @Nullable final String login,
                              @WebParam @Nullable final String password)
                              throws IncorrectDataException {
@@ -45,7 +43,6 @@ public class UserEndpointImpl implements ru.stoliarenkoas.tm.webserver.api.webse
     }
 
     @Override
-    @WebMethod
     public String userLogin(@WebParam @Nullable final String login,
                             @WebParam @Nullable final String password)
                             throws IncorrectDataException {
@@ -54,7 +51,6 @@ public class UserEndpointImpl implements ru.stoliarenkoas.tm.webserver.api.webse
     }
 
     @Override
-    @WebMethod
     public List<UserDTO> getAllUsers(@WebParam @Nullable final String token)
                                      throws AccessForbiddenException {
         if (token == null) throw new AccessForbiddenException("not logged in");
@@ -63,7 +59,6 @@ public class UserEndpointImpl implements ru.stoliarenkoas.tm.webserver.api.webse
     }
 
     @Override
-    @WebMethod
     public UserDTO getOneUser(@WebParam @Nullable final String token,
                               @WebParam @Nullable final String requestedUserId)
                               throws AccessForbiddenException {
@@ -73,7 +68,6 @@ public class UserEndpointImpl implements ru.stoliarenkoas.tm.webserver.api.webse
     }
 
     @Override
-    @WebMethod
     public void deleteOneUser(@WebParam @Nullable final String token,
                               @WebParam @Nullable final String requestedUserId)
                               throws AccessForbiddenException {

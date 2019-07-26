@@ -17,9 +17,9 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
 @NoArgsConstructor
+@XmlRootElement(name = "user")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class UserDTO implements Entity, Serializable {
 
     private static final long serialVersionUID = 12345678904L;
