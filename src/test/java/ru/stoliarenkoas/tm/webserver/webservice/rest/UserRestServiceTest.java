@@ -20,7 +20,6 @@ import ru.stoliarenkoas.tm.webserver.util.CypherUtil;
 import ru.stoliarenkoas.tm.webserver.webservice.rest.client.UserRestServiceClient;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 @WebAppConfiguration
 @RunWith(SpringRunner.class)
@@ -103,8 +102,9 @@ public class UserRestServiceTest {
         assertNotNull(UserRestServiceClient.client().login(adminLogin, password));
     }
 
+    @Test
     public void registerTest() {
-
+        assertNotNull(UserRestServiceClient.client().login(adminLogin, password));
     }
 
 }
