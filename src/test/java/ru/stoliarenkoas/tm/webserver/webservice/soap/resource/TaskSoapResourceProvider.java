@@ -6,33 +6,34 @@ import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
-import ru.stoliarenkoas.tm.webserver.api.websevice.soap.UserEndpoint;
-import ru.stoliarenkoas.tm.webserver.webservice.soap.UserEndpointImpl;
+import ru.stoliarenkoas.tm.webserver.api.websevice.soap.TaskEndpoint;
+import ru.stoliarenkoas.tm.webserver.webservice.soap.TaskEndpointImpl;
 
-public class UserSoapServerProvider {
-    public static final String ADDRESS = "http://localhost:8080/webservice/UserService";
+public class TaskSoapResourceProvider {
 
-    private UserEndpointImpl userEndpoint;
+    public static final String ADDRESS = "http://localhost:8080/webservice/TaskService";
+
+    private TaskEndpointImpl taskEndpoint;
     @Autowired
-    public void setUserEndpoint(UserEndpointImpl userEndpoint) {
-        this.userEndpoint = userEndpoint;
+    public void setTaskEndpoint(TaskEndpointImpl taskEndpoint) {
+        this.taskEndpoint = taskEndpoint;
     }
 
     @Bean @Scope("application")
-    public Server userEndpointServer() {
+    public Server taskEndpointServer() {
 
         final JaxWsServerFactoryBean jaxWsServerFactoryBean = new JaxWsServerFactoryBean();
-        jaxWsServerFactoryBean.setServiceBean(userEndpoint);
+        jaxWsServerFactoryBean.setServiceBean(taskEndpoint);
         jaxWsServerFactoryBean.setAddress(ADDRESS);
         return jaxWsServerFactoryBean.create();
     }
 
     @Bean @Scope("application")
-    public UserEndpoint userEndpointClient() {
+    public TaskEndpoint taskEndpointClient() {
         JaxWsProxyFactoryBean factoryBean = new JaxWsProxyFactoryBean();
-        factoryBean.setServiceClass(UserEndpoint.class);
+        factoryBean.setServiceClass(TaskEndpoint.class);
         factoryBean.setAddress(ADDRESS);
-        return (UserEndpoint) factoryBean.create();
+        return (TaskEndpoint) factoryBean.create();
     }
 
 }
