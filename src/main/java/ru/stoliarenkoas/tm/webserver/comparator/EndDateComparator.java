@@ -14,4 +14,5 @@ public class EndDateComparator implements Comparator<PlannedEntity> {
         if (o1.getEndDate() == null || o2.getEndDate() == null) return o1.getEndDate() == null ? 1 : -1;
         return o1.getEndDate().compareTo(o2.getEndDate());
     }
+
 }

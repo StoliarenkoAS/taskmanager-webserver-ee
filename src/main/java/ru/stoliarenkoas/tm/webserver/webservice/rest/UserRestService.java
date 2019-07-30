@@ -2,7 +2,6 @@ package ru.stoliarenkoas.tm.webserver.webservice.rest;
 
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestParam;
 import ru.stoliarenkoas.tm.webserver.exception.AccessForbiddenException;
 import ru.stoliarenkoas.tm.webserver.exception.IncorrectDataException;
 import ru.stoliarenkoas.tm.webserver.model.dto.UserDTO;
@@ -10,6 +9,7 @@ import ru.stoliarenkoas.tm.webserver.service.UserServicePageableImpl;
 import ru.stoliarenkoas.tm.webserver.util.JwtTokenProvider;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 public class UserRestService {
@@ -28,7 +28,6 @@ public class UserRestService {
 
     @POST
     @Path("/register")
-    @Consumes("application/json")
     public void userRegister(@QueryParam("login") @Nullable String login,
                              @QueryParam("password") @Nullable String password)
                              throws IncorrectDataException {
@@ -46,6 +45,7 @@ public class UserRestService {
 
     @GET
     @Path("/list")
+    @Produces(MediaType.APPLICATION_JSON)
     public List<UserDTO> getAllUsers(@HeaderParam("token") @Nullable String token)
                                      throws AccessForbiddenException {
         if (token == null) throw new AccessForbiddenException("not logged in");
@@ -55,6 +55,7 @@ public class UserRestService {
 
     @GET
     @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     public UserDTO getOneUser(@HeaderParam("token") @Nullable String token,
                               @PathParam("id") @Nullable String requestedUserId)
                               throws AccessForbiddenException {

@@ -2,10 +2,6 @@ package ru.stoliarenkoas.tm.webserver.webservice.rest;
 
 
 import org.apache.cxf.endpoint.Server;
-import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
-import org.apache.cxf.jaxrs.lifecycle.SingletonResourceProvider;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +15,9 @@ import ru.stoliarenkoas.tm.webserver.model.dto.UserDTO;
 import ru.stoliarenkoas.tm.webserver.webservice.rest.client.UserRestServiceClient;
 import ru.stoliarenkoas.tm.webserver.webservice.rest.resource.UserRestResourceProvider;
 
-import static org.junit.Assert.assertNotNull;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 @WebAppConfiguration
 @RunWith(SpringRunner.class)
@@ -34,11 +32,11 @@ import static org.junit.Assert.assertNotNull;
                 ru.stoliarenkoas.tm.webserver.util.JwtTokenProvider.class})
 public class UserRestServiceTest {
 
-    private Server userRestServer;
     @Autowired
-    public void setUserRestServer(Server userRestServer) {
-        this.userRestServer = userRestServer;
-    }
+    private String adminToken;
+
+    @Autowired
+    private String userToken;
 
     private UserRestServiceClient client;
     @Autowired
@@ -49,6 +47,7 @@ public class UserRestServiceTest {
     @Test
     public void loginTest() {
         final String token = client.login(DataConstants.ADMIN_LOGIN, DataConstants.PASSWORD);
+        System.out.println(token);
         assertNotNull(token);
     }
 
@@ -63,7 +62,35 @@ public class UserRestServiceTest {
 
     @Test
     public void getOneTest() {
-//        final UserDTO admin = userRestService.getOneUser()
+        final UserDTO user = client.getOneUser(adminToken, DataConstants.USER_ID);
+        assertNotNull(user);
+        assertEquals(DataConstants.USER_LOGIN, user.getLogin());
+    }
+
+    @Test(expected = feign.RetryableException.class)
+    public void getOneWrongRoleTest() {
+        client.getOneUser(userToken, DataConstants.ADMIN_ID);
+    }
+
+    @Test
+    public void getSelfTest() {
+        final UserDTO user = client.getOneUser(userToken, DataConstants.USER_ID);
+        assertNotNull(user);
+        assertEquals(DataConstants.USER_LOGIN, user.getLogin());
+    }
+
+    @Test
+    public void getAllTest() {
+        final List<UserDTO> users = client.getAllUsers(adminToken);
+        assertNotNull(users);
+        assertFalse(users.isEmpty());
+    }
+
+    @Test(expected = feign.RetryableException.class)
+    public void getAllWrongRoleTest() {
+        final List<UserDTO> users = client.getAllUsers(userToken);
+        assertNotNull(users);
+        assertFalse(users.isEmpty());
     }
 
 }

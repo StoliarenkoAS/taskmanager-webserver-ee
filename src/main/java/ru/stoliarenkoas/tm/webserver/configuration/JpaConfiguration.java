@@ -49,9 +49,12 @@ public class JpaConfiguration {
             @Value("${hibernate.cache.use_query_cache}") final String useQueryCache,
             @Value("${hibernate.cache.region_prefix}") final String regionPrefix,
             @Value("${hibernate.cache.provider_configuration_file_resource_path}") final String configFile,
-            @Value("${hibernate.cache.region.factory_class}") final String cacheFactoryClass,
-            @Value("${hibernate.implicit_naming_strategy}") final String implicitNamingStrategy,
-            @Value("${hibernate.physical_naming_strategy}") final String physicalNamingStrategy,
+            @Value("${hibernate.cache.region.factory_class}")
+            final String cacheFactoryClass,
+            @Value("${hibernate.implicit_naming_strategy}")
+            final String implicitNamingStrategy,
+            @Value("${hibernate.physical_naming_strategy}")
+            final String physicalNamingStrategy,
             @Value("${hibernate.cache.use_minimal_puts}") final String useMinPuts,
             @Value("${hibernate.cache.hazelcast.use_lite_member}") final String useLiteMember
     ) {
@@ -74,7 +77,8 @@ public class JpaConfiguration {
         properties.put(Environment.PHYSICAL_NAMING_STRATEGY, physicalNamingStrategy);
 
         properties.put(Environment.USE_MINIMAL_PUTS, useMinPuts);
-        properties.put("hibernate.cache.hazelcast.use_lite_member", useLiteMember); //client does not contain any data
+        //client does not contain any data
+        properties.put("hibernate.cache.hazelcast.use_lite_member", useLiteMember);
         factoryBean.setJpaProperties(properties);
         return factoryBean;
     }

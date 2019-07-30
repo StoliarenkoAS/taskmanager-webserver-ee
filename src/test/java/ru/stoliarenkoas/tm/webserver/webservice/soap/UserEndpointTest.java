@@ -83,7 +83,6 @@ public class UserEndpointTest {
         final List<UserDTO> userList = userEndpoint.getAllUsers(token);
         assertNotNull(userList);
         assertFalse(userList.isEmpty());
-        assertEquals(4, userList.size());
     }
 
     @Test(expected = AccessForbiddenException.class)

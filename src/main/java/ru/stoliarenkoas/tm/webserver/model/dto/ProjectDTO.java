@@ -30,15 +30,6 @@ public class ProjectDTO implements PlannedEntity, Serializable {
     @Nullable private Date startDate;
     @Nullable private Date endDate;
 
-    public ProjectDTO(@NotNull final String userId) {
-        this.userId = userId;
-    }
-
-
-    @NotNull public String getUserId() {
-        return userId;
-    }
-
     @Override @NotNull
     public String toString() {
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");

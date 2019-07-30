@@ -1,5 +1,6 @@
 package ru.stoliarenkoas.tm.webserver.webservice.rest.resource;
 
+import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
 import org.apache.cxf.jaxrs.lifecycle.SingletonResourceProvider;
@@ -26,6 +27,7 @@ public class UserRestResourceProvider {
     public Server userRestServer() {
         final JAXRSServerFactoryBean jaxrsServerFactoryBean = new JAXRSServerFactoryBean();
         jaxrsServerFactoryBean.setResourceClasses(UserRestService.class);
+        jaxrsServerFactoryBean.setProvider(new JacksonJaxbJsonProvider());
         jaxrsServerFactoryBean.setResourceProvider(new SingletonResourceProvider(userRestService));
         jaxrsServerFactoryBean.setAddress(ADDRESS);
         return jaxrsServerFactoryBean.create();

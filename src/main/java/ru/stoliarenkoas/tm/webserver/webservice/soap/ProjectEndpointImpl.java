@@ -8,7 +8,6 @@ import ru.stoliarenkoas.tm.webserver.model.dto.ProjectDTO;
 import ru.stoliarenkoas.tm.webserver.service.ProjectServicePageableImpl;
 import ru.stoliarenkoas.tm.webserver.util.JwtTokenProvider;
 
-import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import java.util.List;

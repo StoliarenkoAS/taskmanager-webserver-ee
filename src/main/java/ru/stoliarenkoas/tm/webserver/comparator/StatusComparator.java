@@ -12,4 +12,5 @@ public class StatusComparator implements Comparator<PlannedEntity> {
         if (o1 == null || o2 == null) throw new NullPointerException("null comparison");
         return o1.getStatus().ordinal() - o2.getStatus().ordinal();
     }
+
 }

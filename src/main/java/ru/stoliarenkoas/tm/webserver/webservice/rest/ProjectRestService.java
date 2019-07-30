@@ -9,6 +9,8 @@ import ru.stoliarenkoas.tm.webserver.service.ProjectServicePageableImpl;
 import ru.stoliarenkoas.tm.webserver.util.JwtTokenProvider;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import java.io.IOException;
 import java.util.List;
 
 public class ProjectRestService {
@@ -27,6 +29,7 @@ public class ProjectRestService {
 
     @GET
     @Path("/list")
+    @Produces(MediaType.APPLICATION_JSON)
     public List<ProjectDTO> getAllProjects(@HeaderParam("token") @Nullable String token)
                                            throws AccessForbiddenException {
         if (token == null) throw new AccessForbiddenException("not logged in");
@@ -36,6 +39,7 @@ public class ProjectRestService {
 
     @GET
     @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     public ProjectDTO getOneProject(@HeaderParam("token") @Nullable String token,
                                     @PathParam("id") @Nullable String requestedProjectId)
                                     throws AccessForbiddenException, IncorrectDataException {
@@ -56,11 +60,22 @@ public class ProjectRestService {
 
     @POST
     @Path("/clear")
-    public void deleteOneProject(@HeaderParam("token") @Nullable String token)
-            throws AccessForbiddenException, IncorrectDataException {
+    public void deleteAllProjects(@HeaderParam("token") @Nullable String token)
+                                 throws AccessForbiddenException {
         if (token == null) throw new AccessForbiddenException("not logged in");
         final String userId = tokenProvider.getUserId(token);
         projectService.removeAllByUserId(userId);
+    }
+
+    @POST
+    @Path("/persist")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void persistProject(@HeaderParam("token") @Nullable String token,
+                               @Nullable ProjectDTO project)
+                               throws AccessForbiddenException, IOException, IncorrectDataException {
+        if (token == null) throw new AccessForbiddenException("not logged in");
+        final String userId = tokenProvider.getUserId(token);
+        projectService.persist(userId, project);
     }
     
 }

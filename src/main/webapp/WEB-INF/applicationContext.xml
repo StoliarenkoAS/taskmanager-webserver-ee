@@ -20,14 +20,21 @@
     <context:component-scan base-package="ru.stoliarenkoas.tm.webserver"/>
     <mvc:annotation-driven/>
 
+    <bean name="jsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider"/>
     <jaxrs:server id="userService" address="/rs/user"
-                  beanNames="userRestService"/>
+                  beanNames="userRestService">
+        <jaxrs:providers><ref bean="jsonProvider"/></jaxrs:providers>
+    </jaxrs:server>
     <bean id="userRestService" class="ru.stoliarenkoas.tm.webserver.webservice.rest.UserRestService" scope="prototype"/>
     <jaxrs:server id="projectService" address="/rs/project"
-                  beanNames="projectRestService"/>
+                  beanNames="projectRestService">
+        <jaxrs:providers><ref bean="jsonProvider"/></jaxrs:providers>
+    </jaxrs:server>
     <bean id="projectRestService" class="ru.stoliarenkoas.tm.webserver.webservice.rest.ProjectRestService" scope="prototype"/>
     <jaxrs:server id="taskService" address="/rs/task"
-                  beanNames="taskRestService"/>
+                  beanNames="taskRestService">
+        <jaxrs:providers><ref bean="jsonProvider"/></jaxrs:providers>
+    </jaxrs:server>
     <bean id="taskRestService" class="ru.stoliarenkoas.tm.webserver.webservice.rest.TaskRestService" scope="prototype"/>
 
     <jaxws:endpoint

@@ -16,24 +16,29 @@ public interface UserServicePageable {
     List<UserDTO> findAll(@Nullable String loggedUserId) throws AccessForbiddenException;
 
     @NotNull
-    Page<UserDTO> findAll(@Nullable String loggedUserId, @Nullable PageRequest page) throws AccessForbiddenException;
+    Page<UserDTO> findAll(@Nullable String loggedUserId, @Nullable PageRequest page)
+                          throws AccessForbiddenException;
 
     @Nullable
-    UserDTO findOne(@Nullable String loggedUserId, @Nullable String requestedUserId) throws AccessForbiddenException;
+    UserDTO findOne(@Nullable String loggedUserId, @Nullable String requestedUserId)
+                    throws AccessForbiddenException;
 
     @Nullable
-    UserDTO login(@Nullable String login, @Nullable String password) throws IncorrectDataException;
+    UserDTO login(@Nullable String login, @Nullable String password)
+                  throws IncorrectDataException;
 
     boolean exists(@Nullable String userId);
 
     void persist(@Nullable String loggedUserId, @Nullable UserDTO persistableUser)
-            throws AccessForbiddenException, IncorrectDataException;
+                 throws AccessForbiddenException, IncorrectDataException;
 
     void merge(@Nullable String loggedUserId, @Nullable UserDTO mergableUser)
-            throws AccessForbiddenException, IncorrectDataException;
+               throws AccessForbiddenException, IncorrectDataException;
 
-    void register(@Nullable String login, @Nullable String password) throws IncorrectDataException;
+    void register(@Nullable String login, @Nullable String password)
+                  throws IncorrectDataException;
 
-    void remove(@Nullable String loggedUserId, @Nullable String removableUserId) throws AccessForbiddenException;
+    void remove(@Nullable String loggedUserId, @Nullable String removableUserId)
+                throws AccessForbiddenException;
 
 }

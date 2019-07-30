@@ -9,6 +9,8 @@ import ru.stoliarenkoas.tm.webserver.service.TaskServicePageableImpl;
 import ru.stoliarenkoas.tm.webserver.util.JwtTokenProvider;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import java.io.IOException;
 import java.util.List;
 
 public class TaskRestService {
@@ -62,6 +64,17 @@ public class TaskRestService {
         if (token == null) throw new AccessForbiddenException("not logged in");
         final String userId = tokenProvider.getUserId(token);
         taskService.removeByProjectId(userId, projectId);
+    }
+
+    @POST
+    @Path("/persist")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void persistTask(@HeaderParam("token") @Nullable String token,
+                               @Nullable TaskDTO task)
+            throws AccessForbiddenException, IOException, IncorrectDataException {
+        if (token == null) throw new AccessForbiddenException("not logged in");
+        final String userId = tokenProvider.getUserId(token);
+        taskService.persist(userId, task);
     }
     
 }

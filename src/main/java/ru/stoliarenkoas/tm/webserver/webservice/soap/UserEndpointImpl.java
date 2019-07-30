@@ -9,7 +9,6 @@ import ru.stoliarenkoas.tm.webserver.model.dto.UserDTO;
 import ru.stoliarenkoas.tm.webserver.service.UserServicePageableImpl;
 import ru.stoliarenkoas.tm.webserver.util.JwtTokenProvider;
 
-import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import java.util.List;
