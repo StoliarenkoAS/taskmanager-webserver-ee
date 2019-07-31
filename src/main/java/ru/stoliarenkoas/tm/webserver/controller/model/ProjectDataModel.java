@@ -34,7 +34,13 @@ public class ProjectDataModel extends LazyDataModel<ProjectDTO> {
     }
 
     @Override
-    public List<ProjectDTO> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+    public List<ProjectDTO> load(
+            final int first,
+            final int pageSize,
+            final String sortField,
+            final SortOrder sortOrder,
+            final Map<String, Object> filters
+    ) {
         final UserDTO project = authorizationController.getLoggedUser();
         if (project == null) return Collections.emptyList();
         final PageRequest pageRequest = PageRequest.of(first, pageSize);

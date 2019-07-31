@@ -59,7 +59,11 @@ public class JwtTokenProvider {
     }
 
     public String getRoles(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("role", String.class);
+        return Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token)
+                .getBody()
+                .get("role", String.class);
     }
 
     public void validateToken(@Nullable final String token) throws AccessForbiddenException {

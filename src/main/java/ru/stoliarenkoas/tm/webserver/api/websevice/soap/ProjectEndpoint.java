@@ -15,26 +15,30 @@ public interface ProjectEndpoint {
 
     @WebMethod
     List<ProjectDTO> getAllProjects(@WebParam @Nullable String token)
-                                    throws AccessForbiddenException;
+            throws AccessForbiddenException;
 
     @WebMethod
-    ProjectDTO getOneProject(@WebParam @Nullable String token,
-                             @WebParam @Nullable String requestedProjectId)
-                             throws AccessForbiddenException, IncorrectDataException;
+    ProjectDTO getOneProject(
+            @WebParam @Nullable String token,
+            @WebParam @Nullable String requestedProjectId
+    ) throws AccessForbiddenException, IncorrectDataException;
 
     @WebMethod
-    void persistProject(@WebParam @Nullable String token,
-                        @WebParam @Nullable ProjectDTO newProject)
-                        throws AccessForbiddenException, IncorrectDataException;
+    void persistProject(
+            @WebParam @Nullable String token,
+            @WebParam @Nullable ProjectDTO newProject
+    ) throws AccessForbiddenException, IncorrectDataException;
 
     @WebMethod
-    void mergeProject(@WebParam @Nullable String token,
-                      @WebParam @Nullable ProjectDTO updatedProject)
-                      throws AccessForbiddenException, IncorrectDataException;
+    void mergeProject(
+            @WebParam @Nullable String token,
+            @WebParam @Nullable ProjectDTO updatedProject
+    ) throws AccessForbiddenException, IncorrectDataException;
 
     @WebMethod
-    void deleteOneProject(@WebParam @Nullable String token,
-                          @WebParam @Nullable String requestedProjectId)
-                          throws AccessForbiddenException, IncorrectDataException;
+    void deleteOneProject(
+            @WebParam @Nullable String token,
+            @WebParam @Nullable String requestedProjectId
+    ) throws AccessForbiddenException, IncorrectDataException;
 
 }

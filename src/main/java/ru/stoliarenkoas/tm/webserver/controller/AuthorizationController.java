@@ -65,20 +65,28 @@ public class AuthorizationController {
         return passwordConfirmation;
     }
 
-    public void setPasswordConfirmation(String passwordConfirmation) {
+    public void setPasswordConfirmation(@Nullable String passwordConfirmation) {
         this.passwordConfirmation = passwordConfirmation;
     }
 
     public void login() {
-        System.out.println("jsf-login:" + loginInput + " - " + passwordInput);
         FacesContext context = FacesContext.getCurrentInstance();
         try {
             loggedUser = userService.login(loginInput, passwordInput);
         } catch (IncorrectDataException e) {
             e.printStackTrace();
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Failure", "invalid combination of user and  password"));
+            final FacesMessage errorMessage = new FacesMessage(
+                    FacesMessage.SEVERITY_INFO,
+                    "Failure",
+                    "invalid combination of user and  password");
+            context.addMessage(null, errorMessage);
+            return;
         }
-        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "logged in"));
+        final FacesMessage successMessage = new FacesMessage(
+                FacesMessage.SEVERITY_INFO,
+                "Success",
+                "logged in");
+        context.addMessage(null, successMessage);
         clearFields();
     }
 
@@ -95,10 +103,18 @@ public class AuthorizationController {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
             userService.register(loginInput, passwordInput);
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "user created"));
+            final FacesMessage successMessage = new FacesMessage(
+                    FacesMessage.SEVERITY_INFO,
+                    "Success",
+                    "user created");
+            context.addMessage(null, successMessage);
         } catch (IncorrectDataException e) {
             e.printStackTrace();
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Error", e.getMessage()));
+            final FacesMessage errorMessage = new FacesMessage(
+                    FacesMessage.SEVERITY_INFO,
+                    "Error",
+                    e.getMessage());
+            context.addMessage(null, errorMessage);
         }
         clearFields();
     }

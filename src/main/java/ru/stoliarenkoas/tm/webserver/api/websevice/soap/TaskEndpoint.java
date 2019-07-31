@@ -15,26 +15,30 @@ public interface TaskEndpoint {
 
     @WebMethod
     List<TaskDTO> getAllTasks(@WebParam @Nullable String token)
-                              throws AccessForbiddenException;
+            throws AccessForbiddenException;
 
     @WebMethod
-    TaskDTO getOneTask(@WebParam @Nullable String token,
-                       @WebParam @Nullable String requestedTaskId)
-                       throws AccessForbiddenException, IncorrectDataException;
+    TaskDTO getOneTask(
+            @WebParam @Nullable String token,
+            @WebParam @Nullable String requestedTaskId
+    ) throws AccessForbiddenException, IncorrectDataException;
 
     @WebMethod
-    void persistTask(@WebParam @Nullable String token,
-                     @WebParam @Nullable TaskDTO newTask)
-                     throws AccessForbiddenException, IncorrectDataException;
+    void persistTask(
+            @WebParam @Nullable String token,
+            @WebParam @Nullable TaskDTO newTask
+    ) throws AccessForbiddenException, IncorrectDataException;
 
     @WebMethod
-    void mergeTask(@WebParam @Nullable String token,
-                   @WebParam @Nullable TaskDTO updatedTask)
-                   throws AccessForbiddenException, IncorrectDataException;
+    void mergeTask(
+            @WebParam @Nullable String token,
+            @WebParam @Nullable TaskDTO updatedTask
+    ) throws AccessForbiddenException, IncorrectDataException;
 
     @WebMethod
-    void deleteOneTask(@WebParam @Nullable String token,
-                       @WebParam @Nullable String requestedTaskId)
-                       throws AccessForbiddenException, IncorrectDataException;
+    void deleteOneTask(
+            @WebParam @Nullable String token,
+            @WebParam @Nullable String requestedTaskId
+    ) throws AccessForbiddenException, IncorrectDataException;
 
 }

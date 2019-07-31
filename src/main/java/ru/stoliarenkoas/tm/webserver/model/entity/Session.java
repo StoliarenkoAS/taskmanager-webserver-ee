@@ -30,7 +30,7 @@ public class Session {
     @Nullable
     private String hash;
 
-    @ManyToOne()
+    @ManyToOne
     private User user;
 
     @Override

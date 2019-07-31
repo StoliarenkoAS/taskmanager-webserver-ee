@@ -28,17 +28,19 @@ public class UserRestService {
 
     @POST
     @Path("/register")
-    public void userRegister(@QueryParam("login") @Nullable String login,
-                             @QueryParam("password") @Nullable String password)
-                             throws IncorrectDataException {
+    public void userRegister(
+            @QueryParam("login") @Nullable String login,
+            @QueryParam("password") @Nullable String password
+    ) throws IncorrectDataException {
         userService.register(login, password);
     }
 
     @POST
     @Path("/login")
-    public String userLogin(@QueryParam("login") @Nullable String login,
-                            @QueryParam("password") @Nullable String password)
-                            throws IncorrectDataException {
+    public String userLogin(
+            @QueryParam("login") @Nullable String login,
+            @QueryParam("password") @Nullable String password
+    ) throws IncorrectDataException {
         final UserDTO userDTO = userService.login(login, password);
         return tokenProvider.createToken(userDTO.getId(), userDTO.getRole().toString());
     }
@@ -47,8 +49,8 @@ public class UserRestService {
     @Path("/list")
     @Produces(MediaType.APPLICATION_JSON)
     public List<UserDTO> getAllUsers(@HeaderParam("token") @Nullable String token)
-                                     throws AccessForbiddenException {
-        if (token == null) throw new AccessForbiddenException("not logged in");
+            throws AccessForbiddenException {
+        if (token == null) throw new AccessForbiddenException();
         final String userId = tokenProvider.getUserId(token);
         return userService.findAll(userId);
     }
@@ -56,20 +58,22 @@ public class UserRestService {
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public UserDTO getOneUser(@HeaderParam("token") @Nullable String token,
-                              @PathParam("id") @Nullable String requestedUserId)
-                              throws AccessForbiddenException {
-        if (token == null) throw new AccessForbiddenException("not logged in");
+    public UserDTO getOneUser(
+            @HeaderParam("token") @Nullable String token,
+            @PathParam("id") @Nullable String requestedUserId
+    ) throws AccessForbiddenException {
+        if (token == null) throw new AccessForbiddenException();
         final String userId = tokenProvider.getUserId(token);
         return userService.findOne(userId, requestedUserId);
     }
 
     @POST
     @Path("/delete/{id}")
-    public void deleteOneUser(@HeaderParam("token") @Nullable String token,
-                              @PathParam("id") @Nullable String requestedUserId)
-                              throws AccessForbiddenException {
-        if (token == null) throw new AccessForbiddenException("not logged in");
+    public void deleteOneUser(
+            @HeaderParam("token") @Nullable String token,
+            @PathParam("id") @Nullable String requestedUserId
+    ) throws AccessForbiddenException {
+        if (token == null) throw new AccessForbiddenException();
         final String userId = tokenProvider.getUserId(token);
         userService.remove(userId, requestedUserId);
     }

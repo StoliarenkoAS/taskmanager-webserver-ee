@@ -14,25 +14,25 @@ public interface ProjectServicePageable {
 
     @NotNull
     List<ProjectDTO> findAllByUserId(@Nullable String loggedUserId)
-                                     throws AccessForbiddenException;
+            throws AccessForbiddenException;
 
     @NotNull
     Page<ProjectDTO> findAllByUserId(@Nullable String loggedUserId, @Nullable PageRequest page)
-                                     throws AccessForbiddenException;
+            throws AccessForbiddenException;
 
     @Nullable
     ProjectDTO findOne(@Nullable String loggedUserId, @Nullable String requestedProjectId)
-                       throws AccessForbiddenException, IncorrectDataException;
+            throws AccessForbiddenException, IncorrectDataException;
 
     boolean exists(@Nullable String loggedUserId, @Nullable String projectId);
 
     void persist(@Nullable String loggedUserId, @Nullable ProjectDTO persistableProject)
-                 throws AccessForbiddenException, IncorrectDataException;
+            throws AccessForbiddenException, IncorrectDataException;
 
     void merge(@Nullable String loggedUserId, @Nullable ProjectDTO persistableProject)
-               throws AccessForbiddenException, IncorrectDataException;
+            throws AccessForbiddenException, IncorrectDataException;
 
     void remove(@Nullable String loggedUserId, @Nullable String removableProjectId)
-                throws AccessForbiddenException, IncorrectDataException;
+            throws AccessForbiddenException, IncorrectDataException;
 
 }

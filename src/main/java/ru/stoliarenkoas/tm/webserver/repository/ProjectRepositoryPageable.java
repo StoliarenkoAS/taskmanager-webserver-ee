@@ -18,10 +18,8 @@ import java.util.Optional;
 @Repository
 public interface ProjectRepositoryPageable extends JpaRepository<Project, String> {
 
-    @QueryHints({@QueryHint(name = "org.hibernate.cacheable", value = "true")})
     List<Project> findAllByUser_Id(@NotNull String userId);
 
-    @QueryHints({@QueryHint(name = "org.hibernate.cacheable", value = "true")})
     Page<Project> findAllByUser_Id(@NotNull String userId, @NotNull Pageable pageable);
 
     @Query(value = "SELECT p FROM Project p WHERE p.user.id = :userId AND p.id = :projectId")

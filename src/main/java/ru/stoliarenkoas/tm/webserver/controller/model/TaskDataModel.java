@@ -34,7 +34,13 @@ public class TaskDataModel extends LazyDataModel<TaskDTO> {
     }
 
     @Override
-    public List<TaskDTO> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+    public List<TaskDTO> load(
+            final int first,
+            final int pageSize,
+            final String sortField,
+            final SortOrder sortOrder,
+            final Map<String, Object> filters
+    ) {
         final UserDTO task = authorizationController.getLoggedUser();
         if (task == null) return Collections.emptyList();
         final PageRequest pageRequest = PageRequest.of(first, pageSize);

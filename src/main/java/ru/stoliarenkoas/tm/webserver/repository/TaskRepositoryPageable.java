@@ -18,13 +18,10 @@ import java.util.Optional;
 @Repository
 public interface TaskRepositoryPageable extends JpaRepository<Task, String> {
 
-    @QueryHints({@QueryHint(name = "org.hibernate.cacheable", value = "true")})
     List<Task> findAllByProject_User_Id(@NotNull String userId);
 
-    @QueryHints({@QueryHint(name = "org.hibernate.cacheable", value = "true")})
     Page<Task> findAllByProject_User_Id(@NotNull String userId, @NotNull Pageable pageable);
 
-    @QueryHints({@QueryHint(name = "org.hibernate.cacheable", value = "true")})
     Page<Task> findAllByProject_Id(@NotNull String projectId, @NotNull Pageable pageable);
 
     @Query(value = "SELECT t FROM Task t WHERE t.project.user.id = :userId AND t.id = :id")
@@ -35,7 +32,6 @@ public interface TaskRepositoryPageable extends JpaRepository<Task, String> {
     Boolean existsByProject_User_IdAndId(@NotNull String userId, @NotNull String id);
 
     @Modifying
-    @QueryHints({@QueryHint(name = "org.hibernate.cacheable", value = "true")})
     void deleteAllByProject_Id(@NotNull String projectId);
 
 }

@@ -17,28 +17,28 @@ public interface UserServicePageable {
 
     @NotNull
     Page<UserDTO> findAll(@Nullable String loggedUserId, @Nullable PageRequest page)
-                          throws AccessForbiddenException;
+            throws AccessForbiddenException;
 
     @Nullable
     UserDTO findOne(@Nullable String loggedUserId, @Nullable String requestedUserId)
-                    throws AccessForbiddenException;
+            throws AccessForbiddenException;
 
     @Nullable
     UserDTO login(@Nullable String login, @Nullable String password)
-                  throws IncorrectDataException;
+            throws IncorrectDataException;
 
     boolean exists(@Nullable String userId);
 
     void persist(@Nullable String loggedUserId, @Nullable UserDTO persistableUser)
-                 throws AccessForbiddenException, IncorrectDataException;
+            throws AccessForbiddenException, IncorrectDataException;
 
     void merge(@Nullable String loggedUserId, @Nullable UserDTO mergableUser)
-               throws AccessForbiddenException, IncorrectDataException;
+            throws AccessForbiddenException, IncorrectDataException;
 
     void register(@Nullable String login, @Nullable String password)
-                  throws IncorrectDataException;
+            throws IncorrectDataException;
 
     void remove(@Nullable String loggedUserId, @Nullable String removableUserId)
-                throws AccessForbiddenException;
+            throws AccessForbiddenException;
 
 }

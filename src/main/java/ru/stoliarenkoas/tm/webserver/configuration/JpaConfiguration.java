@@ -12,7 +12,6 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import ru.stoliarenkoas.tm.webserver.util.JwtTokenProvider;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -22,7 +21,6 @@ import java.util.Properties;
 @PropertySource(value = "classpath:application.properties")
 @EnableJpaRepositories(value = "ru.stoliarenkoas.tm.webserver.repository")
 public class JpaConfiguration {
-
 
     @Bean(name = "dataSource")
     public DataSource getDataSource(

@@ -60,7 +60,7 @@ public class ProjectServicePageableImpl implements ProjectServicePageable {
     public Page<ProjectDTO> findAllByUserId(
             @Nullable final String loggedUserId,
             @Nullable PageRequest page
-            ) throws AccessForbiddenException {
+    ) throws AccessForbiddenException {
         checkAuthorization(loggedUserId);
         if (page == null) page = PageRequest.of(0, 10);
         return repository.findAllByUser_Id(loggedUserId, page).map(Project::toDTO);
@@ -72,10 +72,10 @@ public class ProjectServicePageableImpl implements ProjectServicePageable {
     public ProjectDTO findOne(
             @Nullable final String loggedUserId,
             @Nullable final String requestedProjectId
-            ) throws AccessForbiddenException, IncorrectDataException {
+    ) throws AccessForbiddenException, IncorrectDataException {
         checkAuthorization(loggedUserId);
         if (requestedProjectId == null || requestedProjectId.isEmpty()) {
-            throw new IncorrectDataException("empty project request");
+            throw new IncorrectDataException();
         }
         return repository.findOne(loggedUserId, requestedProjectId).map(Project::toDTO).orElse(null);
     }
@@ -94,11 +94,11 @@ public class ProjectServicePageableImpl implements ProjectServicePageable {
     public void persist(
             @Nullable final String loggedUserId,
             @Nullable final ProjectDTO persistableProject
-            ) throws AccessForbiddenException, IncorrectDataException {
+    ) throws AccessForbiddenException, IncorrectDataException {
         checkAuthorization(loggedUserId);
         checkProject(loggedUserId, persistableProject);
         if (repository.existsById(persistableProject.getId())) {
-            throw new AccessForbiddenException("project already exists");
+            throw new AccessForbiddenException();
         }
         repository.save(new Project(persistableProject, userRepository.getOne(loggedUserId)));
     }
@@ -108,7 +108,7 @@ public class ProjectServicePageableImpl implements ProjectServicePageable {
     public void merge(
             @Nullable final String loggedUserId,
             @Nullable final ProjectDTO persistableProject
-            ) throws AccessForbiddenException, IncorrectDataException {
+    ) throws AccessForbiddenException, IncorrectDataException {
         checkAuthorization(loggedUserId);
         checkProject(loggedUserId, persistableProject);
         repository.save(new Project(persistableProject, userRepository.getOne(loggedUserId)));
@@ -119,37 +119,37 @@ public class ProjectServicePageableImpl implements ProjectServicePageable {
     public void remove(
             @Nullable final String loggedUserId,
             @Nullable final String removableProjectId
-            ) throws AccessForbiddenException, IncorrectDataException {
+    ) throws AccessForbiddenException, IncorrectDataException {
         checkAuthorization(loggedUserId);
         if (removableProjectId == null || removableProjectId.isEmpty()) {
-            throw new IncorrectDataException("no project");
+            throw new IncorrectDataException();
         }
         final Optional<Project> project = repository.findOne(loggedUserId, removableProjectId);
-        if (!project.isPresent()) throw new IncorrectDataException("project doesn't exist");
+        if (!project.isPresent()) throw new IncorrectDataException();
         repository.delete(project.get());
     }
 
     public void removeAllByUserId(@Nullable final String loggedUserId)
-                                  throws AccessForbiddenException {
+            throws AccessForbiddenException {
         checkAuthorization(loggedUserId);
         repository.deleteAllByUser_Id(loggedUserId);
     }
 
     private void checkAuthorization(@Nullable final String loggedUserId) throws AccessForbiddenException {
         if (loggedUserId == null || loggedUserId.isEmpty()) {
-            throw new AccessForbiddenException("not authorized");
+            throw new AccessForbiddenException();
         }
         if (!userService.exists(loggedUserId)) {
-            throw new AccessForbiddenException("no such user");
+            throw new AccessForbiddenException();
         }
     }
 
     private void checkProject(@NotNull final String userId, @Nullable final ProjectDTO projectDTO)
             throws AccessForbiddenException, IncorrectDataException {
-        if (projectDTO == null) throw new IncorrectDataException("null project");
-        if (!userId.equals(projectDTO.getUserId())) throw new AccessForbiddenException("save by wrong user");
+        if (projectDTO == null) throw new IncorrectDataException();
+        if (!userId.equals(projectDTO.getUserId())) throw new AccessForbiddenException();
         if (projectDTO.getName() == null || projectDTO.getName().isEmpty()) {
-            throw new IncorrectDataException("empty project name");
+            throw new IncorrectDataException();
         }
     }
 

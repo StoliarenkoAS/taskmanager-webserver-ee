@@ -10,7 +10,6 @@ import ru.stoliarenkoas.tm.webserver.util.JwtTokenProvider;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.io.IOException;
 import java.util.List;
 
 public class TaskRestService {
@@ -31,37 +30,40 @@ public class TaskRestService {
     @Path("/list")
     public List<TaskDTO> getAllTasks(@HeaderParam("token") @Nullable String token)
             throws AccessForbiddenException {
-        if (token == null) throw new AccessForbiddenException("not logged in");
+        if (token == null) throw new AccessForbiddenException();
         final String userId = tokenProvider.getUserId(token);
         return taskService.findAllByUserId(userId);
     }
 
     @GET
     @Path("/{id}")
-    public TaskDTO getOneTask(@HeaderParam("token") @Nullable String token,
-                                    @PathParam("id") @Nullable String requestedTaskId)
-            throws AccessForbiddenException, IncorrectDataException {
-        if (token == null) throw new AccessForbiddenException("not logged in");
+    public TaskDTO getOneTask(
+            @HeaderParam("token") @Nullable String token,
+            @PathParam("id") @Nullable String requestedTaskId
+    ) throws AccessForbiddenException, IncorrectDataException {
+        if (token == null) throw new AccessForbiddenException();
         final String userId = tokenProvider.getUserId(token);
         return taskService.findOne(userId, requestedTaskId);
     }
 
     @POST
     @Path("/delete/{id}")
-    public void deleteOneTask(@HeaderParam("token") @Nullable String token,
-                              @PathParam("id") @Nullable String requestedTaskId)
-            throws AccessForbiddenException, IncorrectDataException {
-        if (token == null) throw new AccessForbiddenException("not logged in");
+    public void deleteOneTask(
+            @HeaderParam("token") @Nullable String token,
+            @PathParam("id") @Nullable String requestedTaskId
+    ) throws AccessForbiddenException, IncorrectDataException {
+        if (token == null) throw new AccessForbiddenException();
         final String userId = tokenProvider.getUserId(token);
         taskService.remove(userId, requestedTaskId);
     }
 
     @POST
     @Path("/clear/{projectId}")
-    public void deleteProjectTasks(@HeaderParam("token") @Nullable String token,
-                              @PathParam("projectId") @Nullable String projectId)
-            throws AccessForbiddenException, IncorrectDataException {
-        if (token == null) throw new AccessForbiddenException("not logged in");
+    public void deleteProjectTasks(
+            @HeaderParam("token") @Nullable String token,
+            @PathParam("projectId") @Nullable String projectId
+    ) throws AccessForbiddenException, IncorrectDataException {
+        if (token == null) throw new AccessForbiddenException();
         final String userId = tokenProvider.getUserId(token);
         taskService.removeByProjectId(userId, projectId);
     }
@@ -69,10 +71,11 @@ public class TaskRestService {
     @POST
     @Path("/persist")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void persistTask(@HeaderParam("token") @Nullable String token,
-                               @Nullable TaskDTO task)
-            throws AccessForbiddenException, IOException, IncorrectDataException {
-        if (token == null) throw new AccessForbiddenException("not logged in");
+    public void persistTask(
+            @HeaderParam("token") @Nullable String token,
+            @Nullable TaskDTO task
+    ) throws AccessForbiddenException, IncorrectDataException {
+        if (token == null) throw new AccessForbiddenException();
         final String userId = tokenProvider.getUserId(token);
         taskService.persist(userId, task);
     }

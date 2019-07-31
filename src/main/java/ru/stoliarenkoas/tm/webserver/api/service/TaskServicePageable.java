@@ -17,31 +17,32 @@ public interface TaskServicePageable {
 
     @NotNull
     Page<TaskDTO> findAllByUserId(@Nullable String loggedUserId, @Nullable PageRequest page)
-                                  throws AccessForbiddenException;
+            throws AccessForbiddenException;
 
     @NotNull
-    Page<TaskDTO> findAllByProjectId(@Nullable String loggedUserId,
-                                     @NotNull String projectId,
-                                     @Nullable PageRequest page)
-                                     throws AccessForbiddenException, IncorrectDataException;
+    Page<TaskDTO> findAllByProjectId(
+            @Nullable String loggedUserId,
+            @NotNull String projectId,
+            @Nullable PageRequest page
+    ) throws AccessForbiddenException, IncorrectDataException;
 
     @Nullable
     TaskDTO findOne(@Nullable String loggedUserId, @Nullable String requestedTaskId)
-                    throws AccessForbiddenException, IncorrectDataException;
+            throws AccessForbiddenException, IncorrectDataException;
 
     @NotNull
     Boolean exists(@Nullable String loggedUserId, @Nullable String requestedTaskId);
 
     void persist(@Nullable String loggedUserId, @Nullable TaskDTO persistableTask)
-                 throws AccessForbiddenException, IncorrectDataException;
+            throws AccessForbiddenException, IncorrectDataException;
 
     void merge(@Nullable String loggedUserId, @Nullable TaskDTO persistableTask)
-               throws AccessForbiddenException, IncorrectDataException;
+            throws AccessForbiddenException, IncorrectDataException;
 
     void remove(@Nullable String loggedUserId, @Nullable String removableTaskId)
-                throws AccessForbiddenException, IncorrectDataException;
+            throws AccessForbiddenException, IncorrectDataException;
 
     void removeByProjectId(@Nullable String loggedUserId, @Nullable String projectId)
-                           throws AccessForbiddenException, IncorrectDataException;
+            throws AccessForbiddenException, IncorrectDataException;
 
 }

@@ -16,6 +16,7 @@ import ru.stoliarenkoas.tm.webserver.exception.AccessForbiddenException;
 import ru.stoliarenkoas.tm.webserver.exception.IncorrectDataException;
 import ru.stoliarenkoas.tm.webserver.model.dto.ProjectDTO;
 import ru.stoliarenkoas.tm.webserver.model.dto.TaskDTO;
+import ru.stoliarenkoas.tm.webserver.model.entity.Project;
 import ru.stoliarenkoas.tm.webserver.model.entity.Task;
 import ru.stoliarenkoas.tm.webserver.repository.ProjectRepositoryPageable;
 import ru.stoliarenkoas.tm.webserver.repository.TaskRepositoryPageable;
@@ -55,7 +56,8 @@ public class TaskServicePageableImpl implements TaskServicePageable {
     @NotNull
     @Override
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public List<TaskDTO> findAllByUserId(@Nullable final String loggedUserId) throws AccessForbiddenException {
+    public List<TaskDTO> findAllByUserId(@Nullable final String loggedUserId)
+            throws AccessForbiddenException {
         checkAuthorization(loggedUserId);
         final List<Task> tasks = repository.findAllByProject_User_Id(loggedUserId);
         return tasks.stream().map(Task::toDTO).collect(Collectors.toList());
@@ -67,7 +69,7 @@ public class TaskServicePageableImpl implements TaskServicePageable {
     public Page<TaskDTO> findAllByUserId(
             @Nullable final String loggedUserId,
             @Nullable PageRequest page
-            ) throws AccessForbiddenException {
+    ) throws AccessForbiddenException {
         checkAuthorization(loggedUserId);
         if (page == null) page = PageRequest.of(0, 10);
         return repository.findAllByProject_User_Id(loggedUserId, page).map(Task::toDTO);
@@ -80,10 +82,10 @@ public class TaskServicePageableImpl implements TaskServicePageable {
             @Nullable final String loggedUserId,
             @Nullable final String projectId,
             @Nullable PageRequest page
-            ) throws AccessForbiddenException, IncorrectDataException {
+    ) throws AccessForbiddenException, IncorrectDataException {
         checkAuthorization(loggedUserId);
         if (projectId == null || projectId.isEmpty() || !projectService.exists(loggedUserId, projectId)) {
-            throw new IncorrectDataException("project selection error");
+            throw new IncorrectDataException();
         }
         if (page == null) page = PageRequest.of(0, 10);
         return repository.findAllByProject_Id(projectId, page).map(Task::toDTO);
@@ -95,10 +97,10 @@ public class TaskServicePageableImpl implements TaskServicePageable {
     public TaskDTO findOne(
             @Nullable final String loggedUserId,
             @Nullable final String requestedTaskId
-            ) throws AccessForbiddenException, IncorrectDataException {
+    ) throws AccessForbiddenException, IncorrectDataException {
         checkAuthorization(loggedUserId);
         if (requestedTaskId == null || requestedTaskId.isEmpty()) {
-            throw new IncorrectDataException("no task selected");
+            throw new IncorrectDataException();
         }
         return repository.findOne(loggedUserId, requestedTaskId).map(Task::toDTO).orElse(null);
     }
@@ -115,25 +117,29 @@ public class TaskServicePageableImpl implements TaskServicePageable {
     @Transactional
     public void persist(
             @Nullable final String loggedUserId,
-            @Nullable final TaskDTO persistableTask
-            ) throws AccessForbiddenException, IncorrectDataException {
+            @Nullable final TaskDTO persistableTaskDTO
+    ) throws AccessForbiddenException, IncorrectDataException {
         checkAuthorization(loggedUserId);
-        checkTask(loggedUserId, persistableTask);
-        if (repository.existsById(persistableTask.getId())) {
-            throw new AccessForbiddenException("task already exists");
+        checkTask(loggedUserId, persistableTaskDTO);
+        if (repository.existsById(persistableTaskDTO.getId())) {
+            throw new AccessForbiddenException();
         }
-        repository.save(new Task(persistableTask, projectRepository.getOne(persistableTask.getProjectId())));
+        final Project tasksProject = projectRepository.getOne(persistableTaskDTO.getProjectId());
+        final Task persistableTask = new Task(persistableTaskDTO, tasksProject);
+        repository.save(persistableTask);
     }
 
     @Override
     @Transactional
     public void merge(
             @Nullable final String loggedUserId,
-            @Nullable final TaskDTO persistableTask
-            ) throws AccessForbiddenException, IncorrectDataException {
+            @Nullable final TaskDTO persistableTaskDTO
+    ) throws AccessForbiddenException, IncorrectDataException {
         checkAuthorization(loggedUserId);
-        checkTask(loggedUserId, persistableTask);
-        repository.save(new Task(persistableTask, projectRepository.getOne(persistableTask.getProjectId())));
+        checkTask(loggedUserId, persistableTaskDTO);
+        final Project tasksProject = projectRepository.getOne(persistableTaskDTO.getProjectId());
+        final Task persistableTask = new Task(persistableTaskDTO, tasksProject);
+        repository.save(persistableTask);
     }
 
     @Override
@@ -141,14 +147,14 @@ public class TaskServicePageableImpl implements TaskServicePageable {
     public void remove(
             @Nullable final String loggedUserId,
             @Nullable final String removableTaskId
-            ) throws AccessForbiddenException, IncorrectDataException {
+    ) throws AccessForbiddenException, IncorrectDataException {
         checkAuthorization(loggedUserId);
         if (removableTaskId == null || removableTaskId.isEmpty()) {
-            throw new IncorrectDataException("empty task");
+            throw new IncorrectDataException();
         }
         final Optional<Task> task = repository.findOne(loggedUserId, removableTaskId);
         if (!task.isPresent()) {
-            throw new IncorrectDataException("task doesn't exist");
+            throw new IncorrectDataException();
         }
         repository.delete(task.get());
     }
@@ -158,36 +164,37 @@ public class TaskServicePageableImpl implements TaskServicePageable {
     public void removeByProjectId(
             @Nullable final String loggedUserId,
             @Nullable final String projectId
-            ) throws AccessForbiddenException, IncorrectDataException {
+    ) throws AccessForbiddenException, IncorrectDataException {
         checkAuthorization(loggedUserId);
         if (projectId == null || projectId.isEmpty()) {
-            throw new IncorrectDataException("empty project");
+            throw new IncorrectDataException();
         }
         if (!projectService.exists(loggedUserId, projectId)) {
-            throw new IncorrectDataException("project doesn't exist");
+            throw new IncorrectDataException();
         }
         repository.deleteAllByProject_Id(projectId);
     }
 
-    private void checkAuthorization(@Nullable final String loggedUserId) throws AccessForbiddenException {
+    private void checkAuthorization(@Nullable final String loggedUserId)
+            throws AccessForbiddenException {
         if (loggedUserId == null || loggedUserId.isEmpty()) {
-            throw new AccessForbiddenException("not authorized");
+            throw new AccessForbiddenException();
         }
         if (!userService.exists(loggedUserId)) {
-            throw new AccessForbiddenException("no such user");
+            throw new AccessForbiddenException();
         }
     }
 
     private void checkTask(@NotNull final String userId, @Nullable final TaskDTO taskDTO)
             throws AccessForbiddenException, IncorrectDataException {
-        if (taskDTO == null) throw new IncorrectDataException("null task");
-        if (!userId.equals(taskDTO.getUserId())) throw new AccessForbiddenException("save by wrong user");
+        if (taskDTO == null) throw new IncorrectDataException();
+        if (!userId.equals(taskDTO.getUserId())) throw new AccessForbiddenException();
         if (taskDTO.getName() == null || taskDTO.getName().isEmpty()) {
-            throw new IncorrectDataException("empty task name");
+            throw new IncorrectDataException();
         }
         final ProjectDTO projectDTO = projectService.findOne(userId, taskDTO.getProjectId());
         if (projectDTO == null || !userId.equals(projectDTO.getUserId())) {
-            throw new IncorrectDataException("project doesn't exist");
+            throw new IncorrectDataException();
         }
     }
 

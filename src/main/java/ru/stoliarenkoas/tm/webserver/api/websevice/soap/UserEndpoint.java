@@ -17,27 +17,31 @@ public interface UserEndpoint {
     String test();
 
     @WebMethod
-    void userRegister(@WebParam @Nullable String login,
-                      @WebParam @Nullable String password)
-                      throws IncorrectDataException;
+    void userRegister(
+            @WebParam @Nullable String login,
+            @WebParam @Nullable String password
+    ) throws IncorrectDataException;
 
     @WebMethod
-    String userLogin(@WebParam @Nullable String login,
-                     @WebParam @Nullable String password)
-                     throws IncorrectDataException;
+    String userLogin(
+            @WebParam @Nullable String login,
+            @WebParam @Nullable String password
+    ) throws IncorrectDataException;
 
     @WebMethod
     List<UserDTO> getAllUsers(@WebParam @Nullable String token)
-                              throws AccessForbiddenException;
+            throws AccessForbiddenException;
 
     @WebMethod
-    UserDTO getOneUser(@WebParam @Nullable String token,
-                       @WebParam @Nullable String requestedUserId)
-                       throws AccessForbiddenException;
+    UserDTO getOneUser(
+            @WebParam @Nullable String token,
+            @WebParam @Nullable String requestedUserId
+    ) throws AccessForbiddenException;
 
     @WebMethod
-    void deleteOneUser(@WebParam @Nullable String token,
-                       @WebParam @Nullable String requestedUserId)
-                       throws AccessForbiddenException;
+    void deleteOneUser(
+            @WebParam @Nullable String token,
+            @WebParam @Nullable String requestedUserId
+    ) throws AccessForbiddenException;
 
 }
