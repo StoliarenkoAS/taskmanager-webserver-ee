@@ -3,8 +3,6 @@ package ru.stoliarenkoas.tm.webserver.webservice.rest.client;
 import feign.Feign;
 import feign.Request;
 import feign.Retryer;
-import feign.gson.GsonDecoder;
-import feign.gson.GsonEncoder;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 import feign.jaxrs.JAXRSContract;
@@ -13,7 +11,6 @@ import org.jetbrains.annotations.Nullable;
 import ru.stoliarenkoas.tm.webserver.exception.AccessForbiddenException;
 import ru.stoliarenkoas.tm.webserver.exception.IncorrectDataException;
 import ru.stoliarenkoas.tm.webserver.model.dto.ProjectDTO;
-import ru.stoliarenkoas.tm.webserver.model.dto.UserDTO;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -42,13 +39,17 @@ public interface ProjectRestServiceClient {
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    ProjectDTO getOneProject(@HeaderParam("token") @Nullable String token,
-                             @PathParam("id") @Nullable String requestedProjectId);
+    ProjectDTO getOneProject(
+            @HeaderParam("token") @Nullable String token,
+            @PathParam("id") @Nullable String requestedProjectId
+    );
 
     @POST
     @Path("/delete/{id}")
-    void deleteOneProject(@HeaderParam("token") @Nullable String token,
-                          @PathParam("id") @Nullable String requestedProjectId);
+    void deleteOneProject(
+            @HeaderParam("token") @Nullable String token,
+            @PathParam("id") @Nullable String requestedProjectId
+    );
 
     @POST
     @Path("/clear")
@@ -57,8 +58,9 @@ public interface ProjectRestServiceClient {
     @POST
     @Path("/persist")
     @Consumes(MediaType.APPLICATION_JSON)
-    void persistProject(@HeaderParam("token") @Nullable String token,
-                        ProjectDTO project)
-                        throws AccessForbiddenException, IOException, IncorrectDataException;
+    void persistProject(
+            @HeaderParam("token") @Nullable String token,
+            @Nullable ProjectDTO project
+    );
 
 }

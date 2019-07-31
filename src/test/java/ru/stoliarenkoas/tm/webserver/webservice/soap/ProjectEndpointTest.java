@@ -42,8 +42,6 @@ import static org.junit.Assert.*;
         })
 public class ProjectEndpointTest {
 
-    private final String testProjectLogin = "soap-test-project-login";
-
     @Autowired
     private String userToken;
 

@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.AnnotationConfigWebContextLoader;
 import org.springframework.test.context.web.WebAppConfiguration;
 import ru.stoliarenkoas.tm.webserver.api.service.TaskServicePageable;
+import ru.stoliarenkoas.tm.webserver.configuration.JpaConfiguration;
 import ru.stoliarenkoas.tm.webserver.enumerate.Role;
 import ru.stoliarenkoas.tm.webserver.exception.AccessForbiddenException;
 import ru.stoliarenkoas.tm.webserver.exception.IncorrectDataException;
@@ -29,10 +30,11 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
         loader = AnnotationConfigWebContextLoader.class,
-        classes = {ru.stoliarenkoas.tm.webserver.configuration.JpaConfiguration.class,
-                   TaskServicePageableImpl.class,
-                   ProjectServicePageableImpl.class,
-                   UserServicePageableImpl.class})
+        classes = {
+                JpaConfiguration.class,
+                TaskServicePageableImpl.class,
+                ProjectServicePageableImpl.class,
+                UserServicePageableImpl.class})
 public class TaskServiceTest {
 
     private UserRepositoryPageable userRepository;

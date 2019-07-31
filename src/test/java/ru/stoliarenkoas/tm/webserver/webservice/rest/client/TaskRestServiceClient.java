@@ -3,8 +3,6 @@ package ru.stoliarenkoas.tm.webserver.webservice.rest.client;
 import feign.Feign;
 import feign.Request;
 import feign.Retryer;
-import feign.gson.GsonDecoder;
-import feign.gson.GsonEncoder;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 import feign.jaxrs.JAXRSContract;
@@ -12,7 +10,6 @@ import feign.okhttp.OkHttpClient;
 import org.jetbrains.annotations.Nullable;
 import ru.stoliarenkoas.tm.webserver.exception.AccessForbiddenException;
 import ru.stoliarenkoas.tm.webserver.exception.IncorrectDataException;
-import ru.stoliarenkoas.tm.webserver.model.dto.ProjectDTO;
 import ru.stoliarenkoas.tm.webserver.model.dto.TaskDTO;
 
 import javax.ws.rs.*;
@@ -42,24 +39,31 @@ public interface TaskRestServiceClient {
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    TaskDTO getOneTask(@HeaderParam("token") @Nullable String token,
-                       @PathParam("id") @Nullable String requestedTaskId);
+    TaskDTO getOneTask(
+            @HeaderParam("token") @Nullable String token,
+            @PathParam("id") @Nullable String requestedTaskId
+    );
 
     @POST
     @Path("/delete/{id}")
-    void deleteOneTask(@HeaderParam("token") @Nullable String token,
-                       @PathParam("id") @Nullable String requestedTaskId);
+    void deleteOneTask(
+            @HeaderParam("token") @Nullable String token,
+            @PathParam("id") @Nullable String requestedTaskId
+    );
 
     @POST
     @Path("/clear/{projectId}")
-    void deleteProjectTasks(@HeaderParam("token") @Nullable String token,
-                            @PathParam("projectId") @Nullable String projectId);
+    void deleteProjectTasks(
+            @HeaderParam("token") @Nullable String token,
+            @PathParam("projectId") @Nullable String projectId
+    );
 
     @POST
     @Path("/persist")
     @Consumes(MediaType.APPLICATION_JSON)
-    void persistTask(@HeaderParam("token") @Nullable String token,
-                     @Nullable TaskDTO task)
-                     throws AccessForbiddenException, IOException, IncorrectDataException;
+    void persistTask(
+            @HeaderParam("token") @Nullable String token,
+            @Nullable TaskDTO task
+    );
 
 }

@@ -42,8 +42,6 @@ import static org.junit.Assert.assertNull;
         })
 public class TaskEndpointTest {
 
-    private final String testTaskLogin = "soap-test-task-login";
-
     @Autowired
     private String userToken;
 

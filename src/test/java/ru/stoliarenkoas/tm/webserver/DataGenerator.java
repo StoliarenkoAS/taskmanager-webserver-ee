@@ -1,14 +1,8 @@
 package ru.stoliarenkoas.tm.webserver;
 
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.cdi.Eager;
-import org.springframework.stereotype.Component;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.AnnotationConfigWebContextLoader;
 import ru.stoliarenkoas.tm.webserver.enumerate.Role;
-import ru.stoliarenkoas.tm.webserver.model.dto.UserDTO;
 import ru.stoliarenkoas.tm.webserver.model.entity.Project;
 import ru.stoliarenkoas.tm.webserver.model.entity.Task;
 import ru.stoliarenkoas.tm.webserver.model.entity.User;
@@ -38,9 +32,11 @@ public class DataGenerator {
 
 
     @Autowired
-    public DataGenerator(UserRepositoryPageable userRepository,
-                         ProjectRepositoryPageable projectRepository,
-                         TaskRepositoryPageable taskRepository) {
+    public DataGenerator(
+            UserRepositoryPageable userRepository,
+            ProjectRepositoryPageable projectRepository,
+            TaskRepositoryPageable taskRepository
+    ) {
         this.userRepository = userRepository;
         this.projectRepository = projectRepository;
         this.taskRepository = taskRepository;

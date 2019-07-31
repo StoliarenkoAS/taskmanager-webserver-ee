@@ -8,13 +8,10 @@ import feign.gson.GsonEncoder;
 import feign.jaxrs.JAXRSContract;
 import feign.okhttp.OkHttpClient;
 import org.jetbrains.annotations.Nullable;
-import ru.stoliarenkoas.tm.webserver.exception.AccessForbiddenException;
-import ru.stoliarenkoas.tm.webserver.exception.IncorrectDataException;
 import ru.stoliarenkoas.tm.webserver.model.dto.UserDTO;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.io.IOException;
 import java.util.List;
 
 public interface UserRestServiceClient {
@@ -33,8 +30,10 @@ public interface UserRestServiceClient {
 
     @POST
     @Path("/register")
-    void userRegister(@QueryParam("login") @Nullable String login,
-                      @QueryParam("password") @Nullable String password);
+    void userRegister(
+            @QueryParam("login") @Nullable String login,
+            @QueryParam("password") @Nullable String password
+    );
 
     @POST
     @Path("/login")

@@ -21,7 +21,6 @@ public class TaskSoapResourceProvider {
 
     @Bean @Scope("application")
     public Server taskEndpointServer() {
-
         final JaxWsServerFactoryBean jaxWsServerFactoryBean = new JaxWsServerFactoryBean();
         jaxWsServerFactoryBean.setServiceBean(taskEndpoint);
         jaxWsServerFactoryBean.setAddress(ADDRESS);

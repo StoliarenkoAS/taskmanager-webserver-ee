@@ -6,14 +6,9 @@ import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
 import org.apache.cxf.jaxrs.lifecycle.SingletonResourceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
-import ru.stoliarenkoas.tm.webserver.DataConstants;
-import ru.stoliarenkoas.tm.webserver.exception.IncorrectDataException;
 import ru.stoliarenkoas.tm.webserver.webservice.rest.ProjectRestService;
 import ru.stoliarenkoas.tm.webserver.webservice.rest.client.ProjectRestServiceClient;
-
-import javax.annotation.PreDestroy;
 
 public class ProjectRestResourceProvider {
 

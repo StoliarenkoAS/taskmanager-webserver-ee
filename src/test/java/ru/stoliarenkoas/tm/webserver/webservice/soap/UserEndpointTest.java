@@ -96,12 +96,12 @@ public class UserEndpointTest {
     public void getAllWrongRoleTest() throws IncorrectDataException, AccessForbiddenException {
         final String token = userEndpoint.userLogin(DataConstants.USER_LOGIN, DataConstants.PASSWORD);
         assertNotNull(token);
-        final List<UserDTO> userList = userEndpoint.getAllUsers(token);
+        userEndpoint.getAllUsers(token);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void getAllUnauthorizedTest() throws IncorrectDataException, AccessForbiddenException {
-        final List<UserDTO> userList = userEndpoint.getAllUsers("");
+    public void getAllUnauthorizedTest() throws AccessForbiddenException {
+        userEndpoint.getAllUsers("");
     }
 
     @Test
@@ -117,19 +117,19 @@ public class UserEndpointTest {
     public void getOneWrongRoleTest() throws IncorrectDataException, AccessForbiddenException {
         final String token = userEndpoint.userLogin(DataConstants.USER_LOGIN, DataConstants.PASSWORD);
         assertNotNull(token);
-        final UserDTO userDTO = userEndpoint.getOneUser(token, DataConstants.ADMIN_ID);
+        userEndpoint.getOneUser(token, DataConstants.ADMIN_ID);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void getOneUnauthorizedTest() throws IncorrectDataException, AccessForbiddenException {
-        final UserDTO userDTO = userEndpoint.getOneUser("", DataConstants.USER_ID);
+    public void getOneUnauthorizedTest() throws AccessForbiddenException {
+        userEndpoint.getOneUser("", DataConstants.USER_ID);
     }
 
     @Test
     public void getSelfTest() throws IncorrectDataException, AccessForbiddenException {
         final String token = userEndpoint.userLogin(DataConstants.USER_LOGIN, DataConstants.PASSWORD);
         assertNotNull(token);
-        final UserDTO userDTO = userEndpoint.getOneUser(token, DataConstants.USER_ID);
+        userEndpoint.getOneUser(token, DataConstants.USER_ID);
     }
 
     @Test
@@ -149,7 +149,7 @@ public class UserEndpointTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void removeUnauthorizedTest() throws IncorrectDataException, AccessForbiddenException {
+    public void removeUnauthorizedTest() throws AccessForbiddenException {
         userEndpoint.deleteOneUser("", DataConstants.USER_TO_DELETE_ID);
     }
 

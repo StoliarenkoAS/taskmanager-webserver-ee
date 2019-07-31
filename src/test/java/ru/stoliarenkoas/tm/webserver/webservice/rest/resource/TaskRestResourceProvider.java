@@ -10,8 +10,6 @@ import org.springframework.context.annotation.Scope;
 import ru.stoliarenkoas.tm.webserver.webservice.rest.TaskRestService;
 import ru.stoliarenkoas.tm.webserver.webservice.rest.client.TaskRestServiceClient;
 
-import javax.annotation.PreDestroy;
-
 public class TaskRestResourceProvider {
 
     private final static String ADDRESS = "http://localhost:8080/webservice/rs/task";

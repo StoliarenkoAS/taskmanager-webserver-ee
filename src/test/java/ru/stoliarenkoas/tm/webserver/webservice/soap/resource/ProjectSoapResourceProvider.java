@@ -29,7 +29,6 @@ public class ProjectSoapResourceProvider {
 
     @Bean @Scope("application")
     public Server projectEndpointServer() {
-
         final JaxWsServerFactoryBean jaxWsServerFactoryBean = new JaxWsServerFactoryBean();
         jaxWsServerFactoryBean.setServiceBean(projectEndpoint);
         jaxWsServerFactoryBean.setAddress(ADDRESS);
