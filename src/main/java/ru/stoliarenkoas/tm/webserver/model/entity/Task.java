@@ -1,6 +1,7 @@
 package ru.stoliarenkoas.tm.webserver.model.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.jetbrains.annotations.NotNull;
@@ -13,6 +14,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Cacheable
+@NoArgsConstructor
 @Table(name = "task")
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Task extends AbstractPlannedEntity {
@@ -20,9 +22,6 @@ public class Task extends AbstractPlannedEntity {
     @ManyToOne(targetEntity = Project.class)
     @JoinColumn(name = "project_id")
     private Project project;
-
-    public Task() {
-    }
 
     public Task(@NotNull final TaskDTO dto, @NotNull final Project project) {
         this.project = project;
@@ -49,7 +48,7 @@ public class Task extends AbstractPlannedEntity {
         return dto;
     }
 
-    @Override @Nullable
+    @Nullable
     public String getUserId() {
         return project.getUserId();
     }

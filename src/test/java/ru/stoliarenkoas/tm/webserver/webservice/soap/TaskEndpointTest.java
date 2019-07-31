@@ -26,7 +26,6 @@ import static org.junit.Assert.assertNull;
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
-        loader = AnnotationConfigWebContextLoader.class,
         classes = {
                 UserEndpointImpl.class,
                 ProjectEndpointImpl.class,

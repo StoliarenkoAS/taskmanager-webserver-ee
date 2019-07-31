@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import ru.stoliarenkoas.tm.webserver.Status;
-import ru.stoliarenkoas.tm.webserver.api.entity.PlannedEntity;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -18,7 +17,7 @@ import java.util.UUID;
 @Setter
 @MappedSuperclass
 @NoArgsConstructor
-public abstract class AbstractPlannedEntity implements PlannedEntity {
+public abstract class AbstractPlannedEntity {
 
     @NotNull @Id
     private String id = UUID.randomUUID().toString();

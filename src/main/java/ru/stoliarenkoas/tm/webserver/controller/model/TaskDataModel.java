@@ -8,7 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 import ru.stoliarenkoas.tm.webserver.api.service.TaskServicePageable;
-import ru.stoliarenkoas.tm.webserver.controller.jsf.AuthorizationController;
+import ru.stoliarenkoas.tm.webserver.controller.AuthorizationController;
 import ru.stoliarenkoas.tm.webserver.exception.AccessForbiddenException;
 import ru.stoliarenkoas.tm.webserver.model.dto.TaskDTO;
 import ru.stoliarenkoas.tm.webserver.model.dto.UserDTO;

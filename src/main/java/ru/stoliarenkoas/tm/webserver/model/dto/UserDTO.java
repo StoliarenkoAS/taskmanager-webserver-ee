@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.stoliarenkoas.tm.webserver.api.entity.Entity;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -20,7 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @XmlRootElement(name = "user")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class UserDTO implements Entity, Serializable {
+public class UserDTO implements Serializable {
 
     private static final long serialVersionUID = 12345678904L;
 
@@ -41,7 +40,7 @@ public class UserDTO implements Entity, Serializable {
     @XmlElement @Nullable private String passwordHash;
     @XmlElement @NotNull private Role role = Role.USER;
 
-    @Override @Nullable @JsonIgnore
+    @Nullable @JsonIgnore
     public String getName() {
         return login;
     }

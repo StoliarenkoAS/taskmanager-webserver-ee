@@ -2,10 +2,13 @@ package ru.stoliarenkoas.tm.webserver.webservice.rest;
 
 
 import org.apache.cxf.endpoint.Server;
+import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.AnnotationConfigWebContextLoader;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -13,6 +16,8 @@ import ru.stoliarenkoas.tm.webserver.DataConstants;
 import ru.stoliarenkoas.tm.webserver.DataGenerator;
 import ru.stoliarenkoas.tm.webserver.model.dto.UserDTO;
 import ru.stoliarenkoas.tm.webserver.webservice.rest.client.UserRestServiceClient;
+import ru.stoliarenkoas.tm.webserver.webservice.rest.resource.ProjectRestResourceProvider;
+import ru.stoliarenkoas.tm.webserver.webservice.rest.resource.TaskRestResourceProvider;
 import ru.stoliarenkoas.tm.webserver.webservice.rest.resource.UserRestResourceProvider;
 
 import java.util.List;
@@ -22,13 +27,18 @@ import static org.junit.Assert.*;
 @WebAppConfiguration
 @RunWith(SpringRunner.class)
 @ContextConfiguration(
-        loader = AnnotationConfigWebContextLoader.class,
         classes = {
                 DataGenerator.class,
+                UserRestService.class,
+                ProjectRestService.class,
+                TaskRestService.class,
                 UserRestResourceProvider.class,
+                ProjectRestResourceProvider.class,
+                TaskRestResourceProvider.class,
                 ru.stoliarenkoas.tm.webserver.configuration.JpaConfiguration.class,
                 ru.stoliarenkoas.tm.webserver.service.UserServicePageableImpl.class,
-                ru.stoliarenkoas.tm.webserver.webservice.rest.UserRestService.class,
+                ru.stoliarenkoas.tm.webserver.service.ProjectServicePageableImpl.class,
+                ru.stoliarenkoas.tm.webserver.service.TaskServicePageableImpl.class,
                 ru.stoliarenkoas.tm.webserver.util.JwtTokenProvider.class})
 public class UserRestServiceTest {
 
@@ -42,6 +52,10 @@ public class UserRestServiceTest {
     @Autowired
     public void setClient(UserRestServiceClient client) {
         this.client = client;
+    }
+
+    @AfterClass
+    public static void stopEndpoint() {
     }
 
     @Test

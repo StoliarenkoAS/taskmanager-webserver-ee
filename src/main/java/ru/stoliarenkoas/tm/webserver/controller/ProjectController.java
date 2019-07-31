@@ -1,4 +1,4 @@
-package ru.stoliarenkoas.tm.webserver.controller.jsf;
+package ru.stoliarenkoas.tm.webserver.controller;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.context.annotation.SessionScope;
 import ru.stoliarenkoas.tm.webserver.api.service.ProjectServicePageable;
-import ru.stoliarenkoas.tm.webserver.api.service.UserServicePageable;
 import ru.stoliarenkoas.tm.webserver.exception.AccessForbiddenException;
 import ru.stoliarenkoas.tm.webserver.exception.IncorrectDataException;
 import ru.stoliarenkoas.tm.webserver.model.dto.ProjectDTO;

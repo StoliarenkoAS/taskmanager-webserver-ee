@@ -5,31 +5,31 @@
 
     <url-mapping id="index">
         <pattern value="/" />
-        <view-id value="/WEB-INF/view/jsf-index.xhtml" />
+        <view-id value="/WEB-INF/view/index.xhtml" />
     </url-mapping>
     <url-mapping>
         <pattern value="/user/list" />
-        <view-id value="/WEB-INF/view/jsf-user-list.xhtml" />
+        <view-id value="/WEB-INF/view/user-list.xhtml" />
     </url-mapping>
     <url-mapping>
         <pattern value="/user/edit" />
-        <view-id value="/WEB-INF/view/jsf-user-edit.xhtml" />
+        <view-id value="/WEB-INF/view/user-edit.xhtml" />
     </url-mapping>
     <url-mapping>
         <pattern value="/project/list" />
-        <view-id value="/WEB-INF/view/jsf-project-list.xhtml" />
+        <view-id value="/WEB-INF/view/project-list.xhtml" />
     </url-mapping>
     <url-mapping>
         <pattern value="/project/edit" />
-        <view-id value="/WEB-INF/view/jsf-project-edit.xhtml" />
+        <view-id value="/WEB-INF/view/project-edit.xhtml" />
     </url-mapping>
     <url-mapping>
         <pattern value="/task/list" />
-        <view-id value="/WEB-INF/view/jsf-task-list.xhtml" />
+        <view-id value="/WEB-INF/view/task-list.xhtml" />
     </url-mapping>
     <url-mapping>
         <pattern value="/task/edit" />
-        <view-id value="/WEB-INF/view/jsf-task-edit.xhtml" />
+        <view-id value="/WEB-INF/view/task-edit.xhtml" />
     </url-mapping>
 
 </pretty-config>

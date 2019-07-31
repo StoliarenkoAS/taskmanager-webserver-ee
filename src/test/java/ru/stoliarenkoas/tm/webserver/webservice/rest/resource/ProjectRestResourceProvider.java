@@ -13,6 +13,8 @@ import ru.stoliarenkoas.tm.webserver.exception.IncorrectDataException;
 import ru.stoliarenkoas.tm.webserver.webservice.rest.ProjectRestService;
 import ru.stoliarenkoas.tm.webserver.webservice.rest.client.ProjectRestServiceClient;
 
+import javax.annotation.PreDestroy;
+
 public class ProjectRestResourceProvider {
 
     private final static String ADDRESS = "http://localhost:8080/webservice/rs/project";

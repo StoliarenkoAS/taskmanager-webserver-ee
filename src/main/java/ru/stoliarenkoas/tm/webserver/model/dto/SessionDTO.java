@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.stoliarenkoas.tm.webserver.comparator.ComparatorType;
 
 import java.util.Date;
 import java.util.UUID;
@@ -19,7 +18,6 @@ public class SessionDTO {
     @NotNull private String userId = "";
     @NotNull private String userLogin = "";
     @NotNull private Date creationDate = new Date();
-    @NotNull private ComparatorType sortMethod = ComparatorType.BY_CREATION_DATE;
     @Nullable private String hash;
 
     public SessionDTO(@NotNull final String userId, @NotNull final String userLogin) {
@@ -33,7 +31,6 @@ public class SessionDTO {
                 "id='" + id + '\'' +
                 ", userId='" + userId + '\'' +
                 ", userLogin='" + userLogin + '\'' +
-                ", sortMethod=" + sortMethod +
                 '}';
     }
 

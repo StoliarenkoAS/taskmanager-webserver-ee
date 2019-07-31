@@ -14,6 +14,7 @@ import ru.stoliarenkoas.tm.webserver.exception.AccessForbiddenException;
 import ru.stoliarenkoas.tm.webserver.exception.IncorrectDataException;
 import ru.stoliarenkoas.tm.webserver.model.dto.TaskDTO;
 import ru.stoliarenkoas.tm.webserver.webservice.rest.client.TaskRestServiceClient;
+import ru.stoliarenkoas.tm.webserver.webservice.rest.resource.ProjectRestResourceProvider;
 import ru.stoliarenkoas.tm.webserver.webservice.rest.resource.TaskRestResourceProvider;
 import ru.stoliarenkoas.tm.webserver.webservice.rest.resource.UserRestResourceProvider;
 
@@ -25,13 +26,13 @@ import static org.junit.Assert.*;
 @WebAppConfiguration
 @RunWith(SpringRunner.class)
 @ContextConfiguration(
-        loader = AnnotationConfigWebContextLoader.class,
         classes = {
                 DataGenerator.class,
                 UserRestService.class,
                 ProjectRestService.class,
                 TaskRestService.class,
                 UserRestResourceProvider.class,
+                ProjectRestResourceProvider.class,
                 TaskRestResourceProvider.class,
                 ru.stoliarenkoas.tm.webserver.configuration.JpaConfiguration.class,
                 ru.stoliarenkoas.tm.webserver.service.UserServicePageableImpl.class,

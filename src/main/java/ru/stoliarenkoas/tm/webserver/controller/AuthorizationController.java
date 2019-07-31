@@ -1,4 +1,4 @@
-package ru.stoliarenkoas.tm.webserver.controller.jsf;
+package ru.stoliarenkoas.tm.webserver.controller;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -14,6 +14,8 @@ import ru.stoliarenkoas.tm.webserver.api.websevice.soap.UserEndpoint;
 import ru.stoliarenkoas.tm.webserver.exception.AccessForbiddenException;
 import ru.stoliarenkoas.tm.webserver.exception.IncorrectDataException;
 import ru.stoliarenkoas.tm.webserver.model.dto.UserDTO;
+import ru.stoliarenkoas.tm.webserver.webservice.soap.resource.ProjectSoapResourceProvider;
+import ru.stoliarenkoas.tm.webserver.webservice.soap.resource.TaskSoapResourceProvider;
 import ru.stoliarenkoas.tm.webserver.webservice.soap.resource.UserSoapResourceProvider;
 
 import java.util.List;
@@ -23,12 +25,17 @@ import static org.junit.Assert.*;
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
-        loader = AnnotationConfigWebContextLoader.class,
         classes = {
                 UserEndpointImpl.class,
+                ProjectEndpointImpl.class,
+                TaskEndpointImpl.class,
                 UserSoapResourceProvider.class,
+                ProjectSoapResourceProvider.class,
+                TaskSoapResourceProvider.class,
                 ru.stoliarenkoas.tm.webserver.DataGenerator.class,
                 ru.stoliarenkoas.tm.webserver.configuration.JpaConfiguration.class,
+                ru.stoliarenkoas.tm.webserver.service.TaskServicePageableImpl.class,
+                ru.stoliarenkoas.tm.webserver.service.ProjectServicePageableImpl.class,
                 ru.stoliarenkoas.tm.webserver.service.UserServicePageableImpl.class,
                 ru.stoliarenkoas.tm.webserver.util.JwtTokenProvider.class
         })

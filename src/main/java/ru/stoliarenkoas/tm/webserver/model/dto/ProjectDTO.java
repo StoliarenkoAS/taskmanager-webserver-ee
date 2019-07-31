@@ -6,7 +6,6 @@ import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stoliarenkoas.tm.webserver.Status;
-import ru.stoliarenkoas.tm.webserver.api.entity.PlannedEntity;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
@@ -18,7 +17,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @XmlRootElement(name = "project")
-public class ProjectDTO implements PlannedEntity, Serializable {
+public class ProjectDTO implements Serializable {
 
     private static final long serialVersionUID = 12345678902L;
     @NotNull private String id = UUID.randomUUID().toString();

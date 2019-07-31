@@ -1,6 +1,7 @@
 package ru.stoliarenkoas.tm.webserver.model.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.jetbrains.annotations.NotNull;
@@ -17,18 +18,16 @@ import java.util.UUID;
 @Setter
 @Entity
 @Cacheable
+@NoArgsConstructor
 @Table(name = "user")
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class User implements ru.stoliarenkoas.tm.webserver.api.entity.Entity {
+public class User {
 
     public User(@NotNull final UserDTO userDTO) {
         this.id = userDTO.getId();
         this.login = userDTO.getLogin();
         this.passwordHash = userDTO.getPasswordHash();
         this.role = userDTO.getRole();
-    }
-
-    public User() {
     }
 
     @NotNull @Id
@@ -49,7 +48,6 @@ public class User implements ru.stoliarenkoas.tm.webserver.api.entity.Entity {
     @NotNull @OneToMany(targetEntity = Session.class, cascade = CascadeType.REMOVE, mappedBy = "user")
     private List<Session> sessions = new ArrayList<>();
 
-    @Override
     public @Nullable String getName() {
         return login;
     }
