@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.AnnotationConfigWebContextLoader;
+import ru.stoliarenkoas.tm.webserver.enumerate.Role;
 import ru.stoliarenkoas.tm.webserver.model.dto.UserDTO;
 import ru.stoliarenkoas.tm.webserver.model.entity.Project;
 import ru.stoliarenkoas.tm.webserver.model.entity.Task;
@@ -54,19 +55,19 @@ public class DataGenerator {
         ADMIN.setId(DataConstants.ADMIN_ID);
         ADMIN.setLogin(DataConstants.ADMIN_LOGIN);
         ADMIN.setPasswordHash(CypherUtil.getMd5(DataConstants.PASSWORD));
-        ADMIN.setRole(UserDTO.Role.ADMIN);
+        ADMIN.setRole(Role.ADMIN);
         userRepository.save(ADMIN);
 
         USER.setId(DataConstants.USER_ID);
         USER.setLogin(DataConstants.USER_LOGIN);
         USER.setPasswordHash(CypherUtil.getMd5(DataConstants.PASSWORD));
-        USER.setRole(UserDTO.Role.USER);
+        USER.setRole(Role.USER);
         userRepository.save(USER);
 
         USER_TO_DELETE.setId(DataConstants.USER_TO_DELETE_ID);
         USER_TO_DELETE.setLogin(DataConstants.USER_TO_DELETE_LOGIN);
         USER_TO_DELETE.setPasswordHash(CypherUtil.getMd5(DataConstants.PASSWORD));
-        USER_TO_DELETE.setRole(UserDTO.Role.USER);
+        USER_TO_DELETE.setRole(Role.USER);
         userRepository.save(USER_TO_DELETE);
     }
 

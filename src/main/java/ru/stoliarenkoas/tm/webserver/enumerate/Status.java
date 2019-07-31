@@ -1,4 +1,4 @@
-package ru.stoliarenkoas.tm.webserver;
+package ru.stoliarenkoas.tm.webserver.enumerate;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.stoliarenkoas.tm.webserver.enumerate.Role;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -23,18 +24,6 @@ public class UserDTO implements Serializable {
 
     private static final long serialVersionUID = 12345678904L;
 
-    public enum Role {
-        USER("user"),
-        ADMIN("administrator");
-
-        @Getter
-        @NotNull private final String displayName;
-
-        Role(@NotNull final String displayName) {
-            this.displayName = displayName;
-        }
-    }
-
     @XmlElement @NotNull private String id = UUID.randomUUID().toString();
     @XmlElement @Nullable private String login;
     @XmlElement @Nullable private String passwordHash;
@@ -47,7 +36,7 @@ public class UserDTO implements Serializable {
 
     @Override @NotNull
     public String toString() {
-        return String.format("UserDTO: %s, id: %s, Role: %s", login, id, role.displayName);
+        return String.format("UserDTO: %s, id: %s, Role: %s", login, id, role.getDisplayName());
     }
 
     @Override

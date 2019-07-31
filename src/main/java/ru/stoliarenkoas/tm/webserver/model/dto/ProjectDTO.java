@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.stoliarenkoas.tm.webserver.Status;
+import ru.stoliarenkoas.tm.webserver.enumerate.Status;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;

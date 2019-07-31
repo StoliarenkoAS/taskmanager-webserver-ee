@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.AnnotationConfigWebContextLoader;
 import org.springframework.test.context.web.WebAppConfiguration;
 import ru.stoliarenkoas.tm.webserver.api.service.TaskServicePageable;
+import ru.stoliarenkoas.tm.webserver.enumerate.Role;
 import ru.stoliarenkoas.tm.webserver.exception.AccessForbiddenException;
 import ru.stoliarenkoas.tm.webserver.exception.IncorrectDataException;
 import ru.stoliarenkoas.tm.webserver.model.dto.TaskDTO;
@@ -66,7 +67,7 @@ public class TaskServiceTest {
         admin.setId("test-admin-id");
         admin.setLogin(adminLogin);
         admin.setPasswordHash(CypherUtil.getMd5(password));
-        admin.setRole(UserDTO.Role.ADMIN);
+        admin.setRole(Role.ADMIN);
         userRepository.save(admin);
         adminProject.setUser(admin);
         adminProject.setId("test-admin-project-id");
@@ -76,7 +77,7 @@ public class TaskServiceTest {
         user.setId("test-user-id");
         user.setLogin(userLogin);
         user.setPasswordHash(CypherUtil.getMd5(password));
-        user.setRole(UserDTO.Role.USER);
+        user.setRole(Role.USER);
         userRepository.save(user);
         userProject.setUser(user);
         userProject.setId("test-user-project-id");

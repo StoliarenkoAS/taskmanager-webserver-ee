@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.annotation.ApplicationScope;
 import ru.stoliarenkoas.tm.webserver.api.service.UserServicePageable;
+import ru.stoliarenkoas.tm.webserver.enumerate.Role;
 import ru.stoliarenkoas.tm.webserver.exception.AccessForbiddenException;
 import ru.stoliarenkoas.tm.webserver.exception.IncorrectDataException;
 import ru.stoliarenkoas.tm.webserver.model.dto.UserDTO;
@@ -38,7 +39,7 @@ public class UserServicePageableImpl implements UserServicePageable {
             @Nullable final String loggedUserId) throws AccessForbiddenException {
         if (loggedUserId == null) throw new AccessForbiddenException("no logged user provided");
         final User loggedUser = repository.findOne(loggedUserId).orElse(null);
-        if (loggedUser == null || loggedUser.getRole() != UserDTO.Role.ADMIN) {
+        if (loggedUser == null || loggedUser.getRole() != Role.ADMIN) {
             throw new AccessForbiddenException();
         }
         final List<User> users = repository.findAll();
@@ -53,7 +54,7 @@ public class UserServicePageableImpl implements UserServicePageable {
             throws AccessForbiddenException {
         if (loggedUserId == null || page == null) return Page.empty();
         final User loggedUser = repository.findOne(loggedUserId).orElse(null);
-        if (loggedUser == null || loggedUser.getRole() != UserDTO.Role.ADMIN) {
+        if (loggedUser == null || loggedUser.getRole() != Role.ADMIN) {
             throw new AccessForbiddenException();
         }
         final Page<User> users = repository.findAll(page);
@@ -69,7 +70,7 @@ public class UserServicePageableImpl implements UserServicePageable {
         if (loggedUserId == null || requestedUserId == null || requestedUserId.isEmpty()) return null;
         if (!loggedUserId.equals(requestedUserId)) {
             final User loggedUser = repository.findOne(loggedUserId).orElse(null);
-            if (loggedUser == null || loggedUser.getRole() != UserDTO.Role.ADMIN) {
+            if (loggedUser == null || loggedUser.getRole() != Role.ADMIN) {
                 throw new AccessForbiddenException();
             }
         }
@@ -107,9 +108,9 @@ public class UserServicePageableImpl implements UserServicePageable {
         if (persistableUser.getLogin() == null || persistableUser.getLogin().isEmpty()) {
             throw new IncorrectDataException("empty login");
         }
-        if (persistableUser.getRole() != UserDTO.Role.USER) {
+        if (persistableUser.getRole() != Role.USER) {
             final User loggedUser = repository.findOne(loggedUserId).orElse(null);
-            if (loggedUser == null || loggedUser.getRole() != UserDTO.Role.ADMIN) {
+            if (loggedUser == null || loggedUser.getRole() != Role.ADMIN) {
                 throw new AccessForbiddenException();
             }
         }
@@ -132,7 +133,7 @@ public class UserServicePageableImpl implements UserServicePageable {
         if (mergableUser == null) throw new IncorrectDataException("null user");
         if (!loggedUserId.equals(mergableUser.getId())) {
             final User loggedUser = repository.findOne(loggedUserId).orElse(null);
-            if (loggedUser == null || loggedUser.getRole() != UserDTO.Role.ADMIN) {
+            if (loggedUser == null || loggedUser.getRole() != Role.ADMIN) {
                 throw new AccessForbiddenException();
             }
         }
@@ -172,7 +173,7 @@ public class UserServicePageableImpl implements UserServicePageable {
             throws AccessForbiddenException {
         if (loggedUserId == null || removableUserId == null) return;
         final User loggedUser = repository.findOne(loggedUserId).orElse(null);
-        if (loggedUser == null || loggedUser.getRole() != UserDTO.Role.ADMIN) {
+        if (loggedUser == null || loggedUser.getRole() != Role.ADMIN) {
             throw new AccessForbiddenException();
         }
         repository.deleteById(removableUserId);

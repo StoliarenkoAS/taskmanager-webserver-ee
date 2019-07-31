@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.AnnotationConfigWebContextLoader;
 import org.springframework.test.context.web.WebAppConfiguration;
 import ru.stoliarenkoas.tm.webserver.api.service.UserServicePageable;
+import ru.stoliarenkoas.tm.webserver.enumerate.Role;
 import ru.stoliarenkoas.tm.webserver.exception.AccessForbiddenException;
 import ru.stoliarenkoas.tm.webserver.exception.IncorrectDataException;
 import ru.stoliarenkoas.tm.webserver.model.dto.UserDTO;
@@ -53,13 +54,13 @@ public class UserServiceTest {
         admin.setId("test-admin-id");
         admin.setLogin(adminLogin);
         admin.setPasswordHash(CypherUtil.getMd5(password));
-        admin.setRole(UserDTO.Role.ADMIN);
+        admin.setRole(Role.ADMIN);
         userRepository.save(admin);
         
         user.setId("test-user-id");
         user.setLogin(userLogin);
         user.setPasswordHash(CypherUtil.getMd5(password));
-        user.setRole(UserDTO.Role.USER);
+        user.setRole(Role.USER);
         userRepository.save(user);
     }
 
@@ -82,7 +83,7 @@ public class UserServiceTest {
             final UserDTO newUser = new UserDTO();
             newUser.setId("User#" + (i+1) + "Id");
             newUser.setLogin("User#" + (i+1));
-            newUser.setRole(i%2 == 0 ? UserDTO.Role.ADMIN : UserDTO.Role.USER);
+            newUser.setRole(i%2 == 0 ? Role.ADMIN : Role.USER);
             userService.persist(i%2 == 0 ? admin.getId() : user.getId(), newUser);
         }
         final List<UserDTO> users = userService.findAll(admin.getId());
@@ -109,7 +110,7 @@ public class UserServiceTest {
         final UserDTO persistableUser = new UserDTO();
         persistableUser.setId("twice-persisted");
         persistableUser.setLogin("newLogin");
-        persistableUser.setRole(UserDTO.Role.ADMIN);
+        persistableUser.setRole(Role.ADMIN);
         userService.persist(user.getId(), persistableUser);
     }
 
@@ -137,7 +138,7 @@ public class UserServiceTest {
         assertEquals(newUser.getLogin(), persistedUser.getLogin());
 
         newUser.setLogin("UpdatedUser");
-        newUser.setRole(UserDTO.Role.ADMIN);
+        newUser.setRole(Role.ADMIN);
         userService.merge(admin.getId(), newUser);
         persistedUser = userService.findOne(this.admin.getId(), newUser.getId());
         assertNotNull(persistedUser);

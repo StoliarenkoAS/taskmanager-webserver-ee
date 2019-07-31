@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.stoliarenkoas.tm.webserver.enumerate.Role;
 import ru.stoliarenkoas.tm.webserver.model.dto.UserDTO;
 
 import javax.persistence.*;
@@ -40,7 +41,7 @@ public class User {
     private String passwordHash;
 
     @NotNull @Enumerated(EnumType.STRING)
-    private UserDTO.Role role = UserDTO.Role.USER;
+    private Role role = Role.USER;
 
     @NotNull @OneToMany(targetEntity = Project.class, cascade = CascadeType.REMOVE, mappedBy = "user")
     private List<Project> projects = new ArrayList<>();

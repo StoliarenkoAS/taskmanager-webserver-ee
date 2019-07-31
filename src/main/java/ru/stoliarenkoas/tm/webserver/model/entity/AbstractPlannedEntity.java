@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
-import ru.stoliarenkoas.tm.webserver.Status;
+import ru.stoliarenkoas.tm.webserver.enumerate.Status;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
