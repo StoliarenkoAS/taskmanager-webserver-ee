@@ -4,8 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.primefaces.model.LazyDataModel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.context.annotation.SessionScope;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.stoliarenkoas.tm.webserver.api.service.ProjectServicePageable;
 import ru.stoliarenkoas.tm.webserver.exception.AccessForbiddenException;
 import ru.stoliarenkoas.tm.webserver.exception.IncorrectDataException;
@@ -13,12 +12,14 @@ import ru.stoliarenkoas.tm.webserver.model.dto.ProjectDTO;
 import ru.stoliarenkoas.tm.webserver.model.dto.UserDTO;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
 
-@Controller
-@SessionScope
-public class ProjectController implements Serializable {
+@ManagedBean
+@SessionScoped
+public class ProjectController extends SpringBeanAutowiringSupport implements Serializable {
 
     @Nullable
     private ProjectDTO editableProject;
@@ -54,45 +55,23 @@ public class ProjectController implements Serializable {
     }
 
     public String projectEdit(@Nullable final ProjectDTO projectDTO) {
-        if (projectDTO == null) {
-            final FacesContext context = FacesContext.getCurrentInstance();
-            context.addMessage(null, new FacesMessage("Error", "no project selected"));
-            return null;
-        }
         editableProject = projectDTO;
         return "project-edit";
     }
 
     public String projectCreate() {
-        try {
-            final UserDTO loggedUser = authorizationController.getLoggedUser();
-            if (loggedUser == null) throw new AccessForbiddenException("not logged in");
-            editableProject = new ProjectDTO();
-            editableProject.setUserId(loggedUser.getId());
-            editableProject.setName("New project");
-            editableProject.setDescription("No description provided yet");
-            projectService.persist(loggedUser.getId(), editableProject);
-        } catch (AccessForbiddenException | IncorrectDataException e) {
-            e.printStackTrace();
-            final FacesContext context = FacesContext.getCurrentInstance();
-            context.addMessage(null, new FacesMessage("Error", e.getMessage()));
-            return "index";
-        }
+        final UserDTO loggedUser = authorizationController.getLoggedUser();
+        editableProject = new ProjectDTO();
+        editableProject.setUserId(loggedUser.getId());
+        editableProject.setName("New project");
+        editableProject.setDescription("No description provided yet");
+        projectService.persist(loggedUser.getId(), editableProject);
         return "project-edit";
     }
 
     public String projectSave() {
         final FacesContext context = FacesContext.getCurrentInstance();
-        if (editableProject == null) {
-            context.addMessage(null, new FacesMessage("Error", "no project selected"));
-            return null;
-        }
         final UserDTO loggedUser = authorizationController.getLoggedUser();
-        if (loggedUser == null) {
-            context.addMessage(null, new FacesMessage("Error", "not logged in"));
-            editableProject = null;
-            return "index";
-        }
         try {
             projectService.merge(loggedUser.getId(), editableProject);
             return "project-list";
@@ -107,13 +86,8 @@ public class ProjectController implements Serializable {
 
     public void projectRemove(@Nullable final ProjectDTO projectDTO) {
         final FacesContext context = FacesContext.getCurrentInstance();
-        if (projectDTO == null) {
-            context.addMessage(null, new FacesMessage("Error", "no project selected"));
-            return;
-        }
         try {
             final UserDTO loggedUser = authorizationController.getLoggedUser();
-            if (loggedUser == null) throw new AccessForbiddenException("not logged in");
             projectService.remove(loggedUser.getId(), projectDTO.getId());
         } catch (AccessForbiddenException | IncorrectDataException e) {
             e.printStackTrace();

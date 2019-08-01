@@ -1,6 +1,6 @@
 package ru.stoliarenkoas.tm.webserver.exception;
 
-public class AccessForbiddenException extends Exception {
+public class AccessForbiddenException extends RuntimeException {
 
     public AccessForbiddenException() {
         super("access forbidden");

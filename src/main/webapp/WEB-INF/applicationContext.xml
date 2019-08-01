@@ -17,7 +17,10 @@
        http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 
 
-    <context:component-scan base-package="ru.stoliarenkoas.tm.webserver"/>
+    <context:component-scan base-package="ru.stoliarenkoas.tm.webserver">
+        <context:include-filter type="regex" expression=".*Controller"/>
+        <context:include-filter type="regex" expression=".*Filter"/>
+    </context:component-scan>
     <mvc:annotation-driven/>
 
     <bean name="jsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider"/>

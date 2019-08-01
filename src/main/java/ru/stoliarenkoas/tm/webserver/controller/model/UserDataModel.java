@@ -9,10 +9,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 import ru.stoliarenkoas.tm.webserver.api.service.UserServicePageable;
 import ru.stoliarenkoas.tm.webserver.controller.AuthorizationController;
-import ru.stoliarenkoas.tm.webserver.exception.AccessForbiddenException;
 import ru.stoliarenkoas.tm.webserver.model.dto.UserDTO;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -40,18 +38,12 @@ public class UserDataModel extends LazyDataModel<UserDTO> {
             final SortOrder sortOrder,
             final Map<String, Object> filters
     ) {
-        final UserDTO user = authorizationController.getLoggedUser();
-        if (user == null) return Collections.emptyList();
+        final UserDTO loggedUser = authorizationController.getLoggedUser();
         final PageRequest pageRequest = PageRequest.of(first, pageSize);
         final List<UserDTO> userList;
-        try {
-            final Page<UserDTO> userPage = userService.findAll(user.getId(), pageRequest);
-            this.setRowCount((int)userPage.getTotalElements());
-            userList = userPage.getContent();
-        } catch (AccessForbiddenException e) {
-            e.printStackTrace();
-            return Collections.emptyList();
-        }
+        final Page<UserDTO> userPage = userService.findAll(loggedUser.getId(), pageRequest);
+        this.setRowCount((int)userPage.getTotalElements());
+        userList = userPage.getContent();
         return userList;
     }
 

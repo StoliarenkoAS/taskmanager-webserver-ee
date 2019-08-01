@@ -12,10 +12,10 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>/WEB-INF/applicationContext.xml</param-value>
     </context-param>
-<!--    <context-param>-->
-<!--        <param-name>primefaces.THEME</param-name>-->
-<!--        <param-value>none</param-value>-->
-<!--    </context-param>-->
+    <context-param>
+        <param-name>primefaces.THEME</param-name>
+        <param-value>nova-dark</param-value>
+    </context-param>
 
     <!-- JSF servlet -->
     <servlet>

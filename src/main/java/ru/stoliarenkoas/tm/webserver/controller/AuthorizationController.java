@@ -3,18 +3,19 @@ package ru.stoliarenkoas.tm.webserver.controller;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.web.context.annotation.SessionScope;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.stoliarenkoas.tm.webserver.api.service.UserServicePageable;
 import ru.stoliarenkoas.tm.webserver.exception.IncorrectDataException;
 import ru.stoliarenkoas.tm.webserver.model.dto.UserDTO;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
-@Component
-@SessionScope
-public class AuthorizationController {
+@ManagedBean
+@SessionScoped
+public class AuthorizationController extends SpringBeanAutowiringSupport {
 
     @Nullable
     private UserDTO loggedUser;
@@ -78,7 +79,7 @@ public class AuthorizationController {
             final FacesMessage errorMessage = new FacesMessage(
                     FacesMessage.SEVERITY_INFO,
                     "Failure",
-                    "invalid combination of user and  password");
+                    "invalid input");
             context.addMessage(null, errorMessage);
             return;
         }

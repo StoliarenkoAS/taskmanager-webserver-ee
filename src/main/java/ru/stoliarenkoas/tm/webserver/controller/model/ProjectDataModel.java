@@ -9,11 +9,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 import ru.stoliarenkoas.tm.webserver.api.service.ProjectServicePageable;
 import ru.stoliarenkoas.tm.webserver.controller.AuthorizationController;
-import ru.stoliarenkoas.tm.webserver.exception.AccessForbiddenException;
 import ru.stoliarenkoas.tm.webserver.model.dto.ProjectDTO;
 import ru.stoliarenkoas.tm.webserver.model.dto.UserDTO;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -41,18 +39,12 @@ public class ProjectDataModel extends LazyDataModel<ProjectDTO> {
             final SortOrder sortOrder,
             final Map<String, Object> filters
     ) {
-        final UserDTO project = authorizationController.getLoggedUser();
-        if (project == null) return Collections.emptyList();
+        final UserDTO loggedUser = authorizationController.getLoggedUser();
         final PageRequest pageRequest = PageRequest.of(first, pageSize);
         final List<ProjectDTO> projectList;
-        try {
-            final Page<ProjectDTO> projectPage = projectService.findAllByUserId(project.getId(), pageRequest);
-            this.setRowCount((int)projectPage.getTotalElements());
-            projectList = projectPage.getContent();
-        } catch (AccessForbiddenException e) {
-            e.printStackTrace();
-            return Collections.emptyList();
-        }
+        final Page<ProjectDTO> projectPage = projectService.findAllByUserId(loggedUser.getId(), pageRequest);
+        this.setRowCount((int)projectPage.getTotalElements());
+        projectList = projectPage.getContent();
         return projectList;
     }
 

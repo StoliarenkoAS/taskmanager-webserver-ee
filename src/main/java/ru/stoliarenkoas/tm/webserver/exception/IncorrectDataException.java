@@ -1,6 +1,6 @@
 package ru.stoliarenkoas.tm.webserver.exception;
 
-public class IncorrectDataException extends Exception {
+public class IncorrectDataException extends RuntimeException {
 
     public IncorrectDataException() {
         super("incorrect incoming data");

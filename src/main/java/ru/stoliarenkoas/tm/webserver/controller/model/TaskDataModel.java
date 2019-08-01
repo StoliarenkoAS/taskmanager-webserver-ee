@@ -9,11 +9,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 import ru.stoliarenkoas.tm.webserver.api.service.TaskServicePageable;
 import ru.stoliarenkoas.tm.webserver.controller.AuthorizationController;
-import ru.stoliarenkoas.tm.webserver.exception.AccessForbiddenException;
 import ru.stoliarenkoas.tm.webserver.model.dto.TaskDTO;
 import ru.stoliarenkoas.tm.webserver.model.dto.UserDTO;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -41,18 +39,12 @@ public class TaskDataModel extends LazyDataModel<TaskDTO> {
             final SortOrder sortOrder,
             final Map<String, Object> filters
     ) {
-        final UserDTO task = authorizationController.getLoggedUser();
-        if (task == null) return Collections.emptyList();
+        final UserDTO loggedUser = authorizationController.getLoggedUser();
         final PageRequest pageRequest = PageRequest.of(first, pageSize);
         final List<TaskDTO> taskList;
-        try {
-            final Page<TaskDTO> taskPage = taskService.findAllByUserId(task.getId(), pageRequest);
-            this.setRowCount((int)taskPage.getTotalElements());
-            taskList = taskPage.getContent();
-        } catch (AccessForbiddenException e) {
-            e.printStackTrace();
-            return Collections.emptyList();
-        }
+        final Page<TaskDTO> taskPage = taskService.findAllByUserId(loggedUser.getId(), pageRequest);
+        this.setRowCount((int)taskPage.getTotalElements());
+        taskList = taskPage.getContent();
         return taskList;
     }
 

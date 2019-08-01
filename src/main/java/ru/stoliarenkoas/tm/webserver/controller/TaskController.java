@@ -4,8 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.primefaces.model.LazyDataModel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.context.annotation.SessionScope;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.stoliarenkoas.tm.webserver.api.service.ProjectServicePageable;
 import ru.stoliarenkoas.tm.webserver.api.service.TaskServicePageable;
 import ru.stoliarenkoas.tm.webserver.exception.AccessForbiddenException;
@@ -15,13 +14,15 @@ import ru.stoliarenkoas.tm.webserver.model.dto.TaskDTO;
 import ru.stoliarenkoas.tm.webserver.model.dto.UserDTO;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.List;
 
-@Controller
-@SessionScope
-public class TaskController implements Serializable {
+@ManagedBean
+@SessionScoped
+public class TaskController extends SpringBeanAutowiringSupport implements Serializable {
 
     @Nullable
     private TaskDTO editableTask;
@@ -72,51 +73,25 @@ public class TaskController implements Serializable {
 
     public String taskEdit(@Nullable final TaskDTO taskDTO) {
         final FacesContext context = FacesContext.getCurrentInstance();
-        if (taskDTO == null) {
-            context.addMessage(null, new FacesMessage("Error", "no task selected"));
-            return null;
-        }
-        try {
-            loadProjects();
-        } catch (AccessForbiddenException e) {
-            e.printStackTrace();
-            context.addMessage(null, new FacesMessage("Error", e.getMessage()));
-            return "task-list";
-        }
+        loadProjects();
         editableTask = taskDTO;
         return "task-edit";
     }
 
     public String taskCreate() {
-        try {
-            final UserDTO loggedUser = authorizationController.getLoggedUser();
-            if (loggedUser == null) throw new AccessForbiddenException("not logged in");
-            loadProjects();
-            editableTask = new TaskDTO();
-            editableTask.setUserId(loggedUser.getId());
-            editableTask.setName("New task");
-            editableTask.setDescription("No description provided yet");
-        } catch (AccessForbiddenException e) {
-            e.printStackTrace();
-            final FacesContext context = FacesContext.getCurrentInstance();
-            context.addMessage(null, new FacesMessage("Error", e.getMessage()));
-            return "index";
-        }
+        final UserDTO loggedUser = authorizationController.getLoggedUser();
+        if (loggedUser == null) throw new AccessForbiddenException("not logged in");
+        loadProjects();
+        editableTask = new TaskDTO();
+        editableTask.setUserId(loggedUser.getId());
+        editableTask.setName("New task");
+        editableTask.setDescription("No description provided yet");
         return "task-edit";
     }
 
     public String taskSave() {
         final FacesContext context = FacesContext.getCurrentInstance();
-        if (editableTask == null) {
-            context.addMessage(null, new FacesMessage("Error", "no task selected"));
-            return null;
-        }
         final UserDTO loggedUser = authorizationController.getLoggedUser();
-        if (loggedUser == null) {
-            context.addMessage(null, new FacesMessage("Error", "not logged in"));
-            editableTask = null;
-            return "index";
-        }
         try {
             taskService.merge(loggedUser.getId(), editableTask);
             return "task-list";
@@ -131,13 +106,8 @@ public class TaskController implements Serializable {
 
     public void taskRemove(@Nullable final TaskDTO taskDTO) {
         final FacesContext context = FacesContext.getCurrentInstance();
-        if (taskDTO == null) {
-            context.addMessage(null, new FacesMessage("Error", "no task selected"));
-            return;
-        }
         try {
             final UserDTO loggedUser = authorizationController.getLoggedUser();
-            if (loggedUser == null) throw new AccessForbiddenException("not logged in");
             taskService.remove(loggedUser.getId(), taskDTO.getId());
         } catch (AccessForbiddenException | IncorrectDataException e) {
             e.printStackTrace();
@@ -149,7 +119,6 @@ public class TaskController implements Serializable {
 
     private void loadProjects() throws AccessForbiddenException {
         final UserDTO loggedUser = authorizationController.getLoggedUser();
-        if (loggedUser == null) throw new AccessForbiddenException("not logged in");
         projects = projectService.findAllByUserId(loggedUser.getId());
     }
 

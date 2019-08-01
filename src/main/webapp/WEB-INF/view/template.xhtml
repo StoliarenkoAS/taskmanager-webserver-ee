@@ -29,13 +29,13 @@
             <h:form>
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <h:commandLink value="Users" action="user-list" class="nav-link"/>
+                    <p:link value="Users" outcome="user-list" class="nav-link" ajax="false"/>
                 </li>
                 <li class="nav-item">
-                    <h:commandLink value="Projects" action="project-list" class="nav-link"/>
+                    <h:link value="Projects" outcome="project-list" class="nav-link"/>
                 </li>
                 <li class="nav-item">
-                    <h:commandLink value="Tasks" action="task-list" class="nav-link"/>
+                    <h:link value="Tasks" outcome="task-list" class="nav-link"/>
                 </li>
             </ul>
             </h:form>
