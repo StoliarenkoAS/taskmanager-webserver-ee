@@ -85,9 +85,9 @@ public class UserServicePageableImpl implements UserServicePageable {
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public UserDTO login(@Nullable final String login, @Nullable final String password)
             throws IncorrectDataException {
-        if (login == null || password == null || login.isEmpty() || password.isEmpty()) {
-            throw new IncorrectDataException();
-        }
+        final boolean loginIsIncorrect = login == null || login.isEmpty();
+        final boolean passwordIsIncorrect = password == null || password.isEmpty();
+        if (loginIsIncorrect || passwordIsIncorrect) throw new IncorrectDataException();
         final Optional<User> user = repository.login(login, CypherUtil.getMd5(password));
         if (!user.isPresent()) throw new IncorrectDataException();
         return user.map(User::toDTO).get();
@@ -108,20 +108,21 @@ public class UserServicePageableImpl implements UserServicePageable {
     ) throws AccessForbiddenException, IncorrectDataException {
         if (loggedUserId == null) throw new AccessForbiddenException();
         if (persistableUser == null) throw new IncorrectDataException();
-        if (persistableUser.getLogin() == null || persistableUser.getLogin().isEmpty()) {
-            throw new IncorrectDataException();
-        }
-        if (persistableUser.getRole() != Role.USER) {
+        final boolean loginIsIncorrect = persistableUser.getLogin() == null ||
+                persistableUser.getLogin().isEmpty();
+        if (loginIsIncorrect) throw new IncorrectDataException();
+        final boolean savedUserIsPrivileged = persistableUser.getRole() != Role.USER;
+        if (savedUserIsPrivileged) {
             final User loggedUser = repository.findOne(loggedUserId).orElse(null);
-            if (loggedUser == null || loggedUser.getRole() != Role.ADMIN) {
-                throw new AccessForbiddenException();
-            }
+            final boolean loggedUserIsNotPrivileged = loggedUser == null ||
+                    loggedUser.getRole() != Role.ADMIN;
+            if (loggedUserIsNotPrivileged) throw new AccessForbiddenException();
         }
-        if (repository.findOne(persistableUser.getId()).isPresent()) {
-            throw new AccessForbiddenException();
-        }
+        final boolean userAlreadyExist = repository.findOne(persistableUser.getId()).isPresent();
+        if (userAlreadyExist) throw new AccessForbiddenException();
         try {
-            repository.save(new User(persistableUser));
+            final User userToSave = new User(persistableUser);
+            repository.save(userToSave);
         } catch (DataIntegrityViolationException e) {
             throw new IncorrectDataException(e.getMessage());
         }
@@ -134,11 +135,11 @@ public class UserServicePageableImpl implements UserServicePageable {
     ) throws AccessForbiddenException, IncorrectDataException {
         if (loggedUserId == null) throw new AccessForbiddenException();
         if (mergableUser == null) throw new IncorrectDataException();
-        if (!loggedUserId.equals(mergableUser.getId())) {
+        final boolean savingHimself = loggedUserId.equals(mergableUser.getId());
+        if (!savingHimself) {
             final User loggedUser = repository.findOne(loggedUserId).orElse(null);
-            if (loggedUser == null || loggedUser.getRole() != Role.ADMIN) {
-                throw new AccessForbiddenException();
-            }
+            final boolean loggedAsAdmin = loggedUser == null || loggedUser.getRole() != Role.ADMIN;
+            if (!loggedAsAdmin) throw new AccessForbiddenException();
         }
         final Optional<User> userOptional = repository.findOne(mergableUser.getId());
         final User user = userOptional.orElseThrow(IncorrectDataException::new);
@@ -156,12 +157,11 @@ public class UserServicePageableImpl implements UserServicePageable {
             @Nullable final String login,
             @Nullable final String password
     ) throws IncorrectDataException {
-        if (login == null || password == null || login.isEmpty() || password.isEmpty()) {
-            throw new IncorrectDataException();
-        }
-        if (repository.findByLogin(login).size() > 0) {
-            throw new IncorrectDataException();
-        }
+        final boolean loginIsIncorrect = login == null || login.isEmpty();
+        final boolean passwordIsIncorrect = password == null || password.isEmpty();
+        if (loginIsIncorrect || passwordIsIncorrect) throw new IncorrectDataException();
+        final boolean loginIsTaken = repository.findByLogin(login).size() > 0;
+        if (loginIsTaken) throw new IncorrectDataException();
         final User user = new User();
         user.setLogin(login);
         user.setPasswordHash(CypherUtil.getMd5(password));
@@ -174,11 +174,11 @@ public class UserServicePageableImpl implements UserServicePageable {
             @Nullable final String loggedUserId,
             @Nullable final String removableUserId
     ) throws AccessForbiddenException {
-        if (loggedUserId == null || removableUserId == null) return;
+        final boolean loggedUserIsIncorrect = loggedUserId == null || loggedUserId.isEmpty();
+        final boolean removableUserIsIncorrect = removableUserId == null || removableUserId.isEmpty();
+        if (loggedUserIsIncorrect || removableUserIsIncorrect) return;
         final User loggedUser = repository.findOne(loggedUserId).orElse(null);
-        if (loggedUser == null || loggedUser.getRole() != Role.ADMIN) {
-            throw new AccessForbiddenException();
-        }
+        if (loggedUser.getRole() != Role.ADMIN) throw new AccessForbiddenException();
         repository.deleteById(removableUserId);
     }
 

@@ -74,18 +74,17 @@ public class ProjectServicePageableImpl implements ProjectServicePageable {
             @Nullable final String requestedProjectId
     ) throws AccessForbiddenException, IncorrectDataException {
         checkAuthorization(loggedUserId);
-        if (requestedProjectId == null || requestedProjectId.isEmpty()) {
-            throw new IncorrectDataException();
-        }
+        final boolean projectIsIncorrect = requestedProjectId == null || requestedProjectId.isEmpty();
+        if (projectIsIncorrect) throw new IncorrectDataException();
         return repository.findOne(loggedUserId, requestedProjectId).map(Project::toDTO).orElse(null);
     }
 
     @Override
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public boolean exists(@Nullable String loggedUserId, @Nullable String projectId) {
-        if (loggedUserId == null || projectId == null || loggedUserId.isEmpty() || projectId.isEmpty()) {
-            return false;
-        }
+        final boolean userIsIncorrect = loggedUserId == null || loggedUserId.isEmpty();
+        final boolean projectIsIncorrect = projectId == null || projectId.isEmpty();
+        if (userIsIncorrect || projectIsIncorrect) return false;
         return repository.existsByUser_IdAndId(loggedUserId, projectId);
     }
 
@@ -121,9 +120,8 @@ public class ProjectServicePageableImpl implements ProjectServicePageable {
             @Nullable final String removableProjectId
     ) throws AccessForbiddenException, IncorrectDataException {
         checkAuthorization(loggedUserId);
-        if (removableProjectId == null || removableProjectId.isEmpty()) {
-            throw new IncorrectDataException();
-        }
+        final boolean projectIsIncorrect = removableProjectId == null || removableProjectId.isEmpty();
+        if (projectIsIncorrect) throw new IncorrectDataException();
         final Optional<Project> project = repository.findOne(loggedUserId, removableProjectId);
         if (!project.isPresent()) throw new IncorrectDataException();
         repository.delete(project.get());
@@ -135,10 +133,10 @@ public class ProjectServicePageableImpl implements ProjectServicePageable {
         repository.deleteAllByUser_Id(loggedUserId);
     }
 
-    private void checkAuthorization(@Nullable final String loggedUserId) throws AccessForbiddenException {
-        if (loggedUserId == null || loggedUserId.isEmpty()) {
-            throw new AccessForbiddenException();
-        }
+    private void checkAuthorization(@Nullable final String loggedUserId)
+            throws AccessForbiddenException {
+        final boolean userIsIncorrect = loggedUserId == null || loggedUserId.isEmpty();
+        if (userIsIncorrect) throw new AccessForbiddenException();
         if (!userService.exists(loggedUserId)) {
             throw new AccessForbiddenException();
         }
