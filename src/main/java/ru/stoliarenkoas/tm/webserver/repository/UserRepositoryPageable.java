@@ -21,7 +21,7 @@ public interface UserRepositoryPageable extends JpaRepository<User, String> {
 
     @Query(value = "SELECT u FROM User u WHERE u.login = :login")
     @QueryHints({@QueryHint(name = "org.hibernate.cacheable", value = "true")})
-    List<User> findByLogin(@NotNull @Param("login") String login);
+    User findByLogin(@NotNull @Param("login") String login);
 
     @Query(value = "SELECT u FROM User u WHERE u.login = :login AND u.passwordHash = :passwordHash")
     Optional<User> login(@NotNull @Param("login") String login, @NotNull @Param("passwordHash") String passwordHash);

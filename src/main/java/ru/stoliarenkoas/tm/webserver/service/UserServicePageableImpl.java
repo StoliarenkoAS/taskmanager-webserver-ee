@@ -138,7 +138,7 @@ public class UserServicePageableImpl implements UserServicePageable {
         final boolean savingHimself = loggedUserId.equals(mergableUser.getId());
         if (!savingHimself) {
             final User loggedUser = repository.findOne(loggedUserId).orElse(null);
-            final boolean loggedAsAdmin = loggedUser == null || loggedUser.getRole() != Role.ADMIN;
+            final boolean loggedAsAdmin = loggedUser != null && loggedUser.getRole() == Role.ADMIN;
             if (!loggedAsAdmin) throw new AccessForbiddenException();
         }
         final Optional<User> userOptional = repository.findOne(mergableUser.getId());
